@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import './Terminal.css';
 
 const fileSystem: Record<string, string[]> = {
   '/': ['home', 'projects', 'blog', 'timeline'],
@@ -8,10 +9,11 @@ const fileSystem: Record<string, string[]> = {
   '/timeline': ['uwaterloo.txt', 'internships.txt'],
 };
 
-const helpText = `Available commands:\nls, cd <dir>, pwd, help, clear`;
+const helpText = `Available commands:\nls, cd <dir>, pwd, help, clear\n\nNavigation:\n- cd .. (go to parent directory)\n- cd /projects (absolute path)\n- cd projects (relative path)`;
 
 type TerminalProps = {
   onNavigate?: (path: string) => void;
+  currentLocation?: string;
 };
 
 // Simple syntax highlighting for terminal output
@@ -21,28 +23,32 @@ function highlight(line: string) {
     const [prompt, ...rest] = line.split(' ');
     return (
       <span>
-        <span style={{ color: '#ffcc00' }}>$</span>{' '}
-        <span style={{ color: '#00bfff' }}>{rest.join(' ')}</span>
+        <span className="command-prompt">$</span>{' '}
+        <span className="command-text">{rest.join(' ')}</span>
       </span>
     );
   }
   // Highlight errors
   if (/no such directory|missing operand|Command not found|Already at root/.test(line)) {
-    return <span style={{ color: '#ff6666' }}>{line}</span>;
+    return <span className="error-text">{line}</span>;
   }
   // Highlight directories in ls output
   if (/^home|projects|blog|timeline$/.test(line.trim())) {
-    return <span style={{ color: '#00ff90' }}>{line}</span>;
+    return <span className="directory-text">{line}</span>;
   }
   // Highlight help
   if (line.startsWith('Available commands')) {
-    return <span style={{ color: '#ffcc00' }}>{line}</span>;
+    return <span className="help-text">{line}</span>;
+  }
+  // Highlight navigation
+  if (line.includes('cd ..') || line.includes('absolute path') || line.includes('relative path')) {
+    return <span className="navigation-text">{line}</span>;
   }
   // Default output
-  return <span style={{ color: '#eaeaea' }}>{line}</span>;
+  return <span className="default-text">{line}</span>;
 }
 
-const Terminal: React.FC<TerminalProps> = ({ onNavigate }) => {
+const Terminal: React.FC<TerminalProps> = ({ onNavigate, currentLocation }) => {
   const [history, setHistory] = useState<string[]>(["Welcome to the Portfolio Terminal! Type 'help' to get started."]);
   const [input, setInput] = useState('');
   const [cwd, setCwd] = useState('/');
@@ -51,6 +57,25 @@ const Terminal: React.FC<TerminalProps> = ({ onNavigate }) => {
   useEffect(() => {
     inputRef.current?.focus();
   }, [history]);
+
+  // Sync terminal state with current location from navbar navigation
+  useEffect(() => {
+    if (currentLocation) {
+      const path = currentLocation === '/' ? '/' : currentLocation;
+      if (fileSystem[path]) {
+        // Only update if the path is different from current cwd
+        if (path !== cwd) {
+          setCwd(path);
+        }
+      }
+    }
+  }, [currentLocation, cwd]);
+
+  const navigateToPage = (path: string) => {
+    if (onNavigate) {
+      onNavigate(path === '/home' ? '/' : path);
+    }
+  };
 
   const handleCommand = (cmd: string) => {
     let output = '';
@@ -65,20 +90,36 @@ const Terminal: React.FC<TerminalProps> = ({ onNavigate }) => {
           let target = args[1];
           if (target === '..') {
             if (cwd !== '/') {
+              // Go to parent directory based on fileSystem structure
               const parts = cwd.split('/').filter(Boolean);
               parts.pop();
-              setCwd(parts.length ? '/' + parts.join('/') : '/');
+              const parentPath = parts.length ? '/' + parts.join('/') : '/';
+              setCwd(parentPath);
+              // Navigate to the parent page if it's a valid route
+              if (['/projects', '/blog', '/timeline', '/home', '/'].includes(parentPath)) {
+                navigateToPage(parentPath);
+              }
               output = '';
             } else {
               output = 'Already at root.';
             }
+          } else if (target.startsWith('/')) {
+            // Handle absolute path
+            if (fileSystem[target]) {
+              setCwd(target);
+              navigateToPage(target);
+              output = '';
+            } else {
+              output = `cd: no such directory: ${target}`;
+            }
           } else {
+            // Handle relative path
             let newPath = cwd === '/' ? `/${target}` : `${cwd}/${target}`;
             if (fileSystem[newPath]) {
               setCwd(newPath);
               output = '';
-              if (onNavigate && ['/projects', '/blog', '/timeline', '/home', '/'].includes(newPath)) {
-                onNavigate(newPath === '/home' ? '/' : newPath);
+              if (['/projects', '/blog', '/timeline', '/home', '/'].includes(newPath)) {
+                navigateToPage(newPath);
               }
             } else {
               output = `cd: no such directory: ${target}`;
@@ -112,20 +153,21 @@ const Terminal: React.FC<TerminalProps> = ({ onNavigate }) => {
   };
 
   return (
-    <div style={{ background: '#181a20', color: '#00ff90', fontFamily: 'monospace', padding: '1.2rem 1rem', borderRadius: 10, boxShadow: '0 2px 12px rgba(0,0,0,0.10)', maxWidth: 700, margin: '0 auto' }}>
-      <div style={{ textAlign: 'left' }}>
+    <div className="terminal">
+      <div className="terminal-content">
         {history.map((line, i) => (
-          <div key={i} style={{ whiteSpace: 'pre-wrap', textAlign: 'left' }}>{highlight(line)}</div>
+          <div key={i} className="terminal-line">{highlight(line)}</div>
         ))}
-        <form onSubmit={handleSubmit} style={{ display: 'flex', marginTop: 8 }}>
-          <span style={{ color: '#ffcc00', marginRight: 4 }}>{cwd} $</span>
+        <form onSubmit={handleSubmit} className="terminal-form">
+          <span className="terminal-prompt">{cwd} $</span>
           <input
             ref={inputRef}
             value={input}
             onChange={e => setInput(e.target.value)}
-            style={{ background: 'none', border: 'none', color: '#00ff90', outline: 'none', flex: 1 }}
+            className="terminal-input"
             autoFocus
             autoComplete="off"
+            placeholder="Enter command..."
           />
         </form>
       </div>

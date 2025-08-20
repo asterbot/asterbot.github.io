@@ -1,0 +1,84 @@
+/* Terminal Component Styles */
+.terminal {
+  background: #181a20;
+  color: #00ff90;
+  font-family: monospace;
+  padding: 1.2rem 1rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.10);
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.terminal-content {
+  text-align: left;
+}
+
+.terminal-line {
+  white-space: pre-wrap;
+  text-align: left;
+  padding: 2px 0;
+}
+
+.terminal-form {
+  display: flex;
+  margin-top: 8px;
+}
+
+.terminal-prompt {
+  color: #ffcc00;
+  margin-right: 4px;
+  font-weight: bold;
+}
+
+.terminal-input {
+  background: none;
+  border: none;
+  color: #00ff90;
+  outline: none;
+  flex: 1;
+  font-family: monospace;
+  font-size: 14px;
+}
+
+.terminal-input::placeholder {
+  color: #666;
+}
+
+/* Syntax highlighting styles */
+.command-prompt {
+  color: #FFD700;
+  text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.7);
+}
+
+.command-text {
+  color: #00bfff;
+  text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.7);
+}
+
+.error-text {
+  color: #ff6666;
+  text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.7);
+}
+
+.directory-text {
+  color: #00ff90;
+  text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.7);
+  font-weight: bold;
+}
+
+.help-text {
+  color: #FFD700;
+  text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.7);
+  font-weight: bold;
+}
+
+.navigation-text {
+  color: #FFA500;
+  text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.7);
+}
+
+.default-text {
+  color: #eaeaea;
+  text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.5);
+}

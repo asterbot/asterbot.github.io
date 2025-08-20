@@ -1,0 +1,63 @@
+/* GitGraph */
+.git-graph-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+  }
+
+.commit-message {
+  fill: white !important;
+  cursor: pointer;
+  transition: color 0.2s ease;
+  padding: 2px;
+}
+
+.commit-message:hover{
+  opacity: 0.6;
+}
+  
+/* Override the styles for the code block */
+.react-syntax-highlighter {
+  background: transparent !important;
+  padding: 0 !important;  /* Reset padding */
+  margin: 0 !important;   /* Reset margin */
+}
+
+/* Neutralize the line highlighting (if applicable) */
+.react-syntax-highlighter .line-highlight {
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+/* Markdown settings */
+
+blockquote{
+  border-left: 3px solid white;
+  opacity: 0.6;
+  padding-left: 10px;
+}
+
+.markdown-content {
+  text-align: left !important;  /* Ensure text is left-aligned */
+}
+
+.markdown-content p, 
+.markdown-content h2, 
+.markdown-content h3, 
+.markdown-content li, 
+.markdown-content code {
+  text-align: left !important;
+}
+
+
+/* Markdown content */
+.markdown-content h2{
+  margin-top: 20px;
+  border-bottom:1px solid grey ;
+}
+
+.katex .vlist{
+  position: absolute !important;
+}

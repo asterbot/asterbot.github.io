@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import './App.css';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
-import Terminal from './Terminal';
+import Terminal from '../Terminal';
+import './App.css';
 
 const navLinks = [
   { href: '/', label: 'Home', color: '#ffcc00' },
@@ -34,60 +34,77 @@ const socials = [
   },
 ];
 
-const profileImg = 'https://placehold.co/120x120?text=CS+Kid';
+const TERMINAL_WIDTH = 360;
+const TERMINAL_MIN_SCREEN = 900;
 
 const App: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [showSocials, setShowSocials] = useState(true);
+  const [showTerminal, setShowTerminal] = useState(window.innerWidth >= TERMINAL_MIN_SCREEN);
 
   useEffect(() => {
-    const handleResize = () => setShowSocials(window.innerWidth >= 700);
+    const handleResize = () => {
+      setShowSocials(window.innerWidth >= 700);
+      setShowTerminal(window.innerWidth >= TERMINAL_MIN_SCREEN);
+    };
     handleResize();
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  const getNavButtonStyle = (link: typeof navLinks[0]) => {
+    const isActive = location.pathname === link.href;
+    return {
+      '--active-color': link.color,
+      '--active-color-dd': link.color + 'dd',
+    } as React.CSSProperties;
+  };
+
   return (
-    <div className="App" style={{ minHeight: '100vh', background: '#23272e', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-start', margin: 0, padding: 0 }}>
+    <div className="app">
+      {/* Minecraft-style background pattern */}
+      <div className="minecraft-background-pattern" />
+      
       {/* Socials bar (desktop only) */}
       {showSocials && (
-        <div style={{ position: 'fixed', top: '50%', left: 0, transform: 'translateY(-50%)', zIndex: 100, flexDirection: 'column', gap: '1.2rem', background: 'rgba(24,26,32,0.95)', borderRadius: '0 16px 16px 0', boxShadow: '2px 0 12px rgba(0,0,0,0.10)', padding: '1.1rem 0.5rem 1.1rem 0.5rem', alignItems: 'center', borderRight: '2px solid #ffcc00', minWidth: 56, maxWidth: 64, display: 'flex' }}>
+        <div className="socials-bar">
           {socials.map(s => (
-            <a key={s.href} href={s.href} target="_blank" rel="noopener noreferrer" title={s.label} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'transform 0.15s', borderRadius: 8 }}>
+            <a key={s.href} href={s.href} target="_blank" rel="noopener noreferrer" title={s.label} className="social-link">
               {s.icon}
             </a>
           ))}
         </div>
       )}
-      <nav style={{ width: '100vw', background: '#181a20', padding: '1rem 0', display: 'flex', justifyContent: 'center', gap: '1.2rem', boxShadow: '0 2px 12px rgba(0,0,0,0.10)', position: 'sticky', top: 0, zIndex: 10, margin: 0, left: 0 }}>
+      
+      {/* Navbar */}
+      <nav className="navbar">
         {navLinks.map(link => (
           <button
             key={link.href}
             onClick={() => navigate(link.href)}
-            style={{
-              background: location.pathname === link.href ? link.color : 'transparent',
-              color: location.pathname === link.href ? '#181a20' : link.color,
-              fontWeight: 700,
-              borderRadius: 8,
-              padding: '0.6rem 1.2rem',
-              border: 'none',
-              fontSize: '1.05rem',
-              cursor: 'pointer',
-              transition: 'background 0.2s, color 0.2s',
-            }}
+            className={`nav-button ${location.pathname === link.href ? 'active' : ''}`}
+            style={getNavButtonStyle(link)}
           >
             {link.label}
           </button>
         ))}
       </nav>
-      <div style={{ width: '100%', maxWidth: 700, margin: '2rem auto 1.5rem auto' }}>
-        <Terminal onNavigate={navigate} />
-      </div>
-      <div style={{ flex: 1, width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-        <Outlet />
-      </div>
       
+      {/* Main content and sticky terminal */}
+      <div className="main-content-container">
+        {/* Main content area */}
+        <div className={`main-content-area ${!showTerminal ? 'no-terminal' : ''}`}>
+          <Outlet />
+        </div>
+        
+        {/* Sticky terminal on the right */}
+        {showTerminal && (
+          <div className="terminal-container">
+            <Terminal onNavigate={navigate} currentLocation={location.pathname} />
+          </div>
+        )}
+      </div>
     </div>
   );
 };
