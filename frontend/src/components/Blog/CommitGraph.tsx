@@ -21,47 +21,34 @@ const handleClick = ({ commitString, navigate }: HandleClickProps) => {
 
 const useAddCommit = () => {
   // This hook is a wrapper for the original commit function, to ensure that the correct properties are applied
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-interface AddCommitProps {
-    branch: any; // Replace `any` with the specific type if available from the library
-    commitString: string;
+  interface AddCommitProps {
+      branch: any; // Replace `any` with the specific type if available from the library
+      commitString: string;
+  }
+
+  interface CommitRenderProps {
+      subject: string;
+  }
+
+  return (branch: AddCommitProps['branch'], commitString: AddCommitProps['commitString']) => {
+      branch.commit({
+          subject: commitString,
+          renderMessage: (commit: CommitRenderProps) => {
+              return (
+                  <text
+                      className="commit-message"
+                      onClick={() => handleClick({ commitString, navigate })}
+                      y={20}
+                  >
+                      {commit.subject}
+                  </text>
+              );
+          },
+      });
+  };
 }
-
-interface CommitRenderProps {
-    subject: string;
-}
-
-return (branch: AddCommitProps['branch'], commitString: AddCommitProps['commitString']) => {
-    branch.commit({
-        subject: commitString,
-        renderMessage: (commit: CommitRenderProps) => {
-            return (
-                <text
-                    className="commit-message"
-                    onClick={() => handleClick({ commitString, navigate })}
-                    y={20}
-                >
-                    {commit.subject}
-                </text>
-            );
-        },
-    });
-};
-}
-
-// let options = {
-//   template: templateExtend("metro", {
-//     // colors: ["gray", "turquoise", "darkgreen", "yellowgreen", "navy"],
-//     commit: {
-//       message: {
-//         displayAuthor: false,
-//         displayHash: false,
-//         display: true,
-//       },
-//     },
-//   }),
-// };
 
 const CommitGraph = () => {
   const addCommit = useAddCommit()

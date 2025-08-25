@@ -5,7 +5,7 @@ import './App.css';
 
 const navLinks = [
   { href: '/', label: 'Home', color: '#ffcc00' },
-  { href: '/blog', label: 'Blog', color: '#00bfff' },
+  { href: '/blog', label: 'Blogs', color: '#00bfff' },
   { href: '/projects', label: 'Projects', color: '#ff66cc' },
   { href: '/timeline', label: 'Timeline', color: '#00ff90' },
 ];
@@ -19,7 +19,7 @@ const socials = [
     ),
   },
   {
-    href: 'https://linkedin.com/in/asterbot',
+    href: 'https://linkedin.com/in/arjun-sodhi',
     label: 'LinkedIn',
     icon: (
       <svg width="28" height="28" fill="none" viewBox="0 0 24 24"><path fill="#00bfff" d="M19 0h-14c-2.76 0-5 2.24-5 5v14c0 2.76 2.24 5 5 5h14c2.76 0 5-2.24 5-5v-14c0-2.76-2.24-5-5-5zm-11 19h-3v-9h3v9zm-1.5-10.28c-.97 0-1.75-.79-1.75-1.75s.78-1.75 1.75-1.75 1.75.79 1.75 1.75-.78 1.75-1.75 1.75zm15.5 10.28h-3v-4.5c0-1.08-.02-2.47-1.5-2.47-1.5 0-1.73 1.17-1.73 2.39v4.58h-3v-9h2.89v1.23h.04c.4-.75 1.38-1.54 2.84-1.54 3.04 0 3.6 2 3.6 4.59v4.72z"/></svg>
@@ -63,7 +63,6 @@ const App: React.FC = () => {
 
   return (
     <div className="app">
-      {/* Minecraft-style background pattern */}
       <div className="minecraft-background-pattern" />
       
       {/* Socials bar (desktop only) */}

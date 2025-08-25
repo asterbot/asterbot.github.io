@@ -1,3 +1,24 @@
+/* CSS Variables for consistent theming */
+:root {
+  --bg-primary: #0d1117;
+  --bg-secondary: #161b22;
+  --bg-tertiary: #21262d;
+  --text-primary: #f0f6fc;
+  --text-secondary: #8b949e;
+  --text-muted: #484f58;
+  --accent-primary: #58a6ff;
+  --accent-secondary: #79c0ff;
+  --accent-success: #3fb950;
+  --accent-warning: #d29922;
+  --accent-error: #f85149;
+  --border-color: #30363d;
+  --shadow-color: rgba(0, 0, 0, 0.3);
+  --terminal-bg: #0d1117;
+  --terminal-text: #f0f6fc;
+  --terminal-accent: #58a6ff;
+  --terminal-border: #30363d;
+}
+
 /* HomePage Component Styles */
 .homepage-container {
   background: #181a20;
@@ -31,11 +52,50 @@
   text-align: center;
 }
 
-.homepage-description {
+.box-body {
+  margin: 2rem 0;
   color: #eaeaea;
-  font-size: 1.15rem;
-  margin-bottom: 32px;
-  text-align: center;
-  max-width: 400px;
-  line-height: 1.6;
+}
+
+.intro-table {
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.intro-text {
+  text-align: left;
+  padding: 2rem;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px var(--shadow-color);
+}
+
+.greeting {
+  color: var(--accent-success);
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.question {
+  color: var(--accent-warning);
+  font-weight: 600;
+}
+
+.highlight {
+  color: var(--accent-primary);
+  font-weight: 600;
+}
+
+.motto {
+  color: var(--accent-secondary);
+  font-style: italic;
+  font-size: 1.1rem;
+}
+
+.text-container, .image-container {
+  display: block;
+  width: 100%;
+  margin-bottom: 1rem;
 }
