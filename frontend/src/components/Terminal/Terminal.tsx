@@ -2,10 +2,10 @@ import React, { useState, useRef, useEffect } from 'react';
 import './Terminal.css';
 
 const fileSystem: Record<string, string[]> = {
-  '/': ['home', 'projects', 'blog', 'timeline'],
+  '/': ['home', 'projects', 'blogs', 'timeline'],
   '/home': ['about.txt'],
   '/projects': ['project1.txt', 'project2.txt'],
-  '/blog': ['branch-main', 'branch-cs'],
+  '/blogs': ['branch-main', 'branch-cs'],
   '/timeline': ['uwaterloo.txt', 'internships.txt'],
 };
 
@@ -33,7 +33,7 @@ function highlight(line: string) {
     return <span className="error-text">{line}</span>;
   }
   // Highlight directories in ls output
-  if (/^home|projects|blog|timeline$/.test(line.trim())) {
+  if (/^home|projects|blogs|timeline$/.test(line.trim())) {
     return <span className="directory-text">{line}</span>;
   }
   // Highlight help
@@ -102,7 +102,7 @@ const Terminal: React.FC<TerminalProps> = ({ onNavigate, currentLocation }) => {
               const parentPath = parts.length ? '/' + parts.join('/') : '/';
               setCwd(parentPath);
               // Navigate to the parent page if it's a valid route
-              if (['/projects', '/blog', '/timeline', '/home', '/'].includes(parentPath)) {
+              if (['/projects', '/blogs', '/timeline', '/home', '/'].includes(parentPath)) {
                 navigateToPage(parentPath);
               }
               output = '';
@@ -129,7 +129,7 @@ const Terminal: React.FC<TerminalProps> = ({ onNavigate, currentLocation }) => {
             if (fileSystem[newPath]) {
               setCwd(newPath);
               output = '';
-              if (['/projects', '/blog', '/timeline', '/home', '/'].includes(newPath)) {
+              if (['/projects', '/blogs', '/timeline', '/home', '/'].includes(newPath)) {
                 navigateToPage(newPath);
               }
             } 
