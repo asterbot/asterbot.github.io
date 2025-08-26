@@ -9,14 +9,14 @@ const timelineEvents: Term [] =  [
         courses:[
             { subject: "CO", courseCode: 456, description: "Introduction to Game Theory"},
             { subject: "CS", courseCode: 480, description: "Introduction to Machine Learning"},
-            { subject: "CS", courseCode: 456, description: "Distributed Systems"},
+            { subject: "CS", courseCode: 454, description: "Distributed Systems"},
         ],
         termType: TermType.StudyTerm,
     },
     {
         date: "May 2025 - Aug 2025",
         title: "Work Term 4",
-        description: "Software Security @ Ford Motors",
+        description: "Security Software Engineer @ Ford Motors",
         courses:[
             { subject: "CS", courseCode: 348, description: "Database Management"},
         ],
@@ -25,7 +25,7 @@ const timelineEvents: Term [] =  [
     {
         date: "Jan 2025 - Apr 2025",
         title: "3A",
-        description: "Canon event",
+        description: "Canon event!",
         courses:[
             { subject: "CS", courseCode: 341, description: "Algorithms"},
             { subject: "CS", courseCode: 350, description: "Operating Systems"},
