@@ -2,7 +2,6 @@ import React from 'react';
 import './HomePage.css';
 
 const HomePage: React.FC = () => {
-  
   return (
     <div className="homepage-container">
       <img src={require('../../img/pfp.png')} alt="Profile" className="profile-image" />
@@ -14,13 +13,12 @@ const HomePage: React.FC = () => {
                   <td>
                       <div className="text-container">
                           <div className="intro-text">
-                              <span className="question">Who am I?</span> A work in progress, fueled by code and curiosity.<br/> 
-                              A massive tech nerd, currently studying <span className="highlight">CS@UWaterloo</span>, in the class of 2027!<br />
+                              <span className="question">Who am I?</span> "A huge nerd" doesn't even scratch the surface.<br />
                               <br />
-                              This website will be a culmination of my professional portfolio and an outlet for me to talk about things I find cool. 
-                              Hope you enjoy looking around!
+                              This website will be a culmination of my professional portfolio and a way for me to talk about tech things I find cool. 
+                              Have fun looking around!
                               <br /><br />
-                              <span className="motto"><i>Code, chaos, create!</i></span>
+                              <span className="motto"><i>yee haw</i></span>
                           </div>
                       </div>
                   </td>

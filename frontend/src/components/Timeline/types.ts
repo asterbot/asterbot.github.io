@@ -1,6 +1,6 @@
 export enum TermType {
-    WorkTerm = "Work Term",
-    StudyTerm = "Study Term",
+    WorkTerm,
+    StudyTerm,
 }
 
 export interface Term{
@@ -13,6 +13,6 @@ export interface Term{
 
 export interface Course{
     subject: string,
-    courseCode: number,
+    courseCode: number | string,
     description: string,
 }

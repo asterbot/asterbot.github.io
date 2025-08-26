@@ -63,7 +63,7 @@
   position: relative;
   left: 50%;
   transform: translateX(-120%); /* moves to the left */
-  text-align: right;
+  text-align: left;
 }
 
 .timeline-item:nth-child(even) .timeline-content {
@@ -80,16 +80,17 @@
 }
 
 .timeline-dot {
-  position: absolute;
   left: 50%;
-  top: 1.5rem;
-  width: 16px;
-  height: 16px;
-  background: #00ff90;
+  position: absolute;
+  width: 60px;             
+  height: 60px;       
   border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: black;
+  background-color: #00ff90;
   transform: translateX(-50%);
-  border: 3px solid #181a20;
-  box-shadow: 0 0 0 3px #00ff90;
 }
 
 .timeline-date {
