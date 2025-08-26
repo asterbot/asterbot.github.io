@@ -7,7 +7,6 @@ import './Timeline.css';
 // Icons for timeline
 import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined';
 import WorkOutlineOutlinedIcon from '@mui/icons-material/WorkOutlineOutlined';
-import OutlinedFlagRoundedIcon from '@mui/icons-material/OutlinedFlagRounded';
 import { TermType } from './types';
 
 function getColor(subject: string): string{
@@ -37,7 +36,7 @@ const Timeline: React.FC = () => {
         {timelineEvents.map((event, index) => (
           <div key={index} className="timeline-item">
             <div className="timeline-dot">
-              {event.termType == TermType.StudyTerm ? <SchoolOutlinedIcon /> : <WorkOutlineOutlinedIcon />}
+              {event.termType === TermType.StudyTerm ? <SchoolOutlinedIcon /> : <WorkOutlineOutlinedIcon />}
             </div>
             <div className="timeline-content">
               <div className="timeline-date">{event.date}</div>

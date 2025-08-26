@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import { App, Blog, Projects, Timeline, HomePage } from './components';
+import { App, Blog, Blogs, Projects, Timeline, HomePage } from './components';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -14,7 +14,8 @@ root.render(
       <Routes>
         <Route path="/" element={<App />}>
           <Route index element={<HomePage />} />
-          <Route path="blog" element={<Blog />} />
+          <Route path="blogs/:id" element = {<Blog />} />
+          <Route path="blogs" element={<Blogs />} />
           <Route path="projects" element={<Projects />} />
           <Route path="timeline" element={<Timeline />} />
         </Route>

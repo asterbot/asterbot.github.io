@@ -15,7 +15,7 @@ const HomePage: React.FC = () => {
                           <div className="intro-text">
                               <span className="question">Who am I?</span> "A huge nerd" doesn't even scratch the surface.<br />
                               <br />
-                              This website will be a culmination of my professional portfolio and a way for me to talk about tech things I find cool. 
+                              This website will be a culmination of my professional portfolio and a way for me to talk about things in tech I find cool. 
                               Have fun looking around!
                               <br /><br />
                               <span className="motto"><i>yee haw</i></span>

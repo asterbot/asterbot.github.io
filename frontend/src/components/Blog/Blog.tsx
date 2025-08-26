@@ -1,5 +1,4 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import './Blog.css';
 
 const Blog: React.FC = () => {
@@ -7,7 +6,7 @@ const Blog: React.FC = () => {
 
     return (
       <div className="blog">
-        hi!
+        <h1>HELLO</h1>
       </div>
     )
 }

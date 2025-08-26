@@ -9,7 +9,7 @@ const fileSystem: Record<string, string[]> = {
   '/timeline': ['uwaterloo.txt', 'internships.txt'],
 };
 
-const helpText = `Available commands:\nls, cd <dir>, pwd, help, clear\n\nNavigation:\n- cd . (go to current directory) (why?)\n- cd .. (go to parent directory)\n- cd /projects (absolute path)\n- cd projects (relative path)`;
+const helpText = `Available commands:\nwhoami, ls, cd <dir>, pwd, help, clear\n\nNavigation:\n- cd . (go to current directory) (why?)\n- cd .. (go to parent directory)\n- cd /projects (absolute path)\n- cd projects (relative path)`;
 
 type TerminalProps = {
   onNavigate?: (path: string) => void;
@@ -20,7 +20,7 @@ type TerminalProps = {
 function highlight(line: string) {
   // Highlight commands
   if (line.startsWith('$ ')) {
-    const [prompt, ...rest] = line.split(' ');
+    const [, ...rest] = line.split(' ');
     return (
       <span>
         <span className="command-prompt">$</span>{' '}
@@ -82,6 +82,9 @@ const Terminal: React.FC<TerminalProps> = ({ onNavigate, currentLocation }) => {
     const args = cmd.trim().split(' ');
     const command = args[0];
     switch (command) {
+      case 'whoami':
+        output = 'Arjun :D'
+        break;
       case 'sudo':
         output = "Why would I give you sudo access?"
         break;

@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { Gitgraph,  templateExtend } from '@gitgraph/react';
+import { Gitgraph } from '@gitgraph/react';
 
 import './index.css'
 

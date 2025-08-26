@@ -2,7 +2,7 @@ import React from 'react';
 import './Blog.css';
 import CommitGraph from './CommitGraph';
 
-const Blog: React.FC = () => {
+const Blogs: React.FC = () => {
   return (
     <div className="blog-container">
       <div className="blog-title">Blogs</div>
@@ -11,4 +11,4 @@ const Blog: React.FC = () => {
   );
 };
 
-export default Blog;
+export default Blogs;

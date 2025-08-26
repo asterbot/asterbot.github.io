@@ -5,7 +5,7 @@ import './App.css';
 
 const navLinks = [
   { href: '/', label: 'Home', color: '#ffcc00' },
-  { href: '/blog', label: 'Blogs', color: '#00bfff' },
+  { href: '/blogs', label: 'Blogs', color: '#00bfff' },
   { href: '/projects', label: 'Projects', color: '#ff66cc' },
   { href: '/timeline', label: 'Timeline', color: '#00ff90' },
 ];
@@ -34,7 +34,6 @@ const socials = [
   },
 ];
 
-const TERMINAL_WIDTH = 360;
 const TERMINAL_MIN_SCREEN = 900;
 
 const App: React.FC = () => {
@@ -54,7 +53,6 @@ const App: React.FC = () => {
   }, []);
 
   const getNavButtonStyle = (link: typeof navLinks[0]) => {
-    const isActive = location.pathname === link.href;
     return {
       '--active-color': link.color,
       '--active-color-dd': link.color + 'dd',
