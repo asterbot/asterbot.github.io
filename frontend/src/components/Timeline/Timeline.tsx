@@ -1,30 +1,18 @@
 import React from 'react';
+
+import timelineEvents from './data/timelineData';
+
 import './Timeline.css';
 
-const Timeline: React.FC = () => {
-  const timelineEvents = [
-    {
-      date: '2023 - Present',
-      title: 'Software Engineer',
-      description: 'Working on innovative web applications and contributing to open-source projects.'
-    },
-    {
-      date: '2022 - 2023',
-      title: 'Game Developer Intern',
-      description: 'Developed gameplay mechanics and contributed to the development of indie games.'
-    },
-    {
-      date: '2021 - 2022',
-      title: 'Research Assistant',
-      description: 'Conducted research in machine learning applications for creative technologies.'
-    },
-    {
-      date: '2019 - 2023',
-      title: 'Computer Science Degree',
-      description: 'Graduated with honors, specializing in software engineering and game development.'
-    }
-  ];
+const color_map={
+  "CS":"success",
+  "MATH": "primary",
+  "STAT": "primary",
+  "CO": "primary",
+  "PHYS": "info"
+}
 
+const Timeline: React.FC = () => {
   return (
     <div className="timeline-container">
       <h1 className="timeline-title">Timeline</h1>
@@ -36,6 +24,18 @@ const Timeline: React.FC = () => {
               <div className="timeline-date">{event.date}</div>
               <h3 className="timeline-item-title">{event.title}</h3>
               <p className="timeline-description">{event.description}</p>
+                <ul className="list-group">
+                  {event.courses.map((course, index) => {
+                    
+                    // console.log(color_map[course.subject])
+                    
+                    return(
+                      <li key={index} className="list-group-item">
+                        {course.subject} {course.courseCode}: {course.description}
+                      </li>
+                    )
+                  })}
+                </ul>
             </div>
           </div>
         ))}
@@ -43,5 +43,6 @@ const Timeline: React.FC = () => {
     </div>
   );
 };
+
 
 export default Timeline;

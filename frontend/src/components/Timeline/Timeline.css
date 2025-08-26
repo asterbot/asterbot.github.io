@@ -38,8 +38,6 @@
 
 .timeline-item:nth-child(odd) .timeline-content {
   margin-left: 0;
-  margin-right: 55%;
-  text-align: right;
 }
 
 .timeline-item:nth-child(even) .timeline-content {
@@ -55,6 +53,24 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   border: 1px solid rgba(0, 255, 144, 0.3);
   transition: transform 0.2s, box-shadow 0.2s;
+  width: auto;
+  max-width: 400px;
+  min-width: 400px;
+  display: inline-block;
+}
+
+.timeline-item:nth-child(odd) .timeline-content {
+  position: relative;
+  left: 50%;
+  transform: translateX(-120%); /* moves to the left */
+  text-align: right;
+}
+
+.timeline-item:nth-child(even) .timeline-content {
+  position: relative;
+  right: 50%;
+  transform: translateX(68%); /* moves to the right */
+  text-align: left;
 }
 
 .timeline-content:hover {

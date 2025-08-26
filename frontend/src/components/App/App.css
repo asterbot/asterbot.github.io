@@ -54,7 +54,7 @@
   transform: scale(1.1);
 }
 
-.navbar {
+.app-navbar {
   width: 100vw;
   background: linear-gradient(135deg, #3C3F43 0%, #2C2F33 100%);
   padding: 1rem 0;

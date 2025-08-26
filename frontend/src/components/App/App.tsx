@@ -77,7 +77,7 @@ const App: React.FC = () => {
       )}
       
       {/* Navbar */}
-      <nav className="navbar">
+      <nav className="app-navbar">
         {navLinks.map(link => (
           <button
             key={link.href}

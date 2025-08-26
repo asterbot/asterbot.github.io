@@ -9,7 +9,7 @@ const fileSystem: Record<string, string[]> = {
   '/timeline': ['uwaterloo.txt', 'internships.txt'],
 };
 
-const helpText = `Available commands:\nls, cd <dir>, pwd, help, clear\n\nNavigation:\n- cd .. (go to parent directory)\n- cd /projects (absolute path)\n- cd projects (relative path)`;
+const helpText = `Available commands:\nls, cd <dir>, pwd, help, clear\n\nNavigation:\n- cd . (go to current directory) (why?)\n- cd .. (go to parent directory)\n- cd /projects (absolute path)\n- cd projects (relative path)`;
 
 type TerminalProps = {
   onNavigate?: (path: string) => void;
@@ -29,7 +29,7 @@ function highlight(line: string) {
     );
   }
   // Highlight errors
-  if (/no such directory|missing operand|Command not found|Already at root/.test(line)) {
+  if (/no such directory|missing operand|Command not found|Already at root|sudo/.test(line)) {
     return <span className="error-text">{line}</span>;
   }
   // Highlight directories in ls output
@@ -45,11 +45,11 @@ function highlight(line: string) {
     return <span className="navigation-text">{line}</span>;
   }
   // Default output
-  return <span className="default-text">{line}</span>;
+  return <span className="terminal-default-text">{line}</span>;
 }
 
 const Terminal: React.FC<TerminalProps> = ({ onNavigate, currentLocation }) => {
-  const [history, setHistory] = useState<string[]>(["Welcome to the Portfolio Terminal! Type 'help' to get started."]);
+  const [history, setHistory] = useState<string[]>([""]);
   const [input, setInput] = useState('');
   const [cwd, setCwd] = useState('/');
   const inputRef = useRef<HTMLInputElement>(null);
@@ -82,6 +82,9 @@ const Terminal: React.FC<TerminalProps> = ({ onNavigate, currentLocation }) => {
     const args = cmd.trim().split(' ');
     const command = args[0];
     switch (command) {
+      case 'sudo':
+        output = "Why would I give you sudo access?"
+        break;
       case 'ls':
         output = (fileSystem[cwd] || []).join('  ');
         break;
@@ -103,7 +106,11 @@ const Terminal: React.FC<TerminalProps> = ({ onNavigate, currentLocation }) => {
             } else {
               output = 'Already at root.';
             }
-          } else if (target.startsWith('/')) {
+          }
+          else if (target === "."){
+              output=""
+          }
+          else if (target.startsWith('/')) {
             // Handle absolute path
             if (fileSystem[target]) {
               setCwd(target);
@@ -112,7 +119,8 @@ const Terminal: React.FC<TerminalProps> = ({ onNavigate, currentLocation }) => {
             } else {
               output = `cd: no such directory: ${target}`;
             }
-          } else {
+          } 
+          else {
             // Handle relative path
             let newPath = cwd === '/' ? `/${target}` : `${cwd}/${target}`;
             if (fileSystem[newPath]) {
@@ -121,7 +129,8 @@ const Terminal: React.FC<TerminalProps> = ({ onNavigate, currentLocation }) => {
               if (['/projects', '/blog', '/timeline', '/home', '/'].includes(newPath)) {
                 navigateToPage(newPath);
               }
-            } else {
+            } 
+            else {
               output = `cd: no such directory: ${target}`;
             }
           }
@@ -151,10 +160,11 @@ const Terminal: React.FC<TerminalProps> = ({ onNavigate, currentLocation }) => {
       setInput('');
     }
   };
-
+  
   return (
     <div className="terminal">
       <div className="terminal-content">
+        <div className="terminal-line">{highlight("Welcome to the Portfolio Terminal! Type 'help' to get started.")}</div>
         {history.map((line, i) => (
           <div key={i} className="terminal-line">{highlight(line)}</div>
         ))}
