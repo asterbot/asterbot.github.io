@@ -4,7 +4,7 @@ import './HomePage.css';
 const HomePage: React.FC = () => {
   return (
     <div className="homepage-container">
-      <img src={require('../../img/pfp.png')} alt="Profile" className="profile-image" />
+      <img src={require('./img/pfp.png')} alt="Profile" className="profile-image" />
       <h1 className="homepage-title">Hello!</h1>
         <div className="box-body">
           <table className="intro-table">

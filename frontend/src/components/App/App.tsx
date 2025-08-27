@@ -6,7 +6,7 @@ import './App.css';
 const navLinks = [
   { href: '/', label: 'Home', color: '#ffcc00' },
   { href: '/blogs', label: 'Blogs', color: '#00bfff' },
-  { href: '/projects', label: 'Projects', color: '#ff66cc' },
+  { href: '/projects', label: 'Projects', color: '#dcff5c' },
   { href: '/timeline', label: 'Timeline', color: '#00ff90' },
 ];
 
@@ -63,7 +63,6 @@ const App: React.FC = () => {
     <div className="app">
       <div className="minecraft-background-pattern" />
       
-      {/* Socials bar (desktop only) */}
       {showSocials && (
         <div className="socials-bar">
           {socials.map(s => (
@@ -74,7 +73,6 @@ const App: React.FC = () => {
         </div>
       )}
       
-      {/* Navbar */}
       <nav className="app-navbar">
         {navLinks.map(link => (
           <button
@@ -88,14 +86,11 @@ const App: React.FC = () => {
         ))}
       </nav>
       
-      {/* Main content and sticky terminal */}
       <div className="main-content-container">
-        {/* Main content area */}
         <div className={`main-content-area ${!showTerminal ? 'no-terminal' : ''}`}>
           <Outlet />
         </div>
         
-        {/* Sticky terminal on the right */}
         {showTerminal && (
           <div className="terminal-container">
             <Terminal onNavigate={navigate} currentLocation={location.pathname} />
