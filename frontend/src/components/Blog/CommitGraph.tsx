@@ -60,10 +60,10 @@ const CommitGraph = () => {
           addCommit(main, "Initial Commit");
 
           const cool_stuff = main.branch("Tech stuff")
-          addCommit(cool_stuff, "Sleep sort")
+          addCommit(cool_stuff, "Sleep Sort")
 
           const school = main.branch("School");
-          addCommit(school, "3A review")
+          addCommit(school, "3A Review")
 
         }}
       </Gitgraph>

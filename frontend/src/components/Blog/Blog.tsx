@@ -10,8 +10,15 @@ import 'katex/dist/katex.min.css';
 import 'highlight.js/styles/github-dark.css';
 import './Blog.css';
 
+
+function convertIDToTitle(id: string | undefined){
+    if (!id) return id;
+    return id.split("_").map((s) => {return s.charAt(0).toUpperCase() + s.slice(1)}).join(" ");
+}
+
 const Blog: React.FC = () => {
     const { id } = useParams();
+
     const [markdownContent, setMarkdownContent] = useState<string>('');
     const [errorMessage, setErrorMessage] = useState<string>('');
 
@@ -44,7 +51,7 @@ const Blog: React.FC = () => {
                     }
                 }
             })
-            .catch((error) => {
+            .catch((_error) => {
                 if (!isCancelled) {
                     setErrorMessage(`Blog not found for id: ${id}`);
                 }
@@ -57,7 +64,7 @@ const Blog: React.FC = () => {
 
     return (
       <div className="blog-container">
-        <div className="blog-title">{id}</div>
+        <div className="blog-title">{convertIDToTitle(id)}</div>
         {errorMessage && (
             <div style={{ color: '#ff6b6b', marginTop: '1rem' }}>{errorMessage}</div>
         )}
