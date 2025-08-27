@@ -3,10 +3,11 @@ import { Project, SourceDomain } from "../types";
 const projectData: Project[] = [
     {
         title: "ASCII Game Engine",
-        tags: ["C++", "Ncurses", "OOP"],
+        tags: ["C++", "Ncurses", "OOP", "MVC", "SOLID"],
         sources: [],
         description: "A game engine based on the Ncurses C framework with C++ abstractions. Created Tetris and Donkey Kong with the game engine!",
         uid: "age",
+        tryItOut: false,
     },
     {
         title: "BetterNotes",
@@ -15,17 +16,19 @@ const projectData: Project[] = [
             {sourceDomain: SourceDomain.GitHub, sourceLink: "https://github.com/asterbot/BetterNotes"},
             {sourceDomain: SourceDomain.Releases, sourceLink: "https://github.com/asterbot/BetterNotes/releases"}
         ],
-        description: "app",
+        description: "Note taking desktop app with support for Markdown, LaTEX, graphs and freehand drawing. Includes multi-user support, offline support and sync with cloud DB on Mongo.",
         uid: "age",
+        tryItOut: true,
     },
     {
         title: "Book Explorer App",
-        tags: ["PostgresSQL", "Supabase", "Python (Flask)", "React TypeScript"],
+        tags: ["PostgresSQL", "Supabase", "Python (Flask)", "React TypeScript", "Full Stack", "App Development"],
         sources: [
             {sourceDomain: SourceDomain.GitHub, sourceLink: "https://github.com/asterbot/Book-Explorer"}
         ],
-        description: "app",
+        description: "A web-app to make the most of your reading journey! Includes personalized recommendations, reading analytics, user progress tracking, book clubs and various other community features.",
         uid: "bookexp",
+        tryItOut: false,
     },
     {
         title: "Peer to Peer Network Implementation",
@@ -33,8 +36,9 @@ const projectData: Project[] = [
         sources: [
             {sourceDomain: SourceDomain.GitHub, sourceLink: "https://github.com/asterbot/hack-the-hill-p2p"}
         ],
-        description: "app",
+        description: "Decentralized file-sharing platform for nodes connected to a common network. Uses data splitting protocols by splitting data into 512B chunks to be resilient against network disruptions.",
         uid: "age",
+        tryItOut: false,
     },
 ]
 

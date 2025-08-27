@@ -11,6 +11,9 @@ const Projects: React.FC = () => {
       <div className="projects-grid">
         {projectData.map((project, index) => (
           <div key={index} className="project-card">
+            {project.tryItOut && (
+              <div className="try-banner">Try it out!</div>
+            )}
             <h3 className="project-title">{project.title}</h3>
             <p className="project-description">{project.description}</p>
             <div className="project-tech">
