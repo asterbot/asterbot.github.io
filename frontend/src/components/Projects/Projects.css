@@ -10,7 +10,7 @@
 .projects-title {
   font-size: 2.5rem;
   margin-bottom: 2rem;
-  color: #ff66cc;
+  color: #dcff5c;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
@@ -27,19 +27,19 @@
   padding: 1.5rem;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   transition: transform 0.2s, box-shadow 0.2s;
-  border: 1px solid rgba(255, 102, 204, 0.3);
+  border: 1px solid rgba(242, 255, 62, 0.3);
 }
 
 .project-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
-  border-color: rgba(255, 102, 204, 0.6);
+  border-color: rgba(255, 252, 46, 0.6);
 }
 
 .project-title {
   font-size: 1.5rem;
   margin-bottom: 1rem;
-  color: #ff66cc;
+  color: #dcff5c;
 }
 
 .project-description {
@@ -56,12 +56,12 @@
 }
 
 .tech-tag {
-  background: rgba(255, 102, 204, 0.2);
-  color: #ff66cc;
+  background: rgba(255, 255, 255, 0.2);
+  color: #dcff5c;
   padding: 0.25rem 0.75rem;
   border-radius: 20px;
   font-size: 0.9rem;
-  border: 1px solid rgba(255, 102, 204, 0.4);
+  border: 1px solid rgba(255, 251, 44, 0.4);
 }
 
 .project-links {
