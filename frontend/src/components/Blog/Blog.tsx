@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom'
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -10,17 +10,8 @@ import 'katex/dist/katex.min.css';
 import 'highlight.js/styles/github-dark.css';
 import './Blog.css';
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore - webpack will provide string URLs for these imports
-import initialCommitUrl from './blogs/initial_commit.md';
-
 const Blog: React.FC = () => {
     const { id } = useParams();
-
-    const idToMarkdownUrl = useMemo<Record<string, string>>(() => ({
-        initial_commit: initialCommitUrl,
-    }), []);
-
     const [markdownContent, setMarkdownContent] = useState<string>('');
     const [errorMessage, setErrorMessage] = useState<string>('');
 
@@ -31,37 +22,38 @@ const Blog: React.FC = () => {
             return;
         }
 
-        const urlForId = idToMarkdownUrl[id];
-
-        if (!urlForId) {
-            setErrorMessage(`Blog not found for id: ${id}`);
-            setMarkdownContent('');
-            return;
-        }
-
         let isCancelled = false;
         setErrorMessage('');
 
-        fetch(urlForId)
-            .then(async (response) => {
-                if (!response.ok) {
-                    throw new Error(`Failed to load markdown: ${response.status}`);
-                }
-                const text = await response.text();
+        // Dynamically import the markdown file based on the id
+        import(`./blogs/${id}.md`)
+            .then((module) => {
                 if (!isCancelled) {
-                    setMarkdownContent(text);
+                    // Fetch the content from the imported URL
+                    return fetch(module.default);
+                }
+            })
+            .then(async (response) => {
+                if (!isCancelled && response) {
+                    if (!response.ok) {
+                        throw new Error(`Failed to load markdown: ${response.status}`);
+                    }
+                    const text = await response.text();
+                    if (!isCancelled) {
+                        setMarkdownContent(text);
+                    }
                 }
             })
             .catch((error) => {
                 if (!isCancelled) {
-                    setErrorMessage(error.message || 'Failed to load blog.');
+                    setErrorMessage(`Blog not found for id: ${id}`);
                 }
             });
 
         return () => {
             isCancelled = true;
         };
-    }, [id, idToMarkdownUrl]);
+    }, [id]);
 
     return (
       <div className="blog-container">
