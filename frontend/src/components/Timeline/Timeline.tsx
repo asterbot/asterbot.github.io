@@ -42,7 +42,7 @@ const Timeline: React.FC = () => {
               <div className="timeline-date">{event.date}</div>
               <h3 className="timeline-item-title">{event.title}</h3>
               <p className="timeline-description">{event.description}</p>
-              Courses:
+              {event.courses.length > 0 && "Courses:"}
                 <ul className="list-group">
                   {event.courses.map((course, index) => {
                     return(

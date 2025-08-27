@@ -6,7 +6,7 @@ import './App.css';
 const navLinks = [
   { href: '/', label: 'Home', color: '#ffcc00' },
   { href: '/blogs', label: 'Blogs', color: '#00bfff' },
-  { href: '/projects', label: 'Projects', color: '#dcff5c' },
+  { href: '/projects', label: 'Projects', color: '#a05cff' },
   { href: '/timeline', label: 'Timeline', color: '#00ff90' },
 ];
 
