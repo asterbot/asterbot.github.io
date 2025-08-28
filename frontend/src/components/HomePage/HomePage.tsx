@@ -13,10 +13,12 @@ const HomePage: React.FC = () => {
                   <td>
                       <div className="text-container">
                           <div className="intro-text">
-                              <span className="question">Who am I?</span> "A huge nerd" doesn't even scratch the surface.<br />
-                              <br />
-                              This website will be a culmination of my professional portfolio and an outlet for me to talk about things in tech I find cool. 
+                              <span className="question">Who am I?</span> "A huge nerd" doesn't even scratch the surface. 
+                              <br /><br />
+                              I love making things with code, whether its games, apps, database systems or anything in between, working with software is my biggest passion!<br />
                               Have fun looking around!
+                              <br /><br />
+                              You can also check out my socials on the left and feel free to reach out on Discord :D
                               <br /><br />
                               <span className="motto"><i>yee haw</i></span>
                           </div>
