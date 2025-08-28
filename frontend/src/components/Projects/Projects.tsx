@@ -14,7 +14,9 @@ const Projects: React.FC = () => {
             {project.tryItOut && (
               <div className="try-banner">Try it out!</div>
             )}
+
             <h3 className="project-title">{project.title}</h3>
+            <img src={require('./img/' + project.uid + '.png')} width={280} height={174} />
             <p className="project-description">{project.description}</p>
             <div className="project-tech">
               {project.tags.map((tech, techIndex) => (
@@ -23,7 +25,7 @@ const Projects: React.FC = () => {
             </div>
             <div className="project-links">
               {project.sources.map((source, sourceIndex) => (
-                <a key={sourceIndex} href={source.sourceLink} className="project-link">
+                <a key={sourceIndex} href={source.sourceLink} className="project-link" target="_blank">
                   {source.sourceDomain}
                 </a>
               ))}

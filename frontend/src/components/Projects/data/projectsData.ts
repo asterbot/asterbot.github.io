@@ -17,7 +17,7 @@ const projectData: Project[] = [
             {sourceDomain: SourceDomain.Releases, sourceLink: "https://github.com/asterbot/BetterNotes/releases"}
         ],
         description: "Note taking desktop app with support for Markdown, LaTEX, graphs and freehand drawing. Includes multi-user support, offline support and sync with cloud DB on Mongo.",
-        uid: "age",
+        uid: "betternotes",
         tryItOut: true,
     },
     {
@@ -31,13 +31,13 @@ const projectData: Project[] = [
         tryItOut: false,
     },
     {
-        title: "Peer to Peer Network Implementation",
+        title: "Peer to Peer Network",
         tags: ["Web Sockets","Python (Flask)", "TCP/IP", "NextJS"],
         sources: [
             {sourceDomain: SourceDomain.GitHub, sourceLink: "https://github.com/asterbot/hack-the-hill-p2p"}
         ],
         description: "Decentralized file-sharing platform for nodes connected to a common network. Uses data splitting protocols by splitting data into 512B chunks to be resilient against network disruptions.",
-        uid: "age",
+        uid: "p2p",
         tryItOut: false,
     },
 ]

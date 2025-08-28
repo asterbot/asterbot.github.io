@@ -18,5 +18,3 @@ export interface Source{
     sourceDomain: SourceDomain,
     sourceLink: string,
 }
-
-
