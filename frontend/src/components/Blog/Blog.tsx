@@ -55,7 +55,6 @@ const Blog: React.FC = () => {
                     }
                     const text = await response.text();
                     if (!isCancelled) {
-                        // Transform image paths before setting the content
                         const transformedContent = transformImagePaths(text, id);
                         setMarkdownContent(transformedContent);
                     }

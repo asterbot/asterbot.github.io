@@ -1,7 +1,8 @@
 import { useNavigate } from 'react-router-dom';
-import { Gitgraph } from '@gitgraph/react';
+import { Gitgraph, templateExtend, TemplateName } from '@gitgraph/react';
 
 import './index.css'
+import { JSX } from 'react/jsx-runtime';
 
 const processString = (commitString: string) => {
   // Convert string like "Initial Commit" to "initial_commit"
@@ -20,22 +21,13 @@ const handleClick = ({ commitString, navigate }: HandleClickProps) => {
 };
 
 const useAddCommit = () => {
-  // This hook is a wrapper for the original commit function, to ensure that the correct properties are applied
   const navigate = useNavigate();
 
-  interface AddCommitProps {
-      branch: any; // Replace `any` with the specific type if available from the library
-      commitString: string;
-  }
 
-  interface CommitRenderProps {
-      subject: string;
-  }
-
-  return (branch: AddCommitProps['branch'], commitString: AddCommitProps['commitString']) => {
+  return (branch: { commit: (arg0: { subject: any; renderMessage: (commit: any) => JSX.Element; }) => void; }, commitString: any) => {
       branch.commit({
           subject: commitString,
-          renderMessage: (commit: CommitRenderProps) => {
+          renderMessage: (commit) => {
               return (
                   <text
                       className="commit-message"
@@ -50,20 +42,33 @@ const useAddCommit = () => {
   };
 }
 
+let options = {
+  template: templateExtend(TemplateName.Metro, {
+    // colors: ["gray", "turquoise", "darkgreen", "yellowgreen", "navy"],
+    commit: {
+      message: {
+        displayAuthor: false,
+        displayHash: false,
+        display: true,
+      },
+    },
+  }),
+};
+
 const CommitGraph = () => {
   const addCommit = useAddCommit()
   return (
     <div className="commit-graph-container">
-      <Gitgraph>
+      <Gitgraph options={options}>
         {(gitgraph) => {
           const main = gitgraph.branch("main");
           addCommit(main, "Initial Commit");
 
-          const cool_stuff = main.branch("Tech stuff")
+          const cool_stuff = main.branch("CS stuff")
           addCommit(cool_stuff, "Sleep Sort")
 
-          const school = main.branch("School");
-          addCommit(school, "3A Review")
+          // const school = main.branch("School");
+          // addCommit(school, "3A Review")
 
         }}
       </Gitgraph>
