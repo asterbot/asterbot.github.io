@@ -1,11 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
 import './Terminal.css';
 
+
+// TODO: refactor with classes
 const fileSystem: Record<string, string[]> = {
   '/': ['home', 'projects', 'blogs', 'timeline'],
   '/home': ['about.txt'],
   '/projects': ['project1.txt', 'project2.txt'],
-  '/blogs': ['branch-main', 'branch-cs'],
+  '/blogs': ['initial_commit', 'sleep_sort'],
   '/timeline': ['uwaterloo.txt', 'internships.txt'],
 };
 

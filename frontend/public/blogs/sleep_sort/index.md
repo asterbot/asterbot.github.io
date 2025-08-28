@@ -48,7 +48,7 @@ This is the type of sorting which involves directly comparing elements of the or
 An array with $n$ items can have at most $n!$ arrangements (or permutations). \
 In a comparison-based sorting algorithm, we must perform **at least** $\log (n!)$ comparisons.
 > The reason for this is that each "comparison" is essentially a yes/no decision about which element to chose, so the question can be reframed as: _how many comparisons do I need to uniquely identify the right permutation?_\
-> If you can make $d$ decisions, the number of possible outcomes is $2^d$\
+> If you can make $d$ yes/no decisions, the number of possible outcomes is $2^d$\
 > We also know the total number of possible outcomes is $n!$, so $2^d\; = n! \implies d = \log (n!)$
 
 Also, \
