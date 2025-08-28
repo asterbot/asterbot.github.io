@@ -22,6 +22,21 @@ const Blog: React.FC = () => {
     const [markdownContent, setMarkdownContent] = useState<string>('');
     const [errorMessage, setErrorMessage] = useState<string>('');
 
+    // Function to transform relative image paths to absolute paths
+    const transformImagePaths = (content: string, blogId: string): string => {
+        // Replace relative image paths like ./img/image.png with absolute paths
+        // Handle both ./img/image.png and img/image.png formats
+        return content
+            .replace(
+                /!\[([^\]]*)\]\(\.\/img\/([^)]+)\)/g,
+                `![$1](/blogs/${blogId}/img/$2)`
+            )
+            .replace(
+                /!\[([^\]]*)\]\(img\/([^)]+)\)/g,
+                `![$1](/blogs/${blogId}/img/$2)`
+            );
+    };
+
     useEffect(() => {
         if (!id) {
             setErrorMessage('No blog id provided.');
@@ -32,22 +47,17 @@ const Blog: React.FC = () => {
         let isCancelled = false;
         setErrorMessage('');
 
-        // Dynamically import the markdown file based on the id
-        import(`./blogs/${id}.md`)
-            .then((module) => {
-                if (!isCancelled) {
-                    // Fetch the content from the imported URL
-                    return fetch(module.default);
-                }
-            })
+        fetch(`/blogs/${id}/index.md`)
             .then(async (response) => {
-                if (!isCancelled && response) {
+                if (!isCancelled) {
                     if (!response.ok) {
                         throw new Error(`Failed to load markdown: ${response.status}`);
                     }
                     const text = await response.text();
                     if (!isCancelled) {
-                        setMarkdownContent(text);
+                        // Transform image paths before setting the content
+                        const transformedContent = transformImagePaths(text, id);
+                        setMarkdownContent(transformedContent);
                     }
                 }
             })
@@ -69,7 +79,7 @@ const Blog: React.FC = () => {
             <div style={{ color: '#ff6b6b', marginTop: '1rem' }}>{errorMessage}</div>
         )}
         {!errorMessage && (
-            <div style={{ textAlign: 'left' }}>
+            <div className={`blog-markdown`} style={{ textAlign: 'left' }}>
                 <ReactMarkdown
                     remarkPlugins={[remarkGfm, remarkMath]}
                     rehypePlugins={[rehypeRaw, rehypeKatex, rehypeHighlight]}

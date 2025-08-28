@@ -74,3 +74,47 @@
   background: rgba(0, 191, 255, 0.1);
   border-color: rgba(0, 191, 255, 0.8);
 }
+
+.blog-markdown table {
+  border-collapse: collapse;
+}
+
+.blog-markdown table,
+.blog-markdown th,
+.blog-markdown td {
+  border: 1px solid rgba(234, 234, 234, 0.4);
+}
+
+.blog-markdown th,
+.blog-markdown td {
+  padding: 0.5rem 0.75rem;
+}
+
+.blog-markdown details {
+  background: rgba(24, 26, 32, 0.6);
+  border: 1px solid rgba(0, 191, 255, 0.3);
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
+  margin: 1rem 0;
+}
+
+.blog-markdown summary {
+  cursor: pointer;
+  color: #00bfff;
+  font-weight: 600;
+  outline: none;
+}
+
+.blog-markdown details[open] summary {
+  border-bottom: 1px solid rgba(0, 191, 255, 0.2);
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.25rem;
+}
+
+.blog-markdown details > *:not(summary) {
+  margin-top: 0.5rem;
+}
+
+.blog-markown h3{
+  font-size: 1.15rem;
+}
