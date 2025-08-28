@@ -8,6 +8,7 @@ const projectData: Project[] = [
         description: "A game engine based on the Ncurses C framework with C++ abstractions. Created Tetris and Donkey Kong with the game engine!",
         uid: "age",
         tryItOut: false,
+        numImages: 4,
     },
     {
         title: "BetterNotes",
@@ -19,6 +20,7 @@ const projectData: Project[] = [
         description: "Note taking desktop app with support for Markdown, LaTEX, graphs and freehand drawing. Includes multi-user support, offline support and sync with cloud DB on Mongo.",
         uid: "betternotes",
         tryItOut: true,
+        numImages: 9,
     },
     {
         title: "Book Explorer App",
@@ -29,6 +31,7 @@ const projectData: Project[] = [
         description: "A web-app to make the most of your reading journey! Includes personalized recommendations, reading analytics, user progress tracking, book clubs and various other community features.",
         uid: "bookexp",
         tryItOut: false,
+        numImages: 3,
     },
     {
         title: "Peer to Peer Network",
@@ -39,6 +42,7 @@ const projectData: Project[] = [
         description: "Decentralized file-sharing platform for nodes connected to a common network. Uses data splitting protocols by splitting data into 512B chunks to be resilient against network disruptions.",
         uid: "p2p",
         tryItOut: false,
+        numImages: 2,
     },
 ]
 

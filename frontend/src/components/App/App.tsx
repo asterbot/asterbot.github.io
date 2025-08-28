@@ -59,6 +59,9 @@ const App: React.FC = () => {
     } as React.CSSProperties;
   };
 
+  if (location.pathname.endsWith("/") && location.pathname.length >= 2) location.pathname = location.pathname.slice(0,-1);
+  // sometimes URL added "/" at end... idk why
+
   return (
     <div className="app">
       <div className="minecraft-background-pattern" />

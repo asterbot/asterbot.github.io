@@ -64,12 +64,7 @@ const Terminal: React.FC<TerminalProps> = ({ onNavigate, currentLocation }) => {
   useEffect(() => {
     if (currentLocation) {
       const path = currentLocation === '/' ? '/' : currentLocation;
-      if (fileSystem[path]) {
-        // Only update if the path is different from current cwd
-        if (path !== cwd) {
-          setCwd(path);
-        }
-      }
+      setCwd(path);
     }
   }, [currentLocation, cwd]);
 
