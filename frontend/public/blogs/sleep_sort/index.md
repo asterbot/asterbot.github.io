@@ -11,7 +11,7 @@ I'm not entirely sure how I stumbled on to this, but I found out that long ago s
 
 ![Screenshot of 4chan thread](./img/image.png)
 
-The main idea is that you sleeo for the amount of time represented by the item in the array. So the smaller elements get in the result faster, and hence in sorted order!
+The main idea is that you sleep for the amount of time represented by the item in the array. So the smaller elements get in the result faster, and hence in sorted order!
 
 Converting the bash code to pseudocode, this is what it roughly translates to:
 
@@ -33,9 +33,9 @@ time(s):   0            1            2            3
 ```
 As you can see, the numbers printed in order! Hooray! Nice sorting! Or is it?
 
-# Aside: How fast can sorting be?
 
----
+<details>
+<summary> Why is O(n) sorting a big deal?</summary>
 
 One fact echo'd almost everywhere about sorting is that the best you can do is $O(n \log n)$. This is true for **comparison-based** sorting.
 
@@ -45,15 +45,15 @@ This is the type of sorting which involves directly comparing elements of the or
 <details>
 <summary>A small proof</summary>
 
-An array with $n$ items can have at most $n!$ arrangements (or permutations). \
+An array with $n$ items can have at most $n!$ arrangements (or permutations).
 In a comparison-based sorting algorithm, we must perform **at least** $\log (n!)$ comparisons.
-> The reason for this is that each "comparison" is essentially a yes/no decision about which element to chose, so the question can be reframed as: _how many comparisons do I need to uniquely identify the right permutation?_\
-> If you can make $d$ yes/no decisions, the number of possible outcomes is $2^d$\
-> We also know the total number of possible outcomes is $n!$, so $2^d\; = n! \implies d = \log (n!)$
+
+The reason for this is that each "comparison" is essentially a yes/no decision about which element to chose, so the question can be reframed as: _how many comparisons do I need to uniquely identify the right permutation?_\
+If you can make $d$ yes/no decisions, the number of possible outcomes is $2^d$\
+We also know the total number of possible outcomes is $n!$, so $2^d\; = n! \implies d = \log (n!)$
 
 Also, \
-$\log(n!) = \log(n) + \log(n-1) + \ldots + \log(1) \le \log(n) + \log(n) + \ldots + \log(n) = n \log(n)$ \
-$\implies \log(n!) \le n \log(n)$
+$\log(n!) = \sum\limits_{i=1}^{n}\;\;\;\;\log(i) \le n \log(n)$
 
 So the lower-bound of comparison-based sorts is $\Omega(n \log n)$ in the worst case
 </details>
@@ -68,6 +68,12 @@ So why aren't these the hero sorting algorithms? The answer is simple: *they mak
 
 And both of these could go as bad as $O(n^2\;)$ if their assumptions aren't met - however, what is true that these algorithms can and will be used when they fit best!
 
+**Conclusion:** So you cannot generally do better than $O(n \log n)$ if you make no assumptions about your input data!
+
+
+</details>
+
+
 # Back to sleep sort
 ---
 
@@ -80,43 +86,96 @@ Sooooo is sleep sort better than all the algorithms seen before?? Is it really $
 Could be insanely high in terms of *seconds*, forget time complexity. If an element is 1000, it's a 16 minute wait! Merge sort would never!
 
 
-*MAYBEEEEE* - For array `L`, using scaling factor to scale `x` to `x / max(L)` to bring everything in `[0,1]` $\to$ shorter wait times??
+*MAYBEEEEE* - For array `L`, using scaling factor to scale `x` to `x / max(L)` as the wait time to bring all the sleeps in `[0,1]` seconds $\to$ shorter wait times??
 - Well, yes, but now you've lost correctness. If this worked as theoretically stated, we could scale it down even further and get super low run times! 
-- The problem is that computers can normally not guarantee sleep times with accuracy more than 1ms
+- The problem is that computers can normally not guarantee sleep times with accuracy more than 1ms $^{[1]}$
 
 So there is a small implicit assumption here! We need all scaled down numbers to be less than 0.001 (which represents 1ms). This can be guaranteed in arrays $L$ which have:
 $$
-\dfrac{\min(L)}{\max(L)}\;\;\;\;\;\;\;\;\;\;\;\; < 0.001
+\dfrac{\min(L)}{\max(L)}\;\;\;\;\;\;\;\;\;\;\;\; > 0.001
 $$
+> The 1ms value is true for non real-time Linux kernels (which is what I am using), but the inquality above can be modified to fit whatever OS you are using! I will continue using 1ms in the blog, but the idea extends to all OS's.
 
-Look at the [jupyer notebook](insert-link-here) and see how this innacuracy plays out!
+
+Look at the [jupyer notebook](insert-link-here) and see how this inaccuracy plays out!
 
 
 ### Thread memory overhead
-Each thread allocates its own stack in virtual memory allocated for it - could theoretically go really high. Depending on the system, the stack size of a thread could be up to 4MB. $^{[1]}$ \
+Each thread allocates its own stack in virtual memory allocated for it - could theoretically go really high. Depending on the system, the stack size of a thread could be up to 4MB. $^{[2]}$ \
 This means that for an array of 1000 elements, it could take up to 4GB of memory! It scales linearly, and can go up to 40GB for 10000 elements! That is completely unreasonable in terms of space complexity for a sorting algorithm.
+
+Remember that this is a problem since the number of threads created is exactly equal to the number of elements in the array, so it doesn't seem like a very scalable solution.
 
 ### Context switching
 
-Switching between threads requires context switching which is expensive. The more threads that run `sleep(x); print(x)`, the more context switches are required to give the illusion that they all ran concurrently. 
-> We need context switches so that when we return to a thread, it knows where to continue from.
+Switching between threads requires context switching, which is expensive. The more threads that run, the more context switches are required to give the illusion that they all ran concurrently. 
 
-Consider two threads $T_a\;$ and $T_b\;$ which are performing sleep for $a$ and $b$ seconds respectively. Assume $T_a\;$ is running. These steps will occur during a context switch:
-1. An interrupt occurs where the OS scheduler decides it's time to pause $T_a\;$ and $T_b\;\;$ should run.
-2. The system pauses $T_a\;$, which involves saving the current state of $T_a\;$ (register values, program counters, ...) into a **Thread Control Block(TCB)**, call it $\text{TCB}_a\;\;$ - you can think of this as encoding how much time has passed with that thread running.
-   - The OS needs to do this so that when it runs $T_a\;$ again, it knows how to resume it correctly. 
-3. The OS retreives the state of $T_b\;$ from its TCB (call it $\text{TCB}_b\;$) and restores the thread from its last save point, which you can think of as encoding how many seconds had already passed in prior runs of $T_b\;$.
-4. Now $T_b\;$ runs while $T_a\;$ is idle.
-5. Now the OS scheduler decides to interrupt $T_b\;$ and run $T_a\;$ - it retreives the last saved point of $T_a\;$ from $\text{TCB}_a\;$ and runs it from there. 
+<details>
+<summary>What are context switches? Why?</summary>
 
-Hooray! They're running concurrently! \
+A computer with a single processor cannot actually run multiple threads "concurrently" as you might expect. It needs to keep switching between the steps of the threads. 
+- The reason we require context switches is to ensure that when we run a thread, we *resume* it from the right point.
+- For example if you partially ran a thread, switched to another one and came back to run the original thread, you want to run it from where you left of.
+- The way the OS keeps track of the "state" or "the place to resume from" is a data structure called the **Thread Control Block (TCB)**. You can just think of this as a high-level abstraction for now.
+  - An important piece of information stored in the TCB is the **[Program Counter (PC)](https://en.wikipedia.org/wiki/Program_counter)** which is an indication of where in its code the thread has already reached. Every program maintains a PC to know what to execute next.
+
+Whenever a context switch happens between two threads $T_0\;$ and $T_1\;$, the following steps happen:
+1. Save the state of $T_0\;$ in a TCB
+2. Load the state of $T_1\;$ from its TCB
+
+Look at the diagram for more details:
+
+![alt text](./img/image3.png)
+
+</details>
+
+
+In our example, the thread we want to run in threads is the following function:
+```python
+T(x):
+    sleep(x)
+    print(x)
+```
+
+Let's say we run $T(a)$ and $T(b)$ which sleep for $a$ and $b$ seconds respectively and then print. Also let's assume $a<b$. The following is a possible schedule of running the 2 threads:
+
+![alt text](img/image4.png)
+
+Hooray! They're running concurrently! This looks lightweight enough, right? \
 ![I've won... but at what cost? meme](img/image2.png)
 
-- The memory overhead arises from the TCB's that need to be saved and restored over and over - they are saved in the memory of the computer
-- The time overhead arises from the OS's scheduling algorithm, which is certainly not negligible if the number of threads are large!
+Well it wasn't free (obviously). The main costs come from:
+- The memory overhead that arises from the TCB's that need to be saved and restored over and over - they are saved in the memory of the CPU
+- The time overhead comes from the following:
+  - Saving the context of a thread before interrupting it causes latency. The data that needs to be saved includes various things like the program counter, registers, stack pointers, etc. which takes time
+  - Restoring contexts is equally time consuming
+  - There is also overhead from the scheduler to determine what to run next. Since most scheduling algorithms use **priority queues** to determine what to run next, reading the highest priority element in the queue can be costly, especially if the number of threads is large. 
+
+Now in the case of 2 threads it doesn't seem like a lot, but costs add up fast the more threads you add. And the whole point of being a fast algorithm is to run well on larger inputs :)
+
+<details>
+<summary>How this scales...</summary>
+
+Let's bash out the math for an array $L$ which is some permutation of $\set{x_1, \ldots, x_n\;}$ with $x_1\; < \ldots < x_n$
+
+So the threads we will need to run will be $T(x_1\;), \ldots, T(x_n\;)$ with $x_1 < \ldots < x_n$. 
+- Let's also assume for the sake of simplicity that none of the $x_i\;$'s are equal to one another, or in other words all elements of $L$ are unique
+
+Then we can calculate the number of context switches in the following way:
+1. **Sleep + Wake-up**: For each of the $n$ threads, there needs to be 1 context switch when sleeping and 1 context switch when waking up (and performing `print`), ie. 2 context switches per thread.
+   - So for all the threads combined, this constitutes $2n$ context switches.
+2. **Extra costs:** For each thread created, there would be more overlaying costs depending on the system.
+   - This could be during the thread creation and thread joining (2 per thread; total $2n$)
+   - This could be during printing to stdout (1 per thread; total $2n$)
+   - This could be during interrupts (1 per thread; total $n$)
+
+So the total cost is of the order $C(n) = 2n + O(n)$. Since the time of this thread increases linearly as the number of threads (aka number of elements) increases, it could be potentially expensive.
+
+</details>
 
 
-Now, ask yourself: is it worth asking your OS to do ALL this over and over to sort even just an array of 5 numbers? Didn't think so.
+
+Now, ask yourself: is it worth asking your OS to do ALL this just to sort an array?
 
 # The time cost comparison
 ---
@@ -124,7 +183,7 @@ After some intense scientific research (wrote some code) to find out how slow or
 1. Python's in-built `sorted` function 
 2. `sleep_sort()` - which implements the sorting algorithm originally created by the 4chan user
 3. `scaled_sleep_sort()` - which was implemented by the scaling method discussed earlier of scaling all elements down to `x/max(L)` and waiting that long. I used only valid array inputs.
-    - As discussed in the earlier, valid inputs for this are those where `max(L)/min(L) < 0.001`, since `sleep` works accurately when the sleep time is 1ms or higher.
+    - As discussed in the earlier, valid inputs for this are those where `min(L)/max(L) > 0.001`, since `sleep` works accurately when the sleep time higher than 1ms.
 
 
 I ran all 3 of them with the input array `[5,3,1,2,4]` and the results were:
@@ -135,7 +194,7 @@ I ran all 3 of them with the input array `[5,3,1,2,4]` and the results were:
 |`sleep_sort` | 5.006 |
 |`scaled_sleep_sort` | 1.002 |
 
-Check out the Jupyter Notebook to see how I measured and implemented these!
+Check out the [Jupyter Notebook](insert-link-here) to see how I measured and implemented these!
 
 Even with using the scaling optimization, it is not even close to the run time of faster sorting algorithms, even for such small inputs! 
 
@@ -145,15 +204,15 @@ Even with using the scaling optimization, it is not even close to the run time o
 ---
 I may have slightly click-baited you at the start there - the 4chan user never explicitly said this was $O(n)$; the rest of the internet did after they posted this.
 Some people argued that the time complexity is actually $O(n \cdot \max(L))$ (since each thread waits upto `max(L)` seconds!), others brought up the point with threads that I did.\
-While studying this case, there are some things I think one can take away from this to become a better computer scientist:
-1. **Time complexity isn't everything!** Just because something has a shiny runtime doesn't mean it's not hiding things! Always try to understand whether the time complexity is in a general-case or if it has hidden assumnptions.
+While studying this case, there are some things I took away from this:
+1. **Time complexity isn't everything!** Just because something has a shiny runtime doesn't mean it's not hiding things! Always try to understand whether the time complexity is in a general-case or if it has hidden assumptions.
 2. **Threads aren't free!** Most applications nowadays run on multi-threaded concurrent programs, and while they offer a really cool abstraction for running things concurrently, it's important to always consider the cost of these!
-3. **Meme case study?** While this case study was picked up from a 4chan thread of all places, and it isn't even in a credible algorithm, sometimes analyzing bad algorithms and doing a deep dive is what gets you to learn new things!  
+3. **Meme case study?** While this case study was picked up from a 4chan thread of all places, and it isn't even in a credible algorithm, sometimes analyzing bad algorithms and doing a deep dive is what gets you to learn new things! I did a lot of research about how threads and context switches work and tried to write it in an approachable way :D
 
 # Sources
 ---
-1. **Linux thread creation:** https://man7.org/linux/man-pages/man3/pthread_create.3.html
-2. **Accuracy of python `time.sleep`:** https://stackoverflow.com/questions/1133857/how-accurate-is-pythons-time-sleep
+1. **Accuracy of python `time.sleep`:** https://stackoverflow.com/questions/1133857/how-accurate-is-pythons-time-sleep
+2. **Linux thread creation:** https://man7.org/linux/man-pages/man3/pthread_create.3.html
 
 > PS. if you read this blog, thank you! I'd appreciate any feedback or thoughts if you'd like to share them :D Feel free to connect with me wherever!
 

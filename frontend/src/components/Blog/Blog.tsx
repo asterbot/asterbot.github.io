@@ -71,8 +71,17 @@ const Blog: React.FC = () => {
         };
     }, [id]);
 
+    // To ensure all clicks in the blog lead to a new tab opening
+    const handleClick = (e: any) => {
+        const link = e.target.closest("a");
+        if (link && e.currentTarget.contains(link)) {
+          window.open(link.href, "_blank", "noopener,noreferrer");
+          e.preventDefault();
+        }
+      };
+
     return (
-      <div className="blog-container">
+      <div className="blog-container" onClick={handleClick}>
         <div className="blog-title">{convertIDToTitle(id)}</div>
         {errorMessage && (
             <div style={{ color: '#ff6b6b', marginTop: '1rem' }}>{errorMessage}</div>
