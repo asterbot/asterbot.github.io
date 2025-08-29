@@ -1,4 +1,5 @@
 import React from 'react';
+import { Fragment } from "react";
 
 import './Timeline.css';
 
@@ -10,6 +11,7 @@ import { TermType } from './types';
 import { VerticalTimeline, VerticalTimelineElement }  from 'react-vertical-timeline-component';
 import 'react-vertical-timeline-component/style.min.css';
 import timelineEvents from './data/timelineData';
+
 
 
 function getColor(subject: string): string{
@@ -33,32 +35,35 @@ function getColor(subject: string): string{
 
 const Timeline: React.FC = () => {
   return (
-    <VerticalTimeline>
-      {timelineEvents.map((event, index) => (
-        <VerticalTimelineElement 
+    <Fragment>
+      <h1 className="timeline-title">Timeline</h1>
+      <VerticalTimeline>
+        {timelineEvents.map((event, index) => (
+          <VerticalTimelineElement 
           key={index}
           className="vertical-timeline-element--work"
-          contentStyle={{ background: '#0e0f0f', color: 'white', border:'2px solid rgb(33, 150, 243)' }}
+          contentStyle={{ background: '#0e0f0f', color: 'white', border:'2px solid rgb(0 255 144)' }}
           date={event.date}
           icon={event.termType === TermType.WorkTerm ? <WorkOutlineOutlinedIcon /> : <SchoolOutlinedIcon />}
-        >
-            <h3 className="vertical-timeline-element-title">{event.title}</h3>
-            <p className="vertical-timeline-element-subtitle">{event.description}</p>
-            {event.courses.length!==0 ? <br />  : ""}
-            {event.courses.length!==0 ? "Courses:"  : ""}
-            <ul className='list-group'>
-              {event.courses.map((course, index) => {
-                return (
-                  <li key={index} className={"list-group-item list-group-item-" + getColor(course.subject)}>
-                     {course.subject} {course.courseCode}: {course.description}
-                   </li>
-                )
-              })}
-            </ul>
+          >
+              <h3 className="vertical-timeline-element-title">{event.title}</h3>
+              <p className="vertical-timeline-element-subtitle">{event.description}</p>
+              {event.courses.length!==0 ? <br />  : ""}
+              {event.courses.length!==0 ? "Courses:"  : ""}
+              <ul className='list-group'>
+                {event.courses.map((course, index) => {
+                  return (
+                    <li key={index} className={"list-group-item list-group-item-" + getColor(course.subject)}>
+                      {course.subject} {course.courseCode}: {course.description}
+                    </li>
+                  )
+                })}
+              </ul>
 
-        </VerticalTimelineElement>
-      ))}
-    </VerticalTimeline>
+          </VerticalTimelineElement>
+        ))}
+      </VerticalTimeline>
+    </Fragment>
   );
 };
 

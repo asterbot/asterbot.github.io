@@ -15,3 +15,11 @@
 .vertical-timeline.vertical-timeline--two-columns{
   margin-top: 30px;
 }
+
+
+.timeline-title {
+  font-size: 2.5rem;
+  margin-top: 2rem;
+  color: #00ff90;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
