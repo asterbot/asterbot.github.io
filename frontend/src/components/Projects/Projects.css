@@ -110,3 +110,18 @@
   z-index: 1;
   white-space: nowrap;
 }
+
+/* Adjust grid layout for smaller screens */
+@media (max-width: 768px) {
+  .projects-grid {
+    grid-template-columns: 1fr; /* Single column layout */
+  }
+
+  .project-card {
+    padding: 1rem;
+  }
+
+  .project-title {
+    font-size: 1.2rem;
+  }
+}

@@ -30,9 +30,11 @@ const Projects: React.FC = () => {
 
             <h3 className="project-title">{project.title}</h3>
             
-            <a onClick={()=>setOpen(project)} style={{ cursor: "pointer" }}>
-              <img src={'/projects/' + project.uid + '/thumbnail.png'} alt={project.title + " project image"} width={280} height={174} />
-            </a>
+              <img src={'/projects/' + project.uid + '/thumbnail.png'} 
+                    alt={project.title + " project image"} 
+                    width={280} height={174} 
+                    onClick={()=>setOpen(project)} style={{ cursor: "pointer" }}
+              />
 
             <p className="project-description">{project.description}</p>
             <div className="project-tech">

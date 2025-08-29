@@ -79,9 +79,8 @@ And both of these could go as bad as $O(n^2\;)$ if their assumptions aren't met 
 
 Sooooo is sleep sort better than all the algorithms seen before?? Is it really $O(n)$? To get into this, I want to deep dive into the OS details of why this isn't as good and do some numerical analysis.
 
-## Problems
 
-### Waiting `x` seconds
+## Waiting `x` seconds
 
 Could be insanely high in terms of *seconds*, forget time complexity. If an element is 1000, it's a 16 minute wait! Merge sort would never!
 
@@ -100,13 +99,13 @@ $$
 Look at the [jupyer notebook](insert-link-here) and see how this inaccuracy plays out!
 
 
-### Thread memory overhead
+## Thread memory overhead
 Each thread allocates its own stack in virtual memory allocated for it - could theoretically go really high. Depending on the system, the stack size of a thread could be up to 4MB. $^{[2]}$ \
 This means that for an array of 1000 elements, it could take up to 4GB of memory! It scales linearly, and can go up to 40GB for 10000 elements! That is completely unreasonable in terms of space complexity for a sorting algorithm.
 
 Remember that this is a problem since the number of threads created is exactly equal to the number of elements in the array, so it doesn't seem like a very scalable solution.
 
-### Context switching
+## Context switching
 
 Switching between threads requires context switching, which is expensive. The more threads that run, the more context switches are required to give the illusion that they all ran concurrently. 
 

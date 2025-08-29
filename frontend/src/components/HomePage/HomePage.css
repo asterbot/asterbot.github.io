@@ -99,3 +99,20 @@
   width: 100%;
   margin-bottom: 1rem;
 }
+
+/* Adjust homepage layout for smaller screens */
+@media (max-width: 768px) {
+  .homepage-container {
+    padding: 1.5rem;
+    max-width: 100%; /* Full width */
+  }
+
+  .profile-image {
+    width: 100px;
+    height: 100px;
+  }
+
+  .homepage-title {
+    font-size: 1.8rem;
+  }
+}
