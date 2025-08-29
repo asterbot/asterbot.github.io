@@ -1,7 +1,7 @@
 # Preface
 ---
 
-Find all code used in the jupyter notebook here: [INSERT-LINK-HERE]
+Find all code used in the jupyter notebook here: https://github.com/asterbot/asterbot.github.io/blob/main/blog_code/sleep_sort/sleep_sort.ipynb
 
 # Introduction
 
@@ -96,7 +96,7 @@ $$
 > The 1ms value is true for non real-time Linux kernels (which is what I am using), but the inquality above can be modified to fit whatever OS you are using! I will continue using 1ms in the blog, but the idea extends to all OS's.
 
 
-Look at the [jupyer notebook](insert-link-here) and see how this inaccuracy plays out!
+Look at the [jupyer notebook](https://github.com/asterbot/asterbot.github.io/blob/main/blog_code/sleep_sort/sleep_sort.ipynb) and see how this inaccuracy plays out!
 
 
 ## Thread memory overhead
@@ -193,7 +193,7 @@ I ran all 3 of them with the input array `[5,3,1,2,4]` and the results were:
 |`sleep_sort` | 5.006 |
 |`scaled_sleep_sort` | 1.002 |
 
-Check out the [Jupyter Notebook](insert-link-here) to see how I measured and implemented these!
+Check out the [jupyter notebook]([insert-link-here](https://github.com/asterbot/asterbot.github.io/blob/main/blog_code/sleep_sort/sleep_sort.ipynb)) to see how I measured and implemented these!
 
 Even with using the scaling optimization, it is not even close to the run time of faster sorting algorithms, even for such small inputs! 
 
