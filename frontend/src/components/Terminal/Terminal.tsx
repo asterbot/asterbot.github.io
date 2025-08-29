@@ -6,9 +6,9 @@ import './Terminal.css';
 const fileSystem: Record<string, string[]> = {
   '/': ['home', 'projects', 'blogs', 'timeline'],
   '/home': ['about.txt'],
-  '/projects': ['project1.txt', 'project2.txt'],
+  '/projects': ['ASCII_Game_Engine', 'BetterNotes','BookExplorer','PeerToPeer'],
   '/blogs': ['initial_commit', 'sleep_sort'],
-  '/timeline': ['uwaterloo.txt', 'internships.txt'],
+  '/timeline': ['3B', 'WT4', '3A', 'WT3', '2B', 'WT2', '2A', 'WT1', '1B', '1A'],
 };
 
 const helpText = `Available commands:\nwhoami, ls, cd <dir>, pwd, help, clear\n\nNavigation:\n- cd . (go to current directory) (why?)\n- cd .. (go to parent directory)\n- cd /projects (absolute path)\n- cd projects (relative path)`;
