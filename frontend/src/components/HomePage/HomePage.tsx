@@ -3,31 +3,27 @@ import './HomePage.css';
 
 const HomePage: React.FC = () => {
   return (
-    <div className="homepage-container">
-      <img src={require('./img/pfp.png')} alt="Profile" className="profile-image" />
-      <h1 className="homepage-title">Hello!</h1>
-        <div className="box-body">
-          <table className="intro-table">
-          <tbody>
-              <tr>
-                  <td>
-                      <div className="text-container">
-                          <div className="intro-text">
-                              <span className="question">Who am I?</span> "A huge nerd" doesn't even scratch the surface. 
-                              <br /><br />
-                              I love making things with code, whether its games, apps, database systems or anything in between, working with software is my biggest passion!<br />
-                              Have fun looking around!
-                              <br /><br />
-                              You can also check out my socials on the left and feel free to reach out however you see fit!
-                              <br /><br />
-                              <span className="motto"><i>Coding my chaos!</i></span>
-                          </div>
-                      </div>
-                  </td>
-              </tr>
-          </tbody>
-          </table>
-          </div>      
+    <div className="homepage-hero">
+      {/* <img src={require('./img/pfp.png')} alt="Profile" className="profile-image" /> */}
+
+      <div className="hero-content">
+        <h1 className="typing-animation">
+          A <span className="accent">Developer</span> at heart
+        </h1>
+      </div>
+
+
+      <div className="intro-box">
+        <div className="intro-text">
+          <span className="question">Who am I?</span> Just someone who may get a CS degree one day :D
+          <br /><br />
+          I love making things with code, whether it's games, apps, system-level projects or anything in between, I'm always trying new things with software!
+          <br /><br />
+          You can also check out my socials on the left and feel free to reach out :D
+          <br /><br />
+          <span className="motto"><i>Coding my chaos!</i></span>
+        </div>
+      </div>
     </div>
   );
 };

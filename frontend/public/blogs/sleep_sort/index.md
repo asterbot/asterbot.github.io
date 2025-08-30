@@ -139,7 +139,7 @@ Let's say we run $T(a)$ and $T(b)$ which sleep for $a$ and $b$ seconds respectiv
 Hooray! They're running concurrently! This looks lightweight enough, right? \
 ![I've won... but at what cost? meme](img/image2.png)
 
-Well it wasn't free (obviously). The main costs come from:
+Well it wasn't free. The main costs come from:
 - The memory overhead that arises from the TCB's that need to be saved and restored over and over - they are saved in the memory of the CPU
 - The time overhead comes from the following:
   - Saving the context of a thread before interrupting it causes latency. The data that needs to be saved includes various things like the program counter, registers, stack pointers, etc. which takes time

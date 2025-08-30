@@ -52,7 +52,7 @@ const timelineEvents: Term [] =  [
             { subject: "CS", courseCode: 240, description: "Data Structures & Data Management"},
             { subject: "MATH", courseCode: 235, description: "Linear Algebra II"},
             { subject: "PHYS", courseCode: 234, description: "Quantum Physics I"},
-            { subject: "ENGL", courseCode: "210E", description: "Probability"},
+            { subject: "ENGL", courseCode: "210E", description: "Genres of Technical Communication"},
             { subject: "FR", courseCode: 151, description: "Basic French I"},
         ],
         termType: TermType.StudyTerm,

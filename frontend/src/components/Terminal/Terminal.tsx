@@ -164,7 +164,7 @@ const Terminal: React.FC<TerminalProps> = ({ onNavigate, currentLocation }) => {
   return (
     <div className="terminal">
       <div className="terminal-content">
-        <div className="terminal-line">{highlight("Welcome to the Portfolio Terminal! Type 'help' to get started.")}</div>
+        <div className="terminal-line">{highlight("Welcome to the Portfolio Terminal! Type 'ls' or 'help' to get started.")}</div>
         {history.map((line, i) => (
           <div key={i} className="terminal-line">{highlight(line)}</div>
         ))}

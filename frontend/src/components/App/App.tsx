@@ -8,10 +8,10 @@ import { faGithub,  faItchIo ,faLinkedin, faDiscord } from '@fortawesome/free-br
 
 
 const navLinks = [
-  { href: '/', label: 'Home', color: '#ffcc00' },
-  { href: '/projects', label: 'Projects', color: '#a05cff' },
-  { href: '/blogs', label: 'Blogs', color: '#00bfff' },
-  { href: '/timeline', label: 'Timeline', color: '#00ff90' },
+  { href: '/', label: 'Home'},
+  { href: '/projects', label: 'Projects'},
+  { href: '/blogs', label: 'Blogs'},
+  { href: '/timeline', label: 'Timeline'},
 ];
 
 const socials = [
@@ -52,6 +52,8 @@ const App: React.FC = () => {
   const location = useLocation();
   const [showSocials, setShowSocials] = useState(true);
   const [showTerminal, setShowTerminal] = useState(window.innerWidth >= TERMINAL_MIN_SCREEN);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
 
   useEffect(() => {
     const handleResize = () => {
@@ -63,55 +65,68 @@ const App: React.FC = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const getNavButtonStyle = (link: typeof navLinks[0]) => {
-    return {
-      '--active-color': link.color,
-      '--active-color-dd': link.color + 'dd',
-    } as React.CSSProperties;
-  };
 
-  if (location.pathname.endsWith("/") && location.pathname.length >= 2) location.pathname = location.pathname.slice(0,-1);
   // sometimes URL added "/" at end... idk why
+  if (location.pathname.endsWith("/") && location.pathname.length >= 2) location.pathname = location.pathname.slice(0,-1);
 
   return (
     <div className="app">
-      <div className="minecraft-background-pattern" />
+      <div className="background-pattern" />
       
       {showSocials && (
-        <div className="socials-bar">
-          {socials.map(s => (
-            <a key={s.href} href={s.href} target="_blank" rel="noopener noreferrer" title={s.label} className="social-link">
-              {s.icon}
-            </a>
-          ))}
-        </div>
-      )}
-      
-      <nav className="app-navbar">
-        {navLinks.map(link => (
-          <button
-            key={link.href}
-            onClick={() => navigate(link.href)}
-            className={`nav-button ${location.pathname === link.href ? 'active' : ''}`}
-            style={getNavButtonStyle(link)}
+      <div className="socials-bar">
+        {socials.map((s) => (
+          <a
+            key={s.href}
+            href={s.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            title={s.label}
+            className="social-link"
           >
-            {link.label}
+            {s.icon}
+          </a>
+        ))}
+      </div>
+    )}
+
+    <nav className="app-navbar">
+      <div className="navbar-left">Arjun</div>
+
+      <div className={`navbar-right ${isMenuOpen ? 'open' : ''}`}>
+        {navLinks.map((item) => (
+          <button
+            key={item.href}
+            onClick={() => {
+              navigate(item.href);
+              setIsMenuOpen(false);
+            }}
+            className="nav-link"
+          >
+            {item.label}
           </button>
         ))}
-      </nav>
-      
-      <div className="main-content-container">
-        <div className={`main-content-area ${!showTerminal ? 'no-terminal' : ''}`}>
-          <Outlet />
-        </div>
-        
-        {showTerminal && (
-          <div className="terminal-container">
-            <Terminal onNavigate={navigate} currentLocation={location.pathname} />
-          </div>
-        )}
       </div>
+
+      <div className="hamburger" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </nav>
+
+    <div className="main-content-container">
+      <div className={`main-content-area ${!showTerminal ? 'no-terminal' : ''}`}>
+        <Outlet />
+      </div>
+
+      {showTerminal && (
+        <div className="terminal-container">
+          <Terminal onNavigate={navigate} currentLocation={location.pathname} />
+        </div>
+      )}
     </div>
+  </div>
   );
 };
 
