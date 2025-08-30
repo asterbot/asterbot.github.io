@@ -11,7 +11,7 @@ I'm not entirely sure how I stumbled on to this, but I found out that long ago s
 
 ![Screenshot of 4chan thread](./img/image.png)
 
-The main idea is that you sleep for the amount of time represented by the item in the array. So the smaller elements get in the result faster, and hence in sorted order!
+The main idea is that you sleep for the amount of time represented by the item in the array, and you do this for every single item in the array concurrently (by shoving them into background processes). So the smaller elements get in the result faster, and hence in sorted order!
 
 Converting the bash code to pseudocode, this is what it roughly translates to:
 
@@ -25,12 +25,8 @@ sort(L):
 
 Genius, right? If you input `3 1 2` this is what would happen:
 
-```python
-time(s):   0            1            2            3
-           <--------------sleep-------------->  print(3)
-           <-sleep->  print(1)    
-           <--------sleep--------> print(2)        
-```
+![Timeline of sorting [3,1,2]](./img/image5.png) 
+
 As you can see, the numbers printed in order! Hooray! Nice sorting! Or is it?
 
 
@@ -74,7 +70,7 @@ And both of these could go as bad as $O(n^2\;)$ if their assumptions aren't met 
 </details>
 
 
-# Back to sleep sort
+# Analyzing sleep sort
 ---
 
 Sooooo is sleep sort better than all the algorithms seen before?? Is it really $O(n)$? To get into this, I want to deep dive into the OS details of why this isn't as good and do some numerical analysis.
@@ -114,9 +110,9 @@ Switching between threads requires context switching, which is expensive. The mo
 
 A computer with a single processor cannot actually run multiple threads "concurrently" as you might expect. It needs to keep switching between the steps of the threads. 
 - The reason we require context switches is to ensure that when we run a thread, we *resume* it from the right point.
-- For example if you partially ran a thread, switched to another one and came back to run the original thread, you want to run it from where you left of.
+- For example if you partially ran a thread `thread1`, switched to another thread (call it `thread2`) and came back to run `thread1`, you want to run it from where you left of.
 - The way the OS keeps track of the "state" or "the place to resume from" is a data structure called the **Thread Control Block (TCB)**. You can just think of this as a high-level abstraction for now.
-  - An important piece of information stored in the TCB is the **[Program Counter (PC)](https://en.wikipedia.org/wiki/Program_counter)** which is an indication of where in its code the thread has already reached. Every program maintains a PC to know what to execute next.
+  - An important piece of information stored in the TCB is the **[Program Counter (PC)](https://en.wikipedia.org/wiki/Program_counter)** which is an indication of where in its code the thread has already reached. Every sequential program maintains a PC to know what to execute next.
 
 Whenever a context switch happens between two threads $T_0\;$ and $T_1\;$, the following steps happen:
 1. Save the state of $T_0\;$ in a TCB
@@ -143,7 +139,7 @@ Let's say we run $T(a)$ and $T(b)$ which sleep for $a$ and $b$ seconds respectiv
 Hooray! They're running concurrently! This looks lightweight enough, right? \
 ![I've won... but at what cost? meme](img/image2.png)
 
-Well it wasn't free (obviously). The main costs come from:
+Well it wasn't free. The main costs come from:
 - The memory overhead that arises from the TCB's that need to be saved and restored over and over - they are saved in the memory of the CPU
 - The time overhead comes from the following:
   - Saving the context of a thread before interrupting it causes latency. The data that needs to be saved includes various things like the program counter, registers, stack pointers, etc. which takes time
@@ -202,7 +198,8 @@ Even with using the scaling optimization, it is not even close to the run time o
 # Wrap up
 ---
 I may have slightly click-baited you at the start there - the 4chan user never explicitly said this was $O(n)$; the rest of the internet did after they posted this.
-Some people argued that the time complexity is actually $O(n \cdot \max(L))$ (since each thread waits upto `max(L)` seconds!), others brought up the point with threads that I did.\
+Some people argued that the time complexity is actually $O(n \cdot \max(L))$ (the logic being that each thread waits upto `max(L)` seconds), others brought up the point with threads that I did.
+
 While studying this case, there are some things I took away from this:
 1. **Time complexity isn't everything!** Just because something has a shiny runtime doesn't mean it's not hiding things! Always try to understand whether the time complexity is in a general-case or if it has hidden assumptions.
 2. **Threads aren't free!** Most applications nowadays run on multi-threaded concurrent programs, and while they offer a really cool abstraction for running things concurrently, it's important to always consider the cost of these!
@@ -210,7 +207,7 @@ While studying this case, there are some things I took away from this:
 
 # Sources
 ---
-1. **Accuracy of python `time.sleep`:** https://stackoverflow.com/questions/1133857/how-accurate-is-pythons-time-sleep
+1. **(Inn)accuracy of python `time.sleep`:** https://stackoverflow.com/questions/1133857/how-accurate-is-pythons-time-sleep
 2. **Linux thread creation:** https://man7.org/linux/man-pages/man3/pthread_create.3.html
 
 > PS. if you read this blog, thank you! I'd appreciate any feedback or thoughts if you'd like to share them :D Feel free to connect with me wherever!
