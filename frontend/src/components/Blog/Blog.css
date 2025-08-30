@@ -160,3 +160,17 @@
   width: 600px;
   display: none;
 }
+
+
+/* Stuff to make code blocks responsive! */
+.blog-markdown pre {
+  white-space: pre-wrap;
+  overflow-x: auto;
+  margin: 1rem 0;
+  border-radius: .5rem;
+  background: #0d1117;
+  max-width: 100%;
+}
+.blog-markdown pre code {
+  overflow-x: scroll;  
+}

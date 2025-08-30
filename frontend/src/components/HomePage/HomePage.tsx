@@ -18,9 +18,9 @@ const HomePage: React.FC = () => {
                               I love making things with code, whether its games, apps, database systems or anything in between, working with software is my biggest passion!<br />
                               Have fun looking around!
                               <br /><br />
-                              You can also check out my socials on the left and feel free to reach out on Discord :D
+                              You can also check out my socials on the left and feel free to reach out however you see fit!
                               <br /><br />
-                              <span className="motto"><i>yee haw</i></span>
+                              <span className="motto"><i>Coding my chaos!</i></span>
                           </div>
                       </div>
                   </td>
