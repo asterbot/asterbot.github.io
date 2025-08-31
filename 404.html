@@ -4,7 +4,7 @@
     <title>Redirecting...</title>
     <script>
         const path = window.location.pathname + window.location.search + window.location.hash;
-        window.location.replace("/index.html?" + encodeURIComponent(path));
+        window.location.replace("/index.html?path=" + encodeURIComponent(path));
     </script>
   </head>
   <body></body>
