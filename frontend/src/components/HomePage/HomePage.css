@@ -90,3 +90,36 @@
     padding: 1.5rem;
   }
 }
+
+
+
+.link {
+  background: none;
+  border: none;
+  color: rgba(138, 136, 255, 0.85);
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  position: relative;
+  padding-bottom: 4px;
+  transition: color 0.2s ease;
+  display: inline-block;        /* helps ::after sizing/positioning */
+  text-decoration: none;        /* remove default underline */
+}
+
+.link::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 0;
+  height: 2px;
+  background-color: #009cda;
+  transition: width 0.3s ease;
+}
+
+
+
+.link:hover::after {
+  width: 100%;
+}
