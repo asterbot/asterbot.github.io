@@ -48,8 +48,7 @@ const Timeline: React.FC = () => {
           >
               <h3 className="vertical-timeline-element-title">{event.title}</h3>
               <p className="vertical-timeline-element-subtitle">{event.description}</p>
-              {event.courses.length!==0 ? <br />  : ""}
-              {event.courses.length!==0 ? "Courses:"  : ""}
+              {event.courses.length!==0 && (<div className="courses-heading"><br />Courses:</div>)}
               <ul className='list-group'>
                 {event.courses.map((course, index) => {
                   return (

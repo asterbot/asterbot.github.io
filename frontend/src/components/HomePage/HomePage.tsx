@@ -22,7 +22,7 @@ const HomePage: React.FC = () => {
           <br /><br />
           You can also check out my socials on the left and feel free to reach out :D
           <br /><br />
-          <span className="motto"><i>Coding my chaos, one commit at a time!</i></span>
+          <span className="motto"><i>Coding my chaos!</i></span>
         </div>
       </div>
     </div>
