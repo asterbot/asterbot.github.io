@@ -8,6 +8,9 @@ import { Command, CommandContext } from './data/commands/types';
 
 // Simple syntax highlighting for terminal output
 function highlight(line: string) {
+
+  const dirRegex = /^home|projects|blogs|timeline$/;
+
   // Highlight commands
   if (line.startsWith('$ ')) {
     const [, ...rest] = line.split(' ');
@@ -23,8 +26,15 @@ function highlight(line: string) {
     return <span className="error-text">{line}</span>;
   }
   // Highlight directories in ls output
-  if (/^home|projects|blogs|timeline$/.test(line.trim())) {
-    return <span className="directory-text">{line}</span>;
+  if (dirRegex.test(line.trim())) {
+    const words = line.split(' ');
+    return (
+      <span>
+        {words.map((word, i) => {
+          return (dirRegex.test(word) ? <span key={i} className="directory-text">{word} </span> : <span className="file-text" key={i}>{word} </span>);
+        })}
+      </span>
+    )
   }
   // Highlight help
   if (line.startsWith('Available commands')) {
