@@ -30,11 +30,18 @@ const Projects: React.FC = () => {
 
             <h3 className="project-title">{project.title}</h3>
             
-              <img src={'/projects/' + project.uid + '/thumbnail.png'} 
-                    alt={project.title + " project image"} 
-                    width={280} height={174} 
-                    onClick={()=>setOpen(project)} style={{ cursor: "pointer" }}
+            <div className="project-image-container" onClick={() => setOpen(project)}>
+              <img 
+                src={'/projects/' + project.uid + '/thumbnail.png'} 
+                alt={project.title + " project image"} 
+                width={280} 
+                height={174} 
+                className="project-image"
               />
+              <div className="image-overlay">
+                <span className="overlay-text">View Gallery</span>
+              </div>
+            </div>
 
             <p className="project-description">{project.description}</p>
             <div className="project-tech">
