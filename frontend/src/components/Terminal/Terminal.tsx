@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import './Terminal.css';
 import root from './data/directoryData/terminalData';
 import { File, Directory, FileType } from './data/directoryData/types';
+import { directoryExists, getDirectoryByAbsolutePath, listChildren } from './data/directoryData/utils';
 
 
 const helpText = `Available commands:\nwhoami, ls, cd <dir>, pwd, help, clear\n\nNavigation:\n- cd . (go to current directory) (why?)\n- cd .. (go to parent directory)\n- cd /projects (absolute path)\n- cd projects (relative path)`;
@@ -38,75 +39,6 @@ function highlight(line: string) {
   return <span className="terminal-default-text">{line}</span>;
 }
 
-function directoryExists(path: string): boolean{
-  // Does a directory for a given absolute path exist
-
-  var components = path.split("/").filter((s:string) => s!=="");
-
-  var curFile: File = root;
-  for (var component of components){
-      
-      // Components left to process but we hit a regular file... so error
-      if (curFile.type === FileType.Regular) return false;
-      
-      curFile = curFile as Directory;
-
-      var found = false;
-      for (const child of curFile.children){
-          if (child.name === component){
-              curFile = child;
-              found = true;
-              break;
-          }
-      }
-
-      if (!found) return false;
-      
-  }
-
-  if (curFile.type === FileType.Regular) return false;
-
-  return true;
-}
-
-function getDirectoryByAbsolutePath(path: string): Directory {
-  // Get the directory of the path represented by the path string
-  //     OR the directory closest to the path given
-  //     eg. if /a/b/c/ is requested and we only have /a/b/, only return /a/b/
-  //     essentially return however many components of the path you can match with a real directory
-  //     for no matches, return root
-  var components = path.split("/").filter((s:string) => s!=="");
-
-  var curFile: File = root;
-  for (var component of components){
-      
-      // Components left to process but we hit a regular file... so error
-      if (curFile.type === FileType.Regular) return curFile.parent || root;
-      
-      curFile = curFile as Directory;
-
-      var found = false;
-      for (const child of curFile.children){
-          if (child.name === component){
-              curFile = child;
-              found = true;
-              break;
-          }
-      }
-
-      if (!found) return curFile.parent || root;
-      
-  }
-
-  if (curFile.type === FileType.Regular) return curFile.parent || root;
-
-  return curFile;
-}
-
-function listChildren(dir: Directory): string[]{
-    // List all children under this directory with their names as strings
-    return dir.children.map((f) => f.name);
-}
 
 
 type TerminalProps = {
@@ -220,6 +152,17 @@ const Terminal: React.FC<TerminalProps> = ({ onNavigate, currentLocation }) => {
       case 'clear':
         setHistory([]);
         return;
+
+      case 'echo':
+        if (args[1]){
+            let out = args.slice(1).join(' ');
+            if (out.startsWith("\"") && out.endsWith("\"")) out = out.slice(1,-1);
+            output = out;
+        }
+        else{
+          output = 'echo: missing operand'
+        }
+        break;
 
       default:
         output = `Command not found: ${command}`;
