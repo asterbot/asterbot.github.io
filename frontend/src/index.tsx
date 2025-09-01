@@ -8,6 +8,12 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
+
+
+const params = new URLSearchParams(window.location.search);
+const originalPath = params.get("path") || "/";
+window.history.replaceState(null, "", originalPath);
+
 root.render(
   <React.StrictMode>
     <Router>

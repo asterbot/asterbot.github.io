@@ -15,7 +15,7 @@ const HomePage: React.FC = () => {
 
       <div className="intro-box">
         <div className="intro-text">
-          <span className="question">Who am I?</span> "Huge nerd" doesn't even scratch the surface.
+          <span className="question">Who am I?</span> A "huge nerd" doesn't even scratch the surface.
           <br /><br />
           I love making things with code, whether it's games, apps, system-level projects or anything in between, I'm always trying new things with software!<br />
           Check out <a href="/projects"><span className="link"> my projects  &raquo;</span></a>
