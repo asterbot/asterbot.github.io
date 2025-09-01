@@ -1,4 +1,4 @@
-import { Project, SourceDomain } from "../types";
+import { Project, SourceDomain } from "./types";
 
 const projectData: Project[] = [
     {

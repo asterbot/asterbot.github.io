@@ -6,7 +6,7 @@ import './Timeline.css';
 // // Icons for timeline
 import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined';
 import WorkOutlineOutlinedIcon from '@mui/icons-material/WorkOutlineOutlined';
-import { TermType } from './types';
+import { TermType } from './data/types';
 
 import { VerticalTimeline, VerticalTimelineElement }  from 'react-vertical-timeline-component';
 import 'react-vertical-timeline-component/style.min.css';

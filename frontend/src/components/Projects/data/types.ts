@@ -4,7 +4,7 @@ export interface Project{
     sources: Source[],  // mention all sources (eg. github, devpost, ...)
     description: string,
     uid: string,        // all images of the project are stored in img/{uid}/...
-    tryItOut: boolean,  // can this be tried??
+    tryItOut: boolean,  // can this be tried?
     numImages: number,
 }
 

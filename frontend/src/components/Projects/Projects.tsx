@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './Projects.css';
 
 import projectData from './data/projectsData';
-import { Project } from './types';
+import { Project } from './data/types';
 
 import Lightbox from "yet-another-react-lightbox";
 import Thumbnails from "yet-another-react-lightbox/plugins/thumbnails";

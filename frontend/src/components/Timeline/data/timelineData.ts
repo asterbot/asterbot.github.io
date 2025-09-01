@@ -1,4 +1,4 @@
-import { Term, TermType } from "../types";
+import { Term, TermType } from "./types";
 
 
 const timelineEvents: Term [] =  [
