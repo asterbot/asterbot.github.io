@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import './Terminal.css';
 import root from './data/directoryData/terminalData';
-import { File, Directory, FileType } from './data/directoryData/types';
+import { Directory } from './data/directoryData/types';
 import { directoryExists, getDirectoryByAbsolutePath, listChildren } from './data/directoryData/utils';
 
 
