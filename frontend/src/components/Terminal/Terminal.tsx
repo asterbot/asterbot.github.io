@@ -30,10 +30,6 @@ function highlight(line: string) {
   if (line.startsWith('Available commands')) {
     return <span className="help-text">{line}</span>;
   }
-  // Highlight navigation
-  if (line.includes('cd ..') || line.includes('absolute path') || line.includes('relative path')) {
-    return <span className="navigation-text">{line}</span>;
-  }
   // Default output
   return <span className="terminal-default-text">{line}</span>;
 }
