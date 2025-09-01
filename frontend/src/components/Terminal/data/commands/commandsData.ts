@@ -1,5 +1,5 @@
 import { Directory } from "../directoryData/types";
-import { listChildren } from "../directoryData/utils";
+import { getFileByAbsolutePath, listChildren } from "../directoryData/utils";
 import { CommandContext, Command } from "./types";
 import { getDirectoryByAbsolutePath, directoryExists } from "../directoryData/utils";
 
@@ -96,6 +96,22 @@ export const pwd: Command = {
     },
 }
 
+
+export const cat: Command = {
+    name: "cat",
+    minExpectedArgs: 1,
+    help: "Print contents of file to the screen",
+    addToHistory: true,
+
+    callback(cmdArgs: string[], context: CommandContext){
+        var path = cmdArgs[0];
+
+        let newPath = context.cwd.path === '/' ? `/${path}` : `${context.cwd.path}/${path}`;
+
+        var f = getFileByAbsolutePath(newPath);
+        return f ? f.content : `File not found: ${cmdArgs[0]}`;
+    }
+}
 
 export const clear: Command = {
     name: "clear",

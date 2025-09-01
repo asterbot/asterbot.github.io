@@ -19,7 +19,7 @@ function highlight(line: string) {
     );
   }
   // Highlight errors
-  if (/no such directory|missing operand|Command not found|Already at root|sudo|expected at least/.test(line)) {
+    if (/no such directory|missing operand|not found|Already at root|sudo|expected at least/.test(line)) {
     return <span className="error-text">{line}</span>;
   }
   // Highlight directories in ls output

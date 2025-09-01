@@ -1,4 +1,4 @@
-import { Directory, File, FileType } from "./types";
+import { Directory, File, FileType, RegularFile } from "./types";
 import root from "./terminalData";
 
 export function directoryExists(path: string): boolean{
@@ -64,6 +64,31 @@ export function getDirectoryByAbsolutePath(path: string): Directory {
     if (curFile.type === FileType.Regular) return curFile.parent || root;
   
     return curFile;
+}
+
+export function getFileByAbsolutePath(path: string): RegularFile | undefined {
+    // Get the file of the path represented by the path string
+    var components = path.split("/").filter((s:string) => s!=="");
+  
+    var curFile: File = root;
+    for (var component of components){
+        
+        // Components left to process but we hit a regular file... so error
+        if (curFile.type === FileType.Regular) return undefined;
+        
+        curFile = curFile as Directory;
+  
+        var found = false;
+        for (const child of curFile.children){
+            if (child.name === component){
+                curFile = child;
+                found = true;
+                break;
+            }
+        }        
+    }
+  
+    if (curFile.type === FileType.Regular) return curFile;
 }
   
 
