@@ -19,7 +19,6 @@ const help: Command = {
 
     callback(_cmdArgs: string[], context: CommandContext){
         var out = "Available commands:\n";
-        console.log("WE YOLO");
         for (let command in commands){
             out+=`- ${command}: ${commands[command].help}\n\n`
         }

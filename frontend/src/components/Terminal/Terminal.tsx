@@ -59,7 +59,6 @@ const Terminal: React.FC<TerminalProps> = ({ onNavigate, currentLocation }) => {
   useEffect(() => {
     if (currentLocation) {
       const path = currentLocation === '/' ? '/' : currentLocation;
-      console.log(path);
       setCwd(getDirectoryByAbsolutePath(path));
     }
   }, [currentLocation, cwd]);
