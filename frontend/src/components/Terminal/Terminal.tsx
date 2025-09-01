@@ -2,10 +2,9 @@ import React, { useState, useRef, useEffect } from 'react';
 import './Terminal.css';
 import root from './data/directoryData/terminalData';
 import { Directory } from './data/directoryData/types';
-import { directoryExists, getDirectoryByAbsolutePath, listChildren } from './data/directoryData/utils';
-
-
-const helpText = `Available commands:\nwhoami, ls, cd <dir>, pwd, help, clear\n\nNavigation:\n- cd . (go to current directory) (why?)\n- cd .. (go to parent directory)\n- cd /projects (absolute path)\n- cd projects (relative path)`;
+import { getDirectoryByAbsolutePath } from './data/directoryData/utils';
+import commands from './data/commands/utils';
+import { Command, CommandContext } from './data/commands/types';
 
 // Simple syntax highlighting for terminal output
 function highlight(line: string) {
@@ -20,7 +19,7 @@ function highlight(line: string) {
     );
   }
   // Highlight errors
-  if (/no such directory|missing operand|Command not found|Already at root|sudo/.test(line)) {
+  if (/no such directory|missing operand|Command not found|Already at root|sudo|expected at least/.test(line)) {
     return <span className="error-text">{line}</span>;
   }
   // Highlight directories in ls output
@@ -38,7 +37,6 @@ function highlight(line: string) {
   // Default output
   return <span className="terminal-default-text">{line}</span>;
 }
-
 
 
 type TerminalProps = {
@@ -75,98 +73,33 @@ const Terminal: React.FC<TerminalProps> = ({ onNavigate, currentLocation }) => {
   const handleCommand = (cmd: string) => {
     let output = '';
     const args = cmd.trim().split(' ');
-    const command = args[0];
-    switch (command) {
-      case 'whoami':
-        output = 'Arjun :D'
-        break;
+    const commandName = args[0];
+    args.shift(); // remove `command`
 
-      case 'sudo':
-        output = "Why would I give you sudo access?"
-        break;
+    var command: Command = commands[commandName];
 
-      case 'ls':
-        output = (listChildren(cwd)).join('  ');
-        break;
-
-      case 'cd':
-        if (args[1]) {
-          let target = args[1];
-          if (target === '..') {
-
-            if (cwd.path !== '/') {
-              const parent = cwd.parent as Directory;
-              setCwd(parent);
-              navigateToPage(parent);
-              output = '';
-
-            } else {
-              output = 'Already at root.';
-            }
-          }
-
-          else if (target === "."){
-              output=""
-          }
-
-          else if (target.startsWith('/')) {
-            // Handle absolute path
-            if (directoryExists(target)){
-              var dir = getDirectoryByAbsolutePath(target);
-              setCwd(dir);
-              navigateToPage(dir);
-              output = '';
-            } 
-            else {
-              output = `cd: no such directory: ${target}`;
-            }
-          } 
-
-          else {
-            // Handle relative path
-            let newPath = cwd.path === '/' ? `/${target}` : `${cwd.path}/${target}`;
-            if (directoryExists(newPath)) {
-              dir = getDirectoryByAbsolutePath(newPath);
-              setCwd(dir);
-              output = '';
-              navigateToPage(dir)
-            } 
-            else {
-              output = `cd: no such directory: ${target}`;
-            }
-          }
-        } 
-        else {
-          output = 'cd: missing operand';
-        }
-        break;
-
-      case 'pwd':
-        output = cwd.path;
-        break;
-
-      case 'help':
-        output = helpText;
-        break;
-
-      case 'clear':
-        setHistory([]);
-        return;
-
-      case 'echo':
-        if (args[1]){
-            let out = args.slice(1).join(' ');
-            if (out.startsWith("\"") && out.endsWith("\"")) out = out.slice(1,-1);
-            output = out;
-        }
-        else{
-          output = 'echo: missing operand'
-        }
-        break;
-
-      default:
-        output = `Command not found: ${command}`;
+    if (!command){
+        if (commandName=="sudo") output = "Why would I give you sudo access?";  // special case lol
+        else output = `Command not found: ${commandName}`;
     }
+    else if (args.length < command.minExpectedArgs){
+        output = `Command ${command.name} expected at least ${command.minExpectedArgs} args, but got ${args.length}`;
+    }
+    else{
+        var context: CommandContext = {
+            cwd: cwd,
+            setCwd: setCwd,
+            navigateToPage: navigateToPage,
+            setHistory: setHistory,
+        }
+
+        output = command.callback(args, context);
+        
+        if (!command.addToHistory){
+            return;
+        }
+    }
+
     setHistory((h) => [...h, `$ ${cmd}`, output]);
   };
 
