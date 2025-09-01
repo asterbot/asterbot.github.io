@@ -47,7 +47,7 @@ const Blog: React.FC = () => {
         let isCancelled = false;
         setErrorMessage('');
 
-        fetch(`/blogs/${id}/index.md`)
+        fetch(`/blogfiles/${id}/index.md`)
             .then(async (response) => {
                 if (!isCancelled) {
                     if (!response.ok) {
