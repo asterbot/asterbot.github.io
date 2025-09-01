@@ -1,22 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import './Terminal.css';
+import root from './data/directoryData/terminalData';
+import { File, Directory, FileType } from './data/directoryData/types';
 
-
-// TODO: refactor with classes
-const fileSystem: Record<string, string[]> = {
-  '/': ['home', 'projects', 'blogs', 'timeline'],
-  '/home': ['about.txt'],
-  '/projects': ['ASCII_Game_Engine', 'BetterNotes','BookExplorer','PeerToPeer'],
-  '/blogs': ['initial_commit', 'sleep_sort'],
-  '/timeline': ['3B', 'WT4', '3A', 'WT3', '2B', 'WT2', '2A', 'WT1', '1B', '1A'],
-};
 
 const helpText = `Available commands:\nwhoami, ls, cd <dir>, pwd, help, clear\n\nNavigation:\n- cd . (go to current directory) (why?)\n- cd .. (go to parent directory)\n- cd /projects (absolute path)\n- cd projects (relative path)`;
-
-type TerminalProps = {
-  onNavigate?: (path: string) => void;
-  currentLocation?: string;
-};
 
 // Simple syntax highlighting for terminal output
 function highlight(line: string) {
@@ -50,10 +38,87 @@ function highlight(line: string) {
   return <span className="terminal-default-text">{line}</span>;
 }
 
+function directoryExists(path: string): boolean{
+  // Does a directory for a given absolute path exist
+
+  var components = path.split("/").filter((s:string) => s!=="");
+
+  var curFile: File = root;
+  for (var component of components){
+      
+      // Components left to process but we hit a regular file... so error
+      if (curFile.type === FileType.Regular) return false;
+      
+      curFile = curFile as Directory;
+
+      var found = false;
+      for (const child of curFile.children){
+          if (child.name === component){
+              curFile = child;
+              found = true;
+              break;
+          }
+      }
+
+      if (!found) return false;
+      
+  }
+
+  if (curFile.type === FileType.Regular) return false;
+
+  return true;
+}
+
+function getDirectoryByAbsolutePath(path: string): Directory {
+  // Get the directory of the path represented by the path string
+  //     OR the directory closest to the path given
+  //     eg. if /a/b/c/ is requested and we only have /a/b/, only return /a/b/
+  //     essentially return however many components of the path you can match with a real directory
+  //     for no matches, return root
+  var components = path.split("/").filter((s:string) => s!=="");
+
+  var curFile: File = root;
+  for (var component of components){
+      
+      // Components left to process but we hit a regular file... so error
+      if (curFile.type === FileType.Regular) return curFile.parent || root;
+      
+      curFile = curFile as Directory;
+
+      var found = false;
+      for (const child of curFile.children){
+          if (child.name === component){
+              curFile = child;
+              found = true;
+              break;
+          }
+      }
+
+      if (!found) return curFile.parent || root;
+      
+  }
+
+  if (curFile.type === FileType.Regular) return curFile.parent || root;
+
+  return curFile;
+}
+
+function listChildren(dir: Directory): string[]{
+    // List all children under this directory with their names as strings
+    return dir.children.map((f) => f.name);
+}
+
+
+type TerminalProps = {
+  onNavigate?: (path: string) => void;
+  currentLocation?: string;
+};
+
+
 const Terminal: React.FC<TerminalProps> = ({ onNavigate, currentLocation }) => {
   const [history, setHistory] = useState<string[]>([""]);
   const [input, setInput] = useState('');
-  const [cwd, setCwd] = useState('/');
+  const [cwd, setCwd] = useState<Directory>(root);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -64,13 +129,14 @@ const Terminal: React.FC<TerminalProps> = ({ onNavigate, currentLocation }) => {
   useEffect(() => {
     if (currentLocation) {
       const path = currentLocation === '/' ? '/' : currentLocation;
-      setCwd(path);
+      console.log(path);
+      setCwd(getDirectoryByAbsolutePath(path));
     }
   }, [currentLocation, cwd]);
 
-  const navigateToPage = (path: string) => {
+  const navigateToPage = (dir: Directory) => {
     if (onNavigate) {
-      onNavigate(path === '/home' ? '/' : path);
+      onNavigate(dir.path === '/home' ? '/' : dir.path);
     }
   };
 
@@ -82,71 +148,79 @@ const Terminal: React.FC<TerminalProps> = ({ onNavigate, currentLocation }) => {
       case 'whoami':
         output = 'Arjun :D'
         break;
+
       case 'sudo':
         output = "Why would I give you sudo access?"
         break;
+
       case 'ls':
-        output = (fileSystem[cwd] || []).join('  ');
+        output = (listChildren(cwd)).join('  ');
         break;
+
       case 'cd':
         if (args[1]) {
           let target = args[1];
           if (target === '..') {
-            if (cwd !== '/') {
-              // Go to parent directory based on fileSystem structure
-              const parts = cwd.split('/').filter(Boolean);
-              parts.pop();
-              const parentPath = parts.length ? '/' + parts.join('/') : '/';
-              setCwd(parentPath);
-              // Navigate to the parent page if it's a valid route
-              if (['/projects', '/blogs', '/timeline', '/home', '/'].includes(parentPath)) {
-                navigateToPage(parentPath);
-              }
+
+            if (cwd.path !== '/') {
+              const parent = cwd.parent as Directory;
+              setCwd(parent);
+              navigateToPage(parent);
               output = '';
+
             } else {
               output = 'Already at root.';
             }
           }
+
           else if (target === "."){
               output=""
           }
+
           else if (target.startsWith('/')) {
             // Handle absolute path
-            if (fileSystem[target]) {
-              setCwd(target);
-              navigateToPage(target);
+            if (directoryExists(target)){
+              var dir = getDirectoryByAbsolutePath(target);
+              setCwd(dir);
+              navigateToPage(dir);
               output = '';
-            } else {
+            } 
+            else {
               output = `cd: no such directory: ${target}`;
             }
           } 
+
           else {
             // Handle relative path
-            let newPath = cwd === '/' ? `/${target}` : `${cwd}/${target}`;
-            if (fileSystem[newPath]) {
-              setCwd(newPath);
+            let newPath = cwd.path === '/' ? `/${target}` : `${cwd.path}/${target}`;
+            if (directoryExists(newPath)) {
+              dir = getDirectoryByAbsolutePath(newPath);
+              setCwd(dir);
               output = '';
-              if (['/projects', '/blogs', '/timeline', '/home', '/'].includes(newPath)) {
-                navigateToPage(newPath);
-              }
+              navigateToPage(dir)
             } 
             else {
               output = `cd: no such directory: ${target}`;
             }
           }
-        } else {
+        } 
+        else {
           output = 'cd: missing operand';
         }
         break;
+
       case 'pwd':
-        output = cwd;
+        output = cwd.path;
         break;
+
       case 'help':
         output = helpText;
         break;
+
       case 'clear':
         setHistory([]);
         return;
+
       default:
         output = `Command not found: ${command}`;
     }
@@ -169,7 +243,7 @@ const Terminal: React.FC<TerminalProps> = ({ onNavigate, currentLocation }) => {
           <div key={i} className="terminal-line">{highlight(line)}</div>
         ))}
         <form onSubmit={handleSubmit} className="terminal-form">
-          <span className="terminal-prompt">{cwd} $</span>
+          <span className="terminal-prompt">{cwd.path !== "/" ? cwd.path.slice(0,-1): cwd.path} $</span>
           <input
             ref={inputRef}
             value={input}

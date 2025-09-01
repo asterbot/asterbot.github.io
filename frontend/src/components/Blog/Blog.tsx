@@ -29,11 +29,11 @@ const Blog: React.FC = () => {
         return content
             .replace(
                 /!\[([^\]]*)\]\(\.\/img\/([^)]+)\)/g,
-                `![$1](/blogs/${blogId}/img/$2)`
+                `![$1](/blogfiles/${blogId}/img/$2)`
             )
             .replace(
                 /!\[([^\]]*)\]\(img\/([^)]+)\)/g,
-                `![$1](/blogs/${blogId}/img/$2)`
+                `![$1](/blogfiles/${blogId}/img/$2)`
             );
     };
 
