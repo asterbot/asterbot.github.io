@@ -22,7 +22,7 @@ function highlight(line: string) {
     );
   }
   // Highlight errors
-    if (/unexepcted|No manual entry|Invalid command|no such directory|missing operand|not found|Already at root|sudo|expected at least/.test(line)) {
+    if (/unexpected|No manual entry|Invalid command|no such directory|missing operand|not found|Already at root|sudo|expected at least/.test(line)) {
     return <span className="error-text">{line}</span>;
   }
   // Highlight directories in ls output
@@ -102,7 +102,7 @@ const Terminal: React.FC<TerminalProps> = ({ onNavigate, currentLocation }) => {
 
         output = command.callback(args, context);
 
-        if (!output) output = "Something unexepcted happened...";
+        if (output === undefined) output = "Something unexpected happened...";
         
         if (!command.addToHistory){
             return;
