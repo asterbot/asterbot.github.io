@@ -8,7 +8,6 @@ const commands: Record<string, Command> = Object.values(allCommands)
     return acc;
   }, {} as Record<string, Command>);
 
-
 const help: Command = {
     name: 'help',
     minExpectedArgs: 0,
@@ -28,6 +27,22 @@ const help: Command = {
 }
 
 commands["help"] = help;
+
+
+const man: Command = {
+    name: 'man',
+    minExpectedArgs: 1,
+
+    help: "Provide help manual of the command provided",
+
+    addToHistory: true,
+
+    callback(cmdArgs: string[], context: CommandContext){
+        return commands[cmdArgs[0]]?.help;
+    }
+}
+
+commands["man"] = man;
 
 
 export default commands;

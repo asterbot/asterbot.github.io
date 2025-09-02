@@ -22,7 +22,7 @@ function highlight(line: string) {
     );
   }
   // Highlight errors
-    if (/no such directory|missing operand|not found|Already at root|sudo|expected at least/.test(line)) {
+    if (/Invalid command|no such directory|missing operand|not found|Already at root|sudo|expected at least/.test(line)) {
     return <span className="error-text">{line}</span>;
   }
   // Highlight directories in ls output
@@ -76,7 +76,17 @@ const Terminal: React.FC<TerminalProps> = ({ onNavigate, currentLocation }) => {
   };
 
   const handleCommand = (cmd: string) => {
+
+    const validCommandRegex = /^[a-zA-Z0-9 /\.]+$/;
     let output = '';
+    
+    if (!validCommandRegex.test(cmd)){
+        output = "Invalid command";
+        console.log("here!");
+        setHistory((h) => [...h, `$ ${cmd}`, output]);
+        return;
+    }
+
     const args = cmd.trim().split(' ');
     const commandName = args[0];
     args.shift(); // remove `command`

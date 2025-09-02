@@ -100,16 +100,16 @@ export const pwd: Command = {
 export const cat: Command = {
     name: "cat",
     minExpectedArgs: 1,
-    help: "Print contents of file to the screen",
+    help: "Print contents of file to the screen. Allegedly not the feline.",
     addToHistory: true,
 
     callback(cmdArgs: string[], context: CommandContext){
         var path = cmdArgs[0];
 
-        let newPath = context.cwd.path === '/' ? `/${path}` : `${context.cwd.path}/${path}`;
+        if (!path.startsWith('/')) path = context.cwd.path === '/' ? `/${path}` : `${context.cwd.path}` + `${path}`;
 
-        var f = getFileByAbsolutePath(newPath);
-        return f ? f.content : `File not found: ${cmdArgs[0]}`;
+        var f = getFileByAbsolutePath(path);
+        return f ? f.content : `File not found: ${path}`;
     }
 }
 
