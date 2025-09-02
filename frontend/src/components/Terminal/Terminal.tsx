@@ -9,7 +9,7 @@ import { Command, CommandContext } from './data/commands/types';
 // Simple syntax highlighting for terminal output
 function highlight(line: string) {
 
-  const dirRegex = /^home|projects|blogs|timeline$/;
+  const dirRegex = /home|projects|blogs|timeline/;
 
   // Highlight commands
   if (line.startsWith('$ ')) {
@@ -22,7 +22,7 @@ function highlight(line: string) {
     );
   }
   // Highlight errors
-    if (/Invalid command|no such directory|missing operand|not found|Already at root|sudo|expected at least/.test(line)) {
+    if (/unexepcted|No manual entry|Invalid command|no such directory|missing operand|not found|Already at root|sudo|expected at least/.test(line)) {
     return <span className="error-text">{line}</span>;
   }
   // Highlight directories in ls output
@@ -67,7 +67,7 @@ const Terminal: React.FC<TerminalProps> = ({ onNavigate, currentLocation }) => {
       const path = currentLocation === '/' ? '/' : currentLocation;
       setCwd(getDirectoryByAbsolutePath(path));
     }
-  }, [currentLocation, cwd]);
+  }, [currentLocation]);
 
   const navigateToPage = (dir: Directory) => {
     if (onNavigate) {
@@ -77,16 +77,8 @@ const Terminal: React.FC<TerminalProps> = ({ onNavigate, currentLocation }) => {
 
   const handleCommand = (cmd: string) => {
 
-    const validCommandRegex = /^[a-zA-Z0-9 /\.]+$/;
     let output = '';
     
-    if (!validCommandRegex.test(cmd)){
-        output = "Invalid command";
-        console.log("here!");
-        setHistory((h) => [...h, `$ ${cmd}`, output]);
-        return;
-    }
-
     const args = cmd.trim().split(' ');
     const commandName = args[0];
     args.shift(); // remove `command`
@@ -94,7 +86,7 @@ const Terminal: React.FC<TerminalProps> = ({ onNavigate, currentLocation }) => {
     var command: Command = commands[commandName];
 
     if (!command){
-        if (commandName=="sudo") output = "Why would I give you sudo access?";  // special case lol
+        if (commandName==="sudo") output = "Why would I give you sudo access?";  // special case lol
         else output = `Command not found: ${commandName}`;
     }
     else if (args.length < command.minExpectedArgs){
@@ -109,6 +101,8 @@ const Terminal: React.FC<TerminalProps> = ({ onNavigate, currentLocation }) => {
         }
 
         output = command.callback(args, context);
+
+        if (!output) output = "Something unexepcted happened...";
         
         if (!command.addToHistory){
             return;
@@ -125,6 +119,16 @@ const Terminal: React.FC<TerminalProps> = ({ onNavigate, currentLocation }) => {
       setInput('');
     }
   };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    // Ctrl+L clears screen
+    if (e.ctrlKey && e.key.toLowerCase() === 'l') {
+      e.preventDefault(); // prevent browser clear
+      setHistory([]);
+      return;
+    }
+  };
+  
   
   return (
     <div className="terminal">
@@ -139,6 +143,7 @@ const Terminal: React.FC<TerminalProps> = ({ onNavigate, currentLocation }) => {
             ref={inputRef}
             value={input}
             onChange={e => setInput(e.target.value)}
+            onKeyDown={handleKeyDown}
             className="terminal-input"
             autoFocus
             autoComplete="off"

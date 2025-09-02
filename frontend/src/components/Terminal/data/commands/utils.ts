@@ -38,7 +38,9 @@ const man: Command = {
     addToHistory: true,
 
     callback(cmdArgs: string[], context: CommandContext){
-        return commands[cmdArgs[0]]?.help;
+        const target = cmdArgs[0];
+        if (!commands[target]) return `No manual entry for command: ${target}`
+        return commands[target].help;
     }
 }
 
