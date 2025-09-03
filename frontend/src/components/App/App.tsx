@@ -95,11 +95,10 @@ const App: React.FC = () => {
           ))}
         </div>
       ) : (
-        <div className="socials-toggle" onClick={() => setSocialsOpen(!socialsOpen)}>
-          {/* Sleeping Hamburger! */}
-          <span></span>
-          <span></span>
-          <span></span>
+        <div className={`socials-toggle ${socialsOpen ? 'expanded' : ''}`} onClick={() => setSocialsOpen(!socialsOpen)}>
+            <span></span>
+            <span></span>
+            <span></span>
         </div>
       )}
 

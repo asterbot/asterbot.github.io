@@ -258,7 +258,13 @@
   cursor: pointer;
   z-index: 101;
   padding: 1px;
+  transition: left 0.3s ease;
 }
+
+.socials-toggle.expanded {
+  left: calc(64px); /* 64px = bar width */
+}
+
 
 .socials-toggle span {
   width: 4px;
@@ -273,7 +279,7 @@
 .socials-bar.expanded {
   position: fixed;
   top: 50%;
-  left: 32px;
+  left: 0;
   transform: translateY(-50%);
   flex-direction: column;
   gap: 1.2rem;
