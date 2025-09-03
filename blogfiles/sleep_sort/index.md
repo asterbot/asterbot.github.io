@@ -1,7 +1,7 @@
 # Preface
 ---
 
-Find all code used in the jupyter notebook here: https://github.com/asterbot/asterbot.github.io/blob/main/blog_code/sleep_sort/sleep_sort.ipynb
+Find all code used in the jupyter notebook [here](https://github.com/asterbot/asterbot.github.io/blob/main/blog_code/sleep_sort/sleep_sort.ipynb)
 
 # Introduction
 
