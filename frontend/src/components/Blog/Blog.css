@@ -174,3 +174,10 @@
 .blog-markdown pre code {
   overflow-x: scroll;  
 }
+
+
+.blog-markdown a {
+  display: inline-block;
+  word-break: break-all;
+  overflow-wrap: anywhere;
+}
