@@ -5,7 +5,7 @@ const projectData: Project[] = [
         title: "ASCII Game Engine",
         tags: ["C++", "Ncurses", "OOP", "MVC", "SOLID"],
         sources: [],
-        description: "An ASCII-based game engine based on the Ncurses C framework with C++ abstractions. Created Tetris and Donkey Kong with the game engine!",
+        description: "An ASCII-based game engine created on the curses C framework with OOP abstractions in C++, using various OOP patterns over a C library. I created Tetris and Donkey Kong with the game engine!",
         uid: "age",
         tryItOut: false,
         numImages: 4,
