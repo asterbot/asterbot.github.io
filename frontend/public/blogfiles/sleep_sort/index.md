@@ -25,7 +25,7 @@ sort(L):
 
 Genius, right? If you input `3 1 2` this is what would happen:
 
-![Timeline of sorting [3,1,2]](./img/image5.png) 
+![Timeline of sorting 3,1,2](./img/image5.png) 
 
 As you can see, the numbers printed in order! Hooray! Nice sorting! Or is it?
 
