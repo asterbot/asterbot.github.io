@@ -33,23 +33,34 @@ As you can see, the numbers printed in order! Hooray! Nice sorting! Or is it?
 <details>
 <summary> Why is O(n) sorting a big deal?</summary>
 
-One fact echo'd almost everywhere about sorting is that the best you can do is $O(n \log n)$. This is true for **comparison-based** sorting.
+One fact echo'd almost everywhere about sorting is that the best you can do is $n \log n$ comparisons (which is represented as $\Omega(n \log n)$). This is true for **comparison-based** sorting.
 
 ## Comparison-based sorting
-This is the type of sorting which involves directly comparing elements of the original array with one another, and it has been proven that this cannot go faster than $O(n \log n)$. 
+This is the type of sorting which involves directly comparing elements of the original array with one another, and it has been proven that it is in $\Omega(n \log n)$ (ie. we cannot do faster than $n \log n$ steps).
 
 <details>
 <summary>A small proof</summary>
 
-An array with $n$ items can have at most $n!$ arrangements (or permutations).
+An array with $n$ items can have at most $n!$ arrangements (or permutations). **Only one of these is sorted**. \
 In a comparison-based sorting algorithm, we must perform **at least** $\log (n!)$ comparisons.
 
 The reason for this is that each "comparison" is essentially a yes/no decision about which element to chose, so the question can be reframed as: _how many comparisons do I need to uniquely identify the right permutation?_\
 If you can make $d$ yes/no decisions, the number of possible outcomes is $2^d$\
 We also know the total number of possible outcomes is $n!$, so $2^d\; = n! \implies d = \log (n!)$
 
-Also, \
-$\log(n!) = \sum\limits_{i=1}^{n}\;\;\;\;\log(i) \le n \log(n)$
+Also,
+$$
+\log(n!) \;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;= \log(1) + \cdots + \log(n/2) + \cdots + \log(n) \\
+         \;\;\;\;\;\;\;\;\;\;\;\ge \log(n/2) + \cdots + \log(n) \\
+         \;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\ge \log(n/2) + \cdots + \log(n/2) \\
+         = (n/2)\;\; \log(n/2)
+$$
+
+So since $\log(n!) \ge (n/2) \log(n/2)$, we can say it is in $\Omega(n \log n)$ from [First Principles](https://en.wikipedia.org/wiki/Big_O_notation#Formal_definition)
+
+
+> The math here is a *BIT* convoluted! 
+
 
 So the lower-bound of comparison-based sorts is $\Omega(n \log n)$ in the worst case
 </details>
