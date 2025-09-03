@@ -67,7 +67,7 @@ const CommitGraph = () => {
           const cool_stuff = main.branch("CS stuff")
           addCommit(cool_stuff, "Sleep Sort")
 
-          addCommit(cool_stuff, "Fork Bomb");
+          // addCommit(cool_stuff, "Fork Bomb");
 
         }}
       </Gitgraph>
