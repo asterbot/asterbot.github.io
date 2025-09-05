@@ -52,7 +52,7 @@ type TerminalProps = {
 
 
 const Terminal: React.FC<TerminalProps> = ({ onNavigate, currentLocation }) => {
-  const [history, setHistory] = useState<History[]>([{type: HistoryType.COMMAND, cwd: root, out: ""}]);
+  const [history, setHistory] = useState<History[]>([]);
   const [input, setInput] = useState('');
   const [cwd, setCwd] = useState<Directory>(root);
   const inputRef = useRef<HTMLInputElement>(null);
