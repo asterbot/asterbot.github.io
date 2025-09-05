@@ -106,7 +106,7 @@ export const cat: Command = {
     callback(cmdArgs: string[], context: CommandContext){
         var path = cmdArgs[0];
 
-        if (!path.startsWith('/')) path = context.cwd.path === '/' ? `/${path}` : `${context.cwd.path}` + `${path}`;
+        if (!path.startsWith('/')) path = context.cwd.path === '/' ? `/${path}` : `${context.cwd.path}${path}`;
 
         var f = getFileByAbsolutePath(path);
         return f ? f.content : `File not found: ${path}`;
@@ -116,7 +116,7 @@ export const cat: Command = {
 export const clear: Command = {
     name: "clear",
     minExpectedArgs: 0,
-    help: "Clear screen",
+    help: "Clear screen (can also be triggered with ctrl+L)",
     addToHistory: false,
     
     callback(_cmdArgs: string[], context: CommandContext){

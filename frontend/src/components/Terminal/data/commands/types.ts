@@ -1,12 +1,23 @@
 import { Directory } from "../directoryData/types";
 
+export enum HistoryType{
+    COMMAND,
+    OUTPUT,
+}
+
+export interface History{
+    type: HistoryType,
+    cwd: Directory,
+    out: string,
+}
+
 export interface CommandContext {
     // All context that could EVER be required to pass into commands
     //           .... seems type-safe enough 
     cwd: Directory;
     setCwd: (value: React.SetStateAction<Directory>) => void;
     navigateToPage: (dir: Directory) => void;
-    setHistory: (value: React.SetStateAction<string[]>) => void;
+    setHistory: React.Dispatch<React.SetStateAction<History[]>>;
   }
   
 

@@ -4,7 +4,7 @@ import root from './data/directoryData/terminalData';
 import { Directory } from './data/directoryData/types';
 import { getDirectoryByAbsolutePath } from './data/directoryData/utils';
 import commands from './data/commands/utils';
-import { Command, CommandContext } from './data/commands/types';
+import { HistoryType, History, Command, CommandContext } from './data/commands/types';
 
 // Simple syntax highlighting for terminal output
 function highlight(line: string) {
@@ -52,7 +52,7 @@ type TerminalProps = {
 
 
 const Terminal: React.FC<TerminalProps> = ({ onNavigate, currentLocation }) => {
-  const [history, setHistory] = useState<string[]>([""]);
+  const [history, setHistory] = useState<History[]>([{type: HistoryType.COMMAND, cwd: root, out: ""}]);
   const [input, setInput] = useState('');
   const [cwd, setCwd] = useState<Directory>(root);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -85,6 +85,8 @@ const Terminal: React.FC<TerminalProps> = ({ onNavigate, currentLocation }) => {
 
     var command: Command = commands[commandName];
 
+    var oldCWD = cwd;
+
     if (!command){
         if (commandName==="sudo") output = "Why would I give you sudo access?";  // special case lol
         else output = `Command not found: ${commandName}`;
@@ -109,7 +111,7 @@ const Terminal: React.FC<TerminalProps> = ({ onNavigate, currentLocation }) => {
         }
     }
 
-    setHistory((h) => [...h, `$ ${cmd}`, output]);
+    setHistory((h) => [...h, {type: HistoryType.COMMAND ,cwd: oldCWD, out: `$ ${cmd}`}, {type: HistoryType.OUTPUT ,cwd: oldCWD, out: output}]);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -134,9 +136,14 @@ const Terminal: React.FC<TerminalProps> = ({ onNavigate, currentLocation }) => {
     <div className="terminal">
       <div className="terminal-content">
         <div className="terminal-line">{highlight("Welcome to the Portfolio Terminal! Type 'ls' or 'help' to get started.")}</div>
-        {history.map((line, i) => (
-          <div key={i} className="terminal-line">{highlight(line)}</div>
-        ))}
+        {history.map((line, i) => {        
+            return(
+              <div key={i} className="terminal-line">
+                {line.type===HistoryType.COMMAND  && <span className="terminal-prompt">{line.cwd.path !== "/" ? line.cwd.path.slice(0,-1): line.cwd.path}</span>}
+                {highlight(line.out)}
+              </div>
+            )
+        })}
         <form onSubmit={handleSubmit} className="terminal-form">
           <span className="terminal-prompt">{cwd.path !== "/" ? cwd.path.slice(0,-1): cwd.path} $</span>
           <input

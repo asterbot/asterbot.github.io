@@ -12,7 +12,7 @@ const help: Command = {
     name: 'help',
     minExpectedArgs: 0,
 
-    help: "Print this help message and exit",
+    help: "Print help message and exit",
 
     addToHistory: true,
 
