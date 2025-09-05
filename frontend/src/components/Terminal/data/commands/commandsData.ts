@@ -137,3 +137,14 @@ export const echo: Command = {
         return out;
     },
 }
+
+export const rm: Command = {
+    name: "rm",
+    minExpectedArgs: 0,
+    help: "Remove... don't call this",
+    addToHistory: true,
+
+    callback(_cmdArgs: string[], _context: CommandContext){
+        return "Aint breaking this that easy :)";
+    }
+}

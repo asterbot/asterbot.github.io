@@ -32,7 +32,7 @@ const timelineEvents: Term [] =  [
             { subject: "CS", courseCode: 346, description: "App Development"},
             { subject: "CS", courseCode: 370, description: "Numerical Computation"},
             { subject: "MUSIC", courseCode: 290, description: "Video Game Music"},
-            { subject: "FR", courseCode: 152, description: "Probability"},
+            { subject: "FR", courseCode: 152, description: "Basic French II"},
         ],
         termType: TermType.StudyTerm,
     },
