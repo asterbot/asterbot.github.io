@@ -14,8 +14,6 @@ import "yet-another-react-lightbox/plugins/thumbnails.css";
 
 const Projects: React.FC = () => {
 
-  // First one contains the project uid
-  //   2nd one contains how many slides there are
   const [open, setOpen] = useState<Project|null>(null);
 
   return (
@@ -59,21 +57,23 @@ const Projects: React.FC = () => {
           </div>
         ))}
       </div>
-
-      <Lightbox 
-        open = {open != null}
-        close = {() => setOpen(null)}
-        slides = {Array.from
-          ({length: open?.numImages || 1}, (_, i) => {return {src: '/projects/' + open?.uid + '/' + (i+1) as string + '.png'}})
-        }
-        plugins={[Thumbnails]}
-        styles={{
-          container: {
-            backgroundColor: "rgba(0, 0, 0, 0.7)"
-          }
-        }}
       
-      />
+      {open != null &&
+        <Lightbox 
+          open = {open != null}
+          close = {() => setOpen(null)}
+          slides = {Array.from
+            ({length: open.numImages || 1}, (_, i) => {return {src: '/projects/' + open.uid + '/' + (i+1) as string + '.png'}})
+          }
+          plugins={[Thumbnails]}
+          styles={{
+            container: {
+              backgroundColor: "rgba(0, 0, 0, 0.7)"
+            }
+          }}
+        
+        />
+      }
 
 
     </div>
