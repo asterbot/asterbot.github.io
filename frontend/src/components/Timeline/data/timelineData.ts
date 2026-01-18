@@ -3,12 +3,21 @@ import { Term, TermType } from "./types";
 
 const timelineEvents: Term [] =  [
     {
+        date: "Jan 2026 - Apr 2026",
+        title: "WT5",
+        description: "Software Engineer (Telematics/Embedded) @ Motive",
+        courses:[
+            { subject: "CS", courseCode: 451, description: "Data-Intensive Distributed Computing"},
+        ],
+        termType: TermType.WorkTerm,
+    },
+    {
         date: "Sept 2025 - Dec 2025",
         title: "3B",
         description: "",
         courses:[
-            { subject: "CO", courseCode: 456, description: "Introduction to Game Theory"},
-            { subject: "CS", courseCode: 480, description: "Introduction to Machine Learning"},
+            { subject: "CO", courseCode: 456, description: "Game Theory"},
+            { subject: "CS", courseCode: 480, description: "Machine Learning"},
             { subject: "CS", courseCode: 454, description: "Distributed Systems"},
         ],
         termType: TermType.StudyTerm,
@@ -16,7 +25,7 @@ const timelineEvents: Term [] =  [
     {
         date: "May 2025 - Aug 2025",
         title: "Work Term 4",
-        description: "Security Software Engineer @ Ford Motors",
+        description: "Software Engineer (Software Security) @ Ford Motors",
         courses:[
             { subject: "CS", courseCode: 348, description: "Database Management"},
         ],
@@ -39,7 +48,7 @@ const timelineEvents: Term [] =  [
     {
         date: "Sept 2024 - Dec 2024",
         title: "Work Term 3",
-        description: "Software Developer - Performance Team @ Ford Motors",
+        description: "Software Engineer (Performance/Stability) @ Ford Motors",
         courses:[],
         termType: TermType.WorkTerm,
     },
@@ -74,9 +83,9 @@ const timelineEvents: Term [] =  [
             { subject: "CS", courseCode: "246E", description: "Object-Oriented Software Development (Enriched)"},
             { subject: "CS", courseCode: 245, description: "Logic & Computation"},
             { subject: "CS", courseCode: 251, description: "Computer Organization and Design"},
-            { subject: "MATH", courseCode: 249, description: "Introduction to Combinatorics (Adv)"},
+            { subject: "MATH", courseCode: 249, description: "Combinatorics (Adv)"},
             { subject: "STAT", courseCode: 230, description: "Probability"},
-            { subject: "ECON", courseCode: 102, description: "Introduction to Marcoeconomics"},
+            { subject: "ECON", courseCode: 102, description: "Marcoeconomics"},
         ],
         termType: TermType.StudyTerm,
     },
@@ -85,8 +94,8 @@ const timelineEvents: Term [] =  [
         title: "Work Term 1",
         description: "Azure Project Developer @ University of Waterloo (WEA)",
         courses:[
-            { subject: "CO", courseCode: 250, description: "Introduction to Optimization"},
-            { subject: "ECON", courseCode: 101, description: "Introduction to Microeconomics"},
+            { subject: "CO", courseCode: 250, description: "Optimization"},
+            { subject: "ECON", courseCode: 101, description: "Microeconomics"},
         ],
         termType: TermType.WorkTerm,
     },
