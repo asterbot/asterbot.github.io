@@ -4,7 +4,7 @@ import { Term, TermType } from "./types";
 const timelineEvents: Term [] =  [
     {
         date: "Jan 2026 - Apr 2026",
-        title: "WT5",
+        title: "Work Term 5",
         description: "Software Engineer (Telematics/Embedded) @ Motive",
         courses:[
             { subject: "CS", courseCode: 451, description: "Data-Intensive Distributed Computing"},
