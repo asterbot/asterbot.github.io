@@ -98,7 +98,7 @@ Could be insanely high in terms of *seconds*, forget time complexity. If an elem
 
 So there is a small implicit assumption here! We need all scaled down numbers to be less than 0.001 (which represents 1ms). This can be guaranteed in arrays $L$ which have:
 $$
-\dfrac{\min(L)}{\max(L)}\;\;\;\;\;\;\;\;\;\;\;\; > 0.001
+\dfrac{\min(L)}{\max(L)}\;\;\;\;\;\;\;\;\;\;\;\; < 0.001
 $$
 > The 1ms value is true for non real-time Linux kernels (which is what I am using), but the inquality above can be modified to fit whatever OS you are using! I will continue using 1ms in the blog, but the idea extends to all OS's.
 
