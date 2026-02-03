@@ -145,6 +145,6 @@ export const rm: Command = {
     addToHistory: true,
 
     callback(_cmdArgs: string[], _context: CommandContext){
-        return "Aint breaking this that easy :)";
+        return "Ain't breaking this that easy :)";
     }
 }

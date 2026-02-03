@@ -47,7 +47,24 @@ const Timeline: React.FC = () => {
           icon={event.termType === TermType.WorkTerm ? <WorkOutlineOutlinedIcon /> : <SchoolOutlinedIcon />}
           >
               <h3 className="vertical-timeline-element-title">{event.title}</h3>
-              <p className="vertical-timeline-element-subtitle">{event.description}</p>
+              <div className="vertical-timeline-element-subtitle">
+                {event.company && (
+                  <img 
+                    src={'/companies/' + event.company.uid + '.png'} 
+                    width={40} 
+                    height={40} 
+                    className="company-logo"
+                    alt={event.company.name}
+                  />
+                )}
+                <p className="event-description">
+                  {event.description}
+                  {event.company && " @ "}
+                  {event.company && (
+                    <u><a href={event.company.link} target="_blank" rel="noreferrer" className="company-link">{event.company.name}</a></u>
+                  )}
+                </p>
+              </div>
               {event.courses.length!==0 && (<div className="courses-heading"><br />Courses:</div>)}
               <ul className='list-group'>
                 {event.courses.map((course, index) => {

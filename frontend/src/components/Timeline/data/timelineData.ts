@@ -5,7 +5,12 @@ const timelineEvents: Term [] =  [
     {
         date: "Jan 2026 - Apr 2026",
         title: "Work Term 5",
-        description: "Software Engineer (Telematics/Embedded) @ Motive",
+        description: "Software Engineer (Telematics/Embedded)",
+        company: {
+            uid: "motive",
+            name: "Motive",
+            link: "https://gomotive.com/",
+        },
         courses:[
             { subject: "CS", courseCode: 451, description: "Data-Intensive Distributed Computing"},
         ],
@@ -15,6 +20,7 @@ const timelineEvents: Term [] =  [
         date: "Sept 2025 - Dec 2025",
         title: "3B",
         description: "",
+        company: null,
         courses:[
             { subject: "CO", courseCode: 456, description: "Game Theory"},
             { subject: "CS", courseCode: 480, description: "Machine Learning"},
@@ -25,7 +31,12 @@ const timelineEvents: Term [] =  [
     {
         date: "May 2025 - Aug 2025",
         title: "Work Term 4",
-        description: "Software Engineer (Software Security) @ Ford Motors",
+        description: "Software Engineer (Software Security)",
+        company: {
+            uid: "ford",
+            name: "Ford Motors",
+            link: "https://www.ford.com/",
+        },
         courses:[
             { subject: "CS", courseCode: 348, description: "Database Management"},
         ],
@@ -34,7 +45,12 @@ const timelineEvents: Term [] =  [
     {
         date: "Jan 2025 - Apr 2025",
         title: "3A",
-        description: "Canon event!",
+        description: "[Part-Time] Undergraduate TA",
+        company: {
+            uid: "uw",
+            name: "UWaterloo (ISG)",
+            link: "https://uwaterloo.ca/computer-science-instructional-support-group/",
+        },
         courses:[
             { subject: "CS", courseCode: 341, description: "Algorithms"},
             { subject: "CS", courseCode: 350, description: "Operating Systems"},
@@ -48,7 +64,12 @@ const timelineEvents: Term [] =  [
     {
         date: "Sept 2024 - Dec 2024",
         title: "Work Term 3",
-        description: "Software Engineer (Performance/Stability) @ Ford Motors",
+        description: "Software Engineer (Performance/Stability)",
+        company: {
+            uid: "ford",
+            name: "Ford Motors",
+            link: "https://www.ford.com/",
+        },
         courses:[],
         termType: TermType.WorkTerm,
     },
@@ -56,6 +77,7 @@ const timelineEvents: Term [] =  [
         date: "May 2024 - Aug 2024",
         title: "2B",
         description: "",
+        company: null,
         courses:[
             { subject: "CS", courseCode: 241, description: "Foundations of Sequential Programs"},
             { subject: "CS", courseCode: 240, description: "Data Structures & Data Management"},
@@ -69,7 +91,12 @@ const timelineEvents: Term [] =  [
     {
         date: "Jan 2024 - Apr 2024",
         title: "Work Term 2",
-        description: "CS136(L) Instructional Support Assistant @ University of Waterloo",
+        description: "CS136(L) Instructional Support Assistant",
+        company: {
+            uid: "uw",
+            name: "UWaterloo (ISG)",
+            link: "https://uwaterloo.ca/computer-science-instructional-support-group/",
+        },
         courses:[
             { subject: "STAT", courseCode: 231, description: "Statistics"},
         ],
@@ -79,6 +106,7 @@ const timelineEvents: Term [] =  [
         date: "Sept 2023 - Dec 2023",
         title: "2A",
         description: "",
+        company: null,
         courses:[
             { subject: "CS", courseCode: "246E", description: "Object-Oriented Software Development (Enriched)"},
             { subject: "CS", courseCode: 245, description: "Logic & Computation"},
@@ -92,7 +120,8 @@ const timelineEvents: Term [] =  [
     {
         date: "May 2023 - Aug 2023",
         title: "Work Term 1",
-        description: "Azure Project Developer @ University of Waterloo (WEA)",
+        description: "Azure Project Developer @ Unknown",
+        company: null,
         courses:[
             { subject: "CO", courseCode: 250, description: "Optimization"},
             { subject: "ECON", courseCode: 101, description: "Microeconomics"},
@@ -103,6 +132,7 @@ const timelineEvents: Term [] =  [
         date: "Jan 2023 - Apr 2023",
         title: "1B",
         description: "",
+        company: null,
         courses:[
             { subject: "CS", courseCode: 146, description: "Elementary Algorithm Design & Data Abstraction (Adv)"},
             { subject: "CS", courseCode: "136L", description: "Tools & Techniques for Software Development"},
@@ -116,6 +146,7 @@ const timelineEvents: Term [] =  [
         date: "Sep 2022 - Dec 2022",
         title: "1A",
         description: "",
+        company: null,
         courses:[
             { subject: "CS", courseCode: 145, description: "Designing Functional Programs (Adv)"},
             { subject: "MATH", courseCode: 135, description: "Algebra I"},

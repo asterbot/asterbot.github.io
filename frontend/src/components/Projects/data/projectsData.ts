@@ -39,7 +39,7 @@ const projectData: Project[] = [
         sources: [
             {sourceDomain: SourceDomain.GitHub, sourceLink: "https://github.com/asterbot/hack-the-hill-p2p"}
         ],
-        description: "Implemented P2P network for a decentralized file-sharing platform for nodes connected to a common network. Uses data splitting protocols by splitting data into 512B chunks to be resilient against network disruptions.",
+        description: "Created P2P network for a decentralized file-sharing platform for nodes connected to a common network. Implemented data splitting protocols by splitting data into 512B chunks to be resilient against network disruptions.",
         uid: "p2p",
         tryItOut: false,
         numImages: 2,

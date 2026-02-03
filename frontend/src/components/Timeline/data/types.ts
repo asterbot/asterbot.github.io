@@ -3,12 +3,19 @@ export enum TermType {
     StudyTerm,
 }
 
+export interface Company{
+    uid: string,
+    name: string,
+    link: string,
+}
+
 export interface Term{
     date: string,
     title: string,
     description: string,
+    company: Company | null,
     courses: Course[],
-    termType: TermType 
+    termType: TermType
 }
 
 export interface Course{
