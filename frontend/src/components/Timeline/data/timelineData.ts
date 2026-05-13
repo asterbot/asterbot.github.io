@@ -3,6 +3,22 @@ import { Term, TermType } from "./types";
 
 const timelineEvents: Term [] =  [
     {
+        date: "May 2026 - August 2026",
+        title: "4A",
+        description: "[Part-Time] Software Engineer (Telematics/Embedded)",
+        company: {
+            uid: "motive",
+            name: "Motive",
+            link: "https://gomotive.com/",
+        },
+        courses:[
+            { subject: "CS", courseCode: 488, description: "Computer Graphics"},
+            { subject: "CS", courseCode: 453, description: "Software and Systems Security"},
+            { subject: "MUSIC", courseCode: 275, description: "Music and Technology"}
+        ],
+        termType: TermType.StudyTerm,
+    },
+    {
         date: "Jan 2026 - Apr 2026",
         title: "Work Term 5",
         description: "Software Engineer (Telematics/Embedded)",
