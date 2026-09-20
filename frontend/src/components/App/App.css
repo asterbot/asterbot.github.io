@@ -31,10 +31,16 @@
 
 .social-rail a {
   color: var(--dim);
+  display: block;
 }
 
 .social-rail a:hover {
-  color: var(--fg);
+  color: var(--pink);
+}
+
+.social-icon {
+  width: 19px;
+  height: 19px;
 }
 
 /* Main column */
@@ -74,8 +80,27 @@
   color: var(--fg);
 }
 
+.split {
+  display: flex;
+  gap: 28px;
+  align-items: flex-start;
+}
+
+.split.stacked { flex-direction: column; }
+.split.side    { flex-direction: row; }
+
 .page-content {
   padding-top: 22px;
+  flex: 1 1 auto;
+  min-width: 0;
+  width: 100%;
+}
+
+/* Not enough room for a side pane on narrow screens: stack the terminal under the content */
+@media (max-width: 899px) {
+  .split.side {
+    flex-direction: column;
+  }
 }
 
 @media (max-width: 699px) {

@@ -26,7 +26,6 @@ const Timeline: React.FC = () => {
     <div>
       <div className="section-rule"><span className="section-path timeline-accent">~/timeline</span></div>
       <h1 className="section-title timeline-accent">Timeline</h1>
-      <div className="section-hint">{timelineEvents.length} entries &middot; newest first</div>
 
       <div className="timeline">
         {timelineEvents.map((event, index) => {

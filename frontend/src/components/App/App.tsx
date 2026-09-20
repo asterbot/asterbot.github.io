@@ -4,6 +4,9 @@ import Terminal from '../Terminal';
 import { accentFor, pathLabel } from '../Terminal/data/directoryData/utils';
 import './App.css';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faGithub, faItchIo, faLinkedin, faDiscord } from '@fortawesome/free-brands-svg-icons';
+
 const navLinks = [
   { href: '/', label: '~' },
   { href: '/projects', label: 'projects/' },
@@ -12,10 +15,10 @@ const navLinks = [
 ];
 
 const socials = [
-  { href: 'https://github.com/asterbot', label: 'GitHub', short: 'gh' },
-  { href: 'https://linkedin.com/in/arjun-sodhi', label: 'LinkedIn', short: 'in' },
-  { href: 'https://asterbot.itch.io', label: 'itch.io', short: 'io' },
-  { href: 'https://discordapp.com/users/377810036669415425', label: 'discord', short: 'dc' },
+  { href: 'https://github.com/asterbot', label: 'GitHub', icon: faGithub },
+  { href: 'https://linkedin.com/in/arjun-sodhi', label: 'LinkedIn', icon: faLinkedin },
+  { href: 'https://asterbot.itch.io', label: 'itch.io', icon: faItchIo },
+  { href: 'https://discordapp.com/users/377810036669415425', label: 'Discord', icon: faDiscord },
 ];
 
 const App: React.FC = () => {
@@ -41,7 +44,7 @@ const App: React.FC = () => {
         <div className="social-rail-home">~</div>
         {socials.map((s) => (
           <a key={s.href} href={s.href} target="_blank" rel="noopener noreferrer" title={s.label}>
-            {s.short}
+            <FontAwesomeIcon icon={s.icon} className="social-icon" />
           </a>
         ))}
       </aside>
@@ -59,11 +62,14 @@ const App: React.FC = () => {
           ))}
         </header>
 
-        <main className="page-content">
-          <Outlet />
-        </main>
+        {/* Home stacks the terminal under the content; every other page shows it as a side pane */}
+        <div className={`split ${pathname === '/' ? 'stacked' : 'side'}`}>
+          <main className="page-content">
+            <Outlet />
+          </main>
 
-        <Terminal onNavigate={navigate} currentLocation={pathname} focusRef={focusTerminal} />
+          <Terminal onNavigate={navigate} currentLocation={pathname} focusRef={focusTerminal} split={pathname !== '/'} />
+        </div>
       </div>
     </div>
   );

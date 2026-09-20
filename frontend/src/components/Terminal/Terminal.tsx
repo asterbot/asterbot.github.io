@@ -9,8 +9,10 @@ import { HistoryType, History, Command, CommandContext, Tone } from './data/comm
 const PROMPT_SYMBOL = '$';
 const ERROR_PATTERN = /breaking this|unexpected|No manual entry|not found|no such directory|Already at root|sudo|expected at least/;
 
-function promptFor(cwd: Directory) {
-  return `arjun@asterbot ${pathLabel(cwd.path)} ${PROMPT_SYMBOL}`;
+// Full prompt on the home page; the side pane is narrow, so drop the user@host there
+function promptFor(cwd: Directory, short: boolean) {
+  const label = pathLabel(cwd.path);
+  return short ? `${label} ${PROMPT_SYMBOL}` : `arjun@asterbot ${label} ${PROMPT_SYMBOL}`;
 }
 
 function toneFor(commandName: string, output: string): Tone {
@@ -38,11 +40,13 @@ type TerminalProps = {
   onNavigate?: (path: string) => void;
   currentLocation?: string;
   focusRef?: MutableRefObject<() => void>;
+  split?: boolean;   // rendered as a side pane next to the page content
 };
 
-const Terminal: React.FC<TerminalProps> = ({ onNavigate, currentLocation, focusRef }) => {
+const Terminal: React.FC<TerminalProps> = ({ onNavigate, currentLocation, focusRef, split = false }) => {
   const [history, setHistory] = useState<History[]>([]);
   const [input, setInput] = useState('');
+  const [open, setOpen] = useState(true);
   const [cwd, setCwd] = useState<Directory>(() => currentLocation ? getDirectoryByAbsolutePath(currentLocation) : root);
   const inputRef = useRef<HTMLInputElement>(null);
   const typed = useRef<string[]>([]);     // previously submitted commands (for arrow-key recall)
@@ -53,6 +57,11 @@ const Terminal: React.FC<TerminalProps> = ({ onNavigate, currentLocation, focusR
   const focusInput = () => inputRef.current?.focus({ preventScroll: true });
   const scrollDown = () => { scrollOnNextRender.current = true; };
 
+  const toggle = () => {
+    setOpen((o) => !o);
+    if (!open) scrollDown();
+  };
+
   useEffect(() => {
     if (focusRef) focusRef.current = focusInput;
   }, [focusRef]);
@@ -62,9 +71,9 @@ const Terminal: React.FC<TerminalProps> = ({ onNavigate, currentLocation, focusR
     focusInput();
     if (scrollOnNextRender.current) {
       scrollOnNextRender.current = false;
-      window.scrollTo({ top: document.body.scrollHeight });
+      inputRef.current?.scrollIntoView({ block: 'nearest' });
     }
-  }, [history]);
+  }, [history, open]);
 
   // Sync terminal cwd with the router. If the change came from the nav bar (not a `cd`),
   // echo an equivalent `cd` line so the terminal history reflects it.
@@ -186,35 +195,51 @@ const Terminal: React.FC<TerminalProps> = ({ onNavigate, currentLocation, focusR
     if (e.key === 'Tab') { e.preventDefault(); scrollDown(); complete(); }
   };
 
+  const accent = accentFor(cwd.path);
+
   return (
-    <div className="terminal">
-      <div className="terminal-welcome">Welcome to the Portfolio Terminal! Type 'ls' or 'help' to get started.</div>
-      {history.map((line, i) => (
-        line.type === HistoryType.COMMAND ? (
-          <div key={i} className="terminal-line">
-            <span className="terminal-prompt" style={{ color: accentFor(line.cwd.path) }}>{promptFor(line.cwd)} </span>
-            <span>{line.out}</span>
-          </div>
-        ) : (
-          <div key={i} className="terminal-line">
-            {line.out.split('\n').map((l, j) => renderLine(l, line.tone || 'default', j))}
-          </div>
-        )
-      ))}
-      <form onSubmit={handleSubmit} className="terminal-form">
-        <span className="terminal-prompt" style={{ color: accentFor(cwd.path) }}>{promptFor(cwd)}</span>
-        <input
-          ref={inputRef}
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyDown={handleKeyDown}
-          className="terminal-input"
-          autoComplete="off"
-          spellCheck={false}
-          placeholder="Enter command..."
-          aria-label="Terminal command"
-        />
-      </form>
+    <div className={`terminal ${split ? 'side' : 'stacked'} ${open ? 'open' : 'closed'}`}>
+      <div className="terminal-toolbar">
+        <button type="button" className="terminal-toggle" onClick={toggle} title={open ? 'Hide terminal' : 'Show terminal'}>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={accent} strokeWidth="1.8" strokeLinecap="square" aria-hidden="true">
+            <rect x="2.2" y="3.6" width="19.6" height="16.8" />
+            <path d="M5.6 9.2l3.2 2.8-3.2 2.8M11.6 15.4h6" />
+          </svg>
+          <span className="terminal-toggle-word">{open ? '\u2212' : '+'}</span>
+        </button>
+      </div>
+
+      {open && (
+        <div>
+          <div className="terminal-welcome">Welcome to the Portfolio Terminal! Type 'ls' or 'help' to get started.</div>
+          {history.map((line, i) => (
+            line.type === HistoryType.COMMAND ? (
+              <div key={i} className="terminal-line">
+                <span className="terminal-prompt" style={{ color: accentFor(line.cwd.path) }}>{promptFor(line.cwd, split)} </span>
+                <span>{line.out}</span>
+              </div>
+            ) : (
+              <div key={i} className="terminal-line">
+                {line.out.split('\n').map((l, j) => renderLine(l, line.tone || 'default', j))}
+              </div>
+            )
+          ))}
+          <form onSubmit={handleSubmit} className="terminal-form">
+            <span className="terminal-prompt" style={{ color: accent }}>{promptFor(cwd, split)}</span>
+            <input
+              ref={inputRef}
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={handleKeyDown}
+              className="terminal-input"
+              autoComplete="off"
+              spellCheck={false}
+              placeholder="Enter command..."
+              aria-label="Terminal command"
+            />
+          </form>
+        </div>
+      )}
     </div>
   );
 };

@@ -35,13 +35,11 @@ const Projects: React.FC = () => {
                   onClick={() => step(project.uid, project.numImages, 1)}
                   className="project-image"
                 />
+                <button type="button" className="link-button gallery-arrow gallery-prev" aria-label="Previous screenshot" onClick={() => step(project.uid, project.numImages, -1)}>&#8249;</button>
+                <button type="button" className="link-button gallery-arrow gallery-next" aria-label="Next screenshot" onClick={() => step(project.uid, project.numImages, 1)}>&#8250;</button>
               </div>
 
-              <div className="project-pager">
-                <button type="button" className="link-button" aria-label="Previous screenshot" onClick={() => step(project.uid, project.numImages, -1)}>&#8249;</button>
-                <span>{idx + 1}/{project.numImages}</span>
-                <button type="button" className="link-button" aria-label="Next screenshot" onClick={() => step(project.uid, project.numImages, 1)}>&#8250;</button>
-              </div>
+              <div className="project-counter">{idx + 1}/{project.numImages}</div>
 
               <p className="project-description">{project.description}</p>
 
