@@ -41,9 +41,9 @@ const peerToPeer = createRegularFile("PeerToPeer", "Decentralized file-sharing p
 const projects = createDirectory("projects", [ageEngine, betterNotes, bookExplorer, peerToPeer], "/projects/");
 
 
-// Files in blogs
-const initial_commit = createRegularFile("initial_commit", "An initial blog for my website!");
-const sleep_sort = createRegularFile("sleep_sort", "A blog where I analyze a random algorithm posted on 4chan for some reason");
+// Files in blogs (each blog is a directory holding its index.md, so `cd blogs/<id>` opens the post)
+const initial_commit = createDirectory("initial_commit", [createRegularFile("index.md", "An initial blog for my website!")], "/blogs/initial_commit/");
+const sleep_sort = createDirectory("sleep_sort", [createRegularFile("index.md", "A blog where I analyze a random algorithm posted on 4chan for some reason")], "/blogs/sleep_sort/");
 
 const blogs = createDirectory("blogs", [initial_commit, sleep_sort], "/blogs/");
 

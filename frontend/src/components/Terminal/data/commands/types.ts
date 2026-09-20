@@ -5,10 +5,13 @@ export enum HistoryType{
     OUTPUT,
 }
 
+export type Tone = "default" | "error" | "help" | "listing";
+
 export interface History{
     type: HistoryType,
     cwd: Directory,
     out: string,
+    tone?: Tone,   // how to colour OUTPUT lines
 }
 
 export interface CommandContext {

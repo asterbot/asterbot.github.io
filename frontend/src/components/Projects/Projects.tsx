@@ -2,80 +2,68 @@ import React, { useState } from 'react';
 import './Projects.css';
 
 import projectData from './data/projectsData';
-import { Project } from './data/types';
-
-import Lightbox from "yet-another-react-lightbox";
-import Thumbnails from "yet-another-react-lightbox/plugins/thumbnails";
-
-import "yet-another-react-lightbox/styles.css";
-import "yet-another-react-lightbox/plugins/thumbnails.css";
 
 /* CONVENTION: number all images in /projects/{uid}/[number].png where 1.png will be shown at the start and the rest if you click as a slideshow */
 
 const Projects: React.FC = () => {
+  // Current image index per project uid
+  const [gallery, setGallery] = useState<Record<string, number>>({});
 
-  const [open, setOpen] = useState<Project|null>(null);
+  const step = (uid: string, count: number, delta: number) =>
+    setGallery((g) => ({ ...g, [uid]: ((g[uid] || 0) + delta + count) % count }));
 
   return (
-    <div className="projects-container">
-      <h1 className="projects-title">Projects</h1>
+    <div>
+      <div className="section-rule"><span className="section-path projects-accent">~/projects</span></div>
+      <h1 className="section-title projects-accent">Projects</h1>
+      <div className="section-hint">{projectData.length} entries &middot; click a thumbnail or use &#8249; &#8250; to page through screenshots</div>
+
       <div className="projects-grid">
-        {projectData.map((project, index) => (
-          <div key={index} className="project-card">
-            {project.tryItOut && (
-              <div className="try-banner">Try it out!</div>
-            )}
-
-            <h3 className="project-title">{project.title}</h3>
-            
-            <div className="project-image-container" onClick={() => setOpen(project)}>
-              <img 
-                src={'/projects/' + project.uid + '/thumbnail.png'} 
-                alt={project.title + " project image"} 
-                width={280} 
-                height={174} 
-                className="project-image"
-              />
-              <div className="image-overlay">
-                <span className="overlay-text">View Gallery</span>
+        {projectData.map((project) => {
+          const idx = (gallery[project.uid] || 0) % project.numImages;
+          return (
+            <div key={project.uid} className="project-card">
+              <div className="project-heading">
+                <span className="project-title">{project.title}</span>
+                {project.tryItOut && <span className="try-banner">Try it out!</span>}
               </div>
-            </div>
 
-            <p className="project-description">{project.description}</p>
-            <div className="project-tech">
-              {project.tags.map((tech, techIndex) => (
-                <span key={techIndex} className="tech-tag">{tech}</span>
-              ))}
+              <div className="project-image-container">
+                <img
+                  src={`/projects/${project.uid}/${idx + 1}.png`}
+                  alt={project.title + ' project image'}
+                  onClick={() => step(project.uid, project.numImages, 1)}
+                  className="project-image"
+                />
+              </div>
+
+              <div className="project-pager">
+                <button type="button" className="link-button" aria-label="Previous screenshot" onClick={() => step(project.uid, project.numImages, -1)}>&#8249;</button>
+                <span>{idx + 1}/{project.numImages}</span>
+                <button type="button" className="link-button" aria-label="Next screenshot" onClick={() => step(project.uid, project.numImages, 1)}>&#8250;</button>
+              </div>
+
+              <p className="project-description">{project.description}</p>
+
+              <div className="project-tech">
+                {project.tags.map((tech) => (
+                  <span key={tech} className="tech-tag">{tech}</span>
+                ))}
+              </div>
+
+              {project.sources.length > 0 && (
+                <div className="project-links">
+                  {project.sources.map((source) => (
+                    <a key={source.sourceLink} href={source.sourceLink} className="underline-link" target="_blank" rel="noopener noreferrer">
+                      {source.sourceDomain}
+                    </a>
+                  ))}
+                </div>
+              )}
             </div>
-            <div className="project-links">
-              {project.sources.map((source, sourceIndex) => (
-                <a key={sourceIndex} href={source.sourceLink} className="project-link" target="_blank" rel="noreferrer">
-                  {source.sourceDomain}
-                </a>
-              ))}
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
-      
-      {open != null &&
-        <Lightbox 
-          open = {open != null}
-          close = {() => setOpen(null)}
-          slides = {Array.from
-            ({length: open.numImages || 1}, (_, i) => {return {src: '/projects/' + open.uid + '/' + (i+1) as string + '.png'}})
-          }
-          plugins={[Thumbnails]}
-          styles={{
-            container: {
-              backgroundColor: "rgba(0, 0, 0, 0.7)"
-            }
-          }}
-        
-        />
-      }
-
-
     </div>
   );
 };

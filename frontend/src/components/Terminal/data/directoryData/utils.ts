@@ -85,7 +85,9 @@ export function getFileByAbsolutePath(path: string): RegularFile | undefined {
                 found = true;
                 break;
             }
-        }        
+        }
+
+        if (!found) return undefined;
     }
   
     if (curFile.type === FileType.Regular) return curFile;
@@ -97,3 +99,30 @@ export function listChildren(dir: Directory): string[]{
     return dir.children.map((f) => f.name);
 }
   
+export function resolvePath(cwd: Directory, target: string): string {
+    // Resolve a (possibly relative) path against cwd into a normalized absolute path (no trailing slash)
+    if (target === "~") return "/";
+    if (target.startsWith("~/")) target = target.slice(1);
+
+    const parts: string[] = target.startsWith("/") ? [] : cwd.path.split("/").filter((s) => s !== "");
+    for (const seg of target.split("/").filter((s) => s !== "")){
+        if (seg === ".") continue;
+        else if (seg === "..") parts.pop();
+        else parts.push(seg);
+    }
+    return "/" + parts.join("/");
+}
+
+export function pathLabel(path: string): string {
+    // Display form of a path: "/" -> "~", "/projects/" -> "~/projects"
+    const trimmed = path.length > 1 && path.endsWith("/") ? path.slice(0, -1) : path;
+    return trimmed === "/" ? "~" : "~" + trimmed;
+}
+
+export function accentFor(path: string): string {
+    // Accent colour for the section a path belongs to
+    if (path.startsWith("/projects")) return "var(--pink)";
+    if (path.startsWith("/blogs")) return "var(--lav)";
+    if (path.startsWith("/timeline")) return "var(--red)";
+    return "var(--peri)";
+}

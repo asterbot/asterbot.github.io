@@ -1,183 +1,174 @@
 /* Blog Component Styles */
-.blog-container {
-  text-align: center;
-  color: #eaeaea;
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 2rem;
-  white-space: normal; /* Allows wrapping */
-  overflow-wrap: break-word; /* Or 'break-all' for aggressive breaking */
+.blogs-accent {
+  color: var(--lav);
 }
 
-.blog-container img{
+/* git log --graph view */
+.git-log {
+  border: 1px solid var(--line);
+  background: var(--bg-panel);
+  padding: 20px 24px;
+  max-width: 720px;
+  overflow-x: auto;
+  line-height: 1.4;
+}
+
+.git-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.git-main,
+.git-col {
+  color: var(--peri);
+  width: 0.9em;
+  display: inline-block;
+}
+
+.git-branch {
+  color: var(--pink);
+}
+
+.git-commit {
+  cursor: pointer;
+  color: var(--fg);
+  margin-left: 6px;
+}
+
+.git-commit:hover {
+  color: var(--pink);
+}
+
+.git-ref {
+  color: var(--dim);
+}
+
+/* Rendered markdown */
+.blog-markdown {
+  max-width: 820px;
+  color: var(--fg);
+  font-size: 13.5px;
+  line-height: 1.8;
+  white-space: normal;
+  overflow-wrap: break-word;
+}
+
+.blog-markdown h1,
+.blog-markdown h2,
+.blog-markdown h3,
+.blog-markdown h4 {
+  color: var(--lav);
+  font-weight: 700;
+  margin-top: 1.8em;
+  margin-bottom: 0.5em;
+}
+
+.blog-markdown h1 { font-size: 1.5rem; }
+.blog-markdown h2 { font-size: 1.25rem; border-bottom: 1px solid var(--line); padding-bottom: 6px; }
+.blog-markdown h3,
+.blog-markdown h4 { font-size: 1.08rem; }
+
+/* Markdown-style "#" markers before headings */
+.blog-markdown h1::before,
+.blog-markdown h2::before,
+.blog-markdown h3::before,
+.blog-markdown h4::before {
+  color: var(--line);
+}
+.blog-markdown h1::before { content: '# '; }
+.blog-markdown h2::before { content: '## '; }
+.blog-markdown h3::before { content: '### '; }
+.blog-markdown h4::before { content: '#### '; }
+
+.blog-markdown a {
+  color: var(--pink);
+  border-bottom: 1px solid var(--line);
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+.blog-markdown img {
   max-width: 100%;
   height: auto;
+  border: 1px solid var(--line);
+  display: block;
+  margin: 18px 0;
 }
 
-.blog-title {
-  font-size: 2.5rem;
-  margin-bottom: 2rem;
-  color: #00bfff;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+.blog-markdown pre {
+  background: var(--bg-deep);
+  border: 1px solid var(--line);
+  padding: 14px 16px;
+  overflow-x: auto;
+  font-size: 12.5px;
+  margin: 1rem 0;
+  max-width: 100%;
 }
 
-.blog-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
-  margin-top: 2rem;
+.blog-markdown pre code {
+  background: transparent;
+  padding: 0;
 }
 
-.blog-card {
-  background: rgba(24, 26, 32, 0.8);
-  border-radius: 12px;
-  padding: 1.5rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-  transition: transform 0.2s, box-shadow 0.2s;
-  border: 1px solid rgba(0, 191, 255, 0.3);
+.blog-markdown code {
+  font-family: inherit;
 }
 
-.blog-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
-  border-color: rgba(0, 191, 255, 0.6);
+.blog-markdown :not(pre) > code {
+  color: var(--peri);
+  background: var(--bg-inline);
+  padding: 1px 5px;
 }
 
-.blog-card-title {
-  font-size: 1.5rem;
-  margin-bottom: 1rem;
-  color: #00bfff;
-}
-
-.blog-excerpt {
-  color: #b0b0b0;
-  line-height: 1.6;
-  margin-bottom: 1rem;
-}
-
-.blog-meta {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 1rem;
-  font-size: 0.9rem;
-  color: #888;
-}
-
-.blog-date {
-  color: #00bfff;
-}
-
-.blog-read-more {
-  color: #00bfff;
-  text-decoration: none;
-  padding: 0.5rem 1rem;
-  border-radius: 6px;
-  border: 1px solid rgba(0, 191, 255, 0.4);
-  transition: all 0.2s;
-}
-
-.blog-read-more:hover {
-  background: rgba(0, 191, 255, 0.1);
-  border-color: rgba(0, 191, 255, 0.8);
+.blog-markdown blockquote {
+  border-left: 2px solid var(--line);
+  padding-left: 14px;
+  margin: 1em 0;
+  color: var(--dim);
 }
 
 .blog-markdown table {
   border-collapse: collapse;
-}
-
-.blog-markdown table,
-.blog-markdown th,
-.blog-markdown td {
-  border: 1px solid rgba(234, 234, 234, 0.4);
+  font-size: 12.5px;
 }
 
 .blog-markdown th,
 .blog-markdown td {
-  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--line);
+  padding: 6px 10px;
+}
+
+.blog-markdown hr {
+  border: none;
+  border-top: 1px solid var(--line);
+}
+
+.blog-markdown li {
+  color: var(--fg);
 }
 
 .blog-markdown details {
-  background: rgba(24, 26, 32, 0.6);
-  border: 1px solid rgba(0, 191, 255, 0.3);
-  border-radius: 8px;
+  background: var(--bg-panel);
+  border: 1px solid var(--line);
   padding: 0.5rem 0.75rem;
   margin: 1rem 0;
 }
 
 .blog-markdown summary {
   cursor: pointer;
-  color: #00bfff;
-  font-weight: 600;
+  color: var(--peri);
+  font-weight: 700;
   outline: none;
 }
 
 .blog-markdown details[open] summary {
-  border-bottom: 1px solid rgba(0, 191, 255, 0.2);
+  border-bottom: 1px solid var(--line);
   margin-bottom: 0.5rem;
   padding-bottom: 0.25rem;
 }
 
 .blog-markdown details > *:not(summary) {
   margin-top: 0.5rem;
-}
-
-.blog-markown h3{
-  font-size: 1.15rem;
-}
-
-
-.gitgraph-tooltip {
-  position: absolute;
-  margin-top: -15px;
-  margin-left: 25px;
-  padding: 10px;
-  border-radius: 5px;
-  background: #EEE;
-  color: #333;
-  text-align: center;
-  font-size: 14px;
-  line-height: 20px;
-}
-
-.gitgraph-tooltip:after {
-  position: absolute;
-  top: 10px;
-  left: -18px;
-  width: 0;
-  height: 0;
-  border-width: 10px;
-  border-style: solid;
-  border-color: transparent;
-  border-right-color: #EEE;
-  content: "";
-}
-
-.gitgraph-detail {
-  position: absolute;
-  padding: 10px;
-  text-align: justify;
-  width: 600px;
-  display: none;
-}
-
-
-/* Stuff to make code blocks responsive! */
-.blog-markdown pre {
-  white-space: pre-wrap;
-  overflow-x: auto;
-  margin: 1rem 0;
-  border-radius: .5rem;
-  background: #0d1117;
-  max-width: 100%;
-}
-.blog-markdown pre code {
-  overflow-x: scroll;  
-}
-
-
-.blog-markdown a {
-  display: inline-block;
-  word-break: break-all;
-  overflow-wrap: anywhere;
 }

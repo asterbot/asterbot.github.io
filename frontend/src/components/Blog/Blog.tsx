@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import remarkMath from 'remark-math';
@@ -7,7 +7,7 @@ import rehypeKatex from 'rehype-katex';
 import rehypeRaw from 'rehype-raw';
 import rehypeHighlight from 'rehype-highlight';
 import 'katex/dist/katex.min.css';
-import 'highlight.js/styles/github-dark.css';
+import 'highlight.js/styles/base16/material-darker.css';
 import './Blog.css';
 
 
@@ -18,6 +18,7 @@ function convertIDToTitle(id: string | undefined){
 
 const Blog: React.FC = () => {
     const { id } = useParams();
+    const navigate = useNavigate();
 
     const [markdownContent, setMarkdownContent] = useState<string>('');
     const [errorMessage, setErrorMessage] = useState<string>('');
@@ -81,13 +82,16 @@ const Blog: React.FC = () => {
       };
 
     return (
-      <div className="blog-container" onClick={handleClick}>
-        <div className="blog-title">{convertIDToTitle(id)}</div>
+      <div>
+        <div className="section-rule"><span className="section-path blogs-accent">~/blogs/{id}</span></div>
+        <h1 className="section-title blogs-accent">{convertIDToTitle(id)}</h1>
+        <div className="section-hint">cat index.md &middot; <button type="button" className="link-button hint-link" onClick={() => navigate('/blogs')}>cd ..</button></div>
+
         {errorMessage && (
-            <div style={{ color: '#ff6b6b', marginTop: '1rem' }}>{errorMessage}</div>
+            <div className="out-error">{errorMessage}</div>
         )}
         {!errorMessage && (
-            <div className={`blog-markdown`} style={{ textAlign: 'left' }}>
+            <div className="blog-markdown" onClick={handleClick}>
                 <ReactMarkdown
                     remarkPlugins={[remarkGfm, remarkMath]}
                     rehypePlugins={[rehypeRaw, rehypeKatex, rehypeHighlight]}

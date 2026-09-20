@@ -1,29 +1,27 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import './HomePage.css';
 
 const HomePage: React.FC = () => {
+  const navigate = useNavigate();
+
   return (
-    <div className="homepage-hero">
-      {/* <img src={require('./img/pfp.png')} alt="Profile" className="profile-image" /> */}
+    <div>
+      <div className="section-rule"><span className="section-path">~</span></div>
 
-      <div className="hero-content">
-        <h1 className="typing-animation">
-          A <span className="accent">Developer</span> at heart
-        </h1>
-      </div>
-
+      <h1 className="hero-title">
+        A <span className="accent">Developer</span> at heart<span className="cursor" />
+      </h1>
 
       <div className="intro-box">
-        <div className="intro-text">
-          <span className="question">Who am I?</span> A "huge nerd" doesn't even scratch the surface.
-          <br /><br />
-          I love making things with code, whether it's games, apps, system-level projects or anything in between, I'm always trying new things with software!<br />
-          Check out <a href="/projects"><span className="link"> my projects  &raquo;</span></a>
-          <br /><br />
-          You can also check out my socials on the left and feel free to reach out :D
-          <br /><br />
-          <span className="motto"><i>Coding my chaos!</i></span>
-        </div>
+        <div><span className="question">Who am I?</span> A "huge nerd" doesn't even scratch the surface.</div>
+        <div className="gap" />
+        <div>I love making things with code, whether it's games, apps, system-level projects or anything in between, I'm always trying new things with software!</div>
+        <div>Check out <button type="button" className="link-button underline-link" onClick={() => navigate('/projects')}>my projects &raquo;</button></div>
+        <div className="gap" />
+        <div>You can also check out my socials on the left and feel free to reach out :D</div>
+        <div className="gap" />
+        <div className="motto">Coding my chaos!</div>
       </div>
     </div>
   );

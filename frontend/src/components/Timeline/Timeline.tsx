@@ -1,85 +1,84 @@
 import React from 'react';
-import { Fragment } from "react";
-
 import './Timeline.css';
-
-// // Icons for timeline
-import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined';
-import WorkOutlineOutlinedIcon from '@mui/icons-material/WorkOutlineOutlined';
 import { TermType } from './data/types';
-
-import { VerticalTimeline, VerticalTimelineElement }  from 'react-vertical-timeline-component';
-import 'react-vertical-timeline-component/style.min.css';
 import timelineEvents from './data/timelineData';
 
 
-
 function getColor(subject: string): string{
-    // Get color of subject block
+    // Get colour of course code by subject
     switch (subject){
         case "CS":
-          return "success"
+          return "var(--peri)"
         case "MATH":
-          return "primary"
         case "STAT":
-          return "primary"
         case "CO":
-          return "primary"
+          return "var(--pink)"
         case "PHYS":
-          return "info"
+          return "var(--lav)"
         default:
-          return "warning"
+          return "var(--red)"
     }
 }
 
 
 const Timeline: React.FC = () => {
   return (
-    <Fragment>
-      <h1 className="timeline-title">Timeline</h1>
-      <VerticalTimeline>
-        {timelineEvents.map((event, index) => (
-          <VerticalTimelineElement 
-          key={index}
-          className="vertical-timeline-element--work"
-          contentStyle={{ background: '#0e0f0f', color: 'white', border:'2px solid rgb(0 255 144)' }}
-          date={event.date}
-          icon={event.termType === TermType.WorkTerm ? <WorkOutlineOutlinedIcon /> : <SchoolOutlinedIcon />}
-          >
-              <h3 className="vertical-timeline-element-title">{event.title}</h3>
-              <div className="vertical-timeline-element-subtitle">
-                {event.company && (
-                  <img 
-                    src={'/companies/' + event.company.uid + '.png'} 
-                    width={40} 
-                    height={40} 
-                    className="company-logo"
-                    alt={event.company.name}
-                  />
-                )}
-                <p className="event-description">
-                  {event.description}
-                  {event.company && " @ "}
-                  {event.company && (
-                    <u><a href={event.company.link} target="_blank" rel="noreferrer" className="company-link">{event.company.name}</a></u>
-                  )}
-                </p>
-              </div>
-              {event.courses.length!==0 && (<div className="courses-heading"><br />Courses:</div>)}
-              <ul className='list-group'>
-                {event.courses.map((course, index) => {
-                  return (
-                    <li key={index} className={"list-group-item list-group-item-" + getColor(course.subject)}>
-                      {course.subject} {course.courseCode}: {course.description}
-                    </li>
-                  )
-                })}
-              </ul>
+    <div>
+      <div className="section-rule"><span className="section-path timeline-accent">~/timeline</span></div>
+      <h1 className="section-title timeline-accent">Timeline</h1>
+      <div className="section-hint">{timelineEvents.length} entries &middot; newest first</div>
 
-          </VerticalTimelineElement>
-        ))}
-      </VerticalTimeline>
-    </Fragment>
+      <div className="timeline">
+        {timelineEvents.map((event, index) => {
+          const isWork = event.termType === TermType.WorkTerm;
+          const dotColor = isWork ? 'var(--red)' : 'var(--peri)';
+          return (
+            <div key={index} className="timeline-entry">
+              <div className="timeline-spine">
+                <div className="timeline-dot" style={{ color: dotColor }}>●</div>
+                <div className="timeline-line" />
+              </div>
+
+              <div className="timeline-body">
+                <div className="timeline-date">
+                  {event.date}  <span style={{ color: dotColor }}>{isWork ? '[work]' : '[study]'}</span>
+                </div>
+                <div className="timeline-heading">{event.title}</div>
+
+                <div className="timeline-subtitle">
+                  {event.company && (
+                    <img
+                      src={'/companies/' + event.company.uid + '.png'}
+                      width={26}
+                      height={26}
+                      className="company-logo"
+                      alt={event.company.name}
+                    />
+                  )}
+                  <span>{event.description}</span>
+                  {event.company && (
+                    <span>@ <a href={event.company.link} target="_blank" rel="noopener noreferrer" className="underline-link">{event.company.name}</a></span>
+                  )}
+                </div>
+
+                {event.courses.length !== 0 && (
+                  <div className="courses">
+                    <div className="courses-heading">COURSES</div>
+                    {event.courses.map((course, i) => (
+                      <div key={i} className="course">
+                        <span style={{ color: getColor(course.subject) }}>{course.subject} {course.courseCode}</span>
+                        {'  '}
+                        <span className="course-description">{course.description}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
   );
 };
 
