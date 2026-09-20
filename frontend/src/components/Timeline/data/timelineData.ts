@@ -2,6 +2,18 @@ import { Term, TermType } from "./types";
 
 
 const timelineEvents: Term [] =  [
+    { 
+        date: "Sept 2026 - Dec 2026",
+        title: "Work Term 6",
+        description: "Software Engineer",
+        company:{
+            uid: "rundoo",
+            name: "Rundoo",
+            link: "https://rundoo.ai/"
+        },
+        courses: [],
+        termType: TermType.WorkTerm
+    },
     {
         date: "May 2026 - August 2026",
         title: "4A",
