@@ -9,9 +9,9 @@ import { faGithub, faItchIo, faLinkedin, faDiscord } from '@fortawesome/free-bra
 
 const navLinks = [
   { href: '/', label: '~' },
-  { href: '/projects', label: 'projects/' },
-  { href: '/blogs', label: 'blogs/' },
-  { href: '/timeline', label: 'timeline/' },
+  { href: '/projects', label: '~/projects/' },
+  { href: '/blogs', label: '~/blogs/' },
+  { href: '/timeline', label: '~/timeline/' },
 ];
 
 const socials = [
