@@ -1,0 +1,6 @@
+{
+  // Use the project TypeScript (4.9.5) instead of VS Code bundled 6.x,
+  // so editor diagnostics match what react-scripts actually compiles.
+  "typescript.tsdk": "frontend/node_modules/typescript/lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true
+}

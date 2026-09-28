@@ -1,18 +1,9 @@
 /* Terminal Component Styles */
+
+/* Side pane beside the page content */
 .terminal {
   font-size: 13px;
   padding-top: 16px;
-}
-
-/* Stacked under the page content (home) */
-.terminal.stacked {
-  width: 100%;
-  margin-top: 38px;
-  border-top: 1px solid var(--line);
-}
-
-/* Side pane next to the page content (every other page) */
-.terminal.side {
   flex: 0 0 auto;
   width: clamp(340px, 34%, 460px);
   min-width: 0;
@@ -23,12 +14,12 @@
   padding-left: 22px;
 }
 
-.terminal.side.closed {
+.terminal.closed {
   width: auto;
 }
 
 @media (max-width: 899px) {
-  .terminal.side {
+  .terminal {
     width: 100%;
     position: static;
     margin-top: 38px;

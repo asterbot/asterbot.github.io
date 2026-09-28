@@ -9,10 +9,9 @@ import { HistoryType, History, Command, CommandContext, Tone } from './data/comm
 const PROMPT_SYMBOL = '$';
 const ERROR_PATTERN = /breaking this|unexpected|No manual entry|not found|no such directory|Already at root|sudo|expected at least/;
 
-// Full prompt on the home page; the side pane is narrow, so drop the user@host there
-function promptFor(cwd: Directory, short: boolean) {
-  const label = pathLabel(cwd.path);
-  return short ? `${label} ${PROMPT_SYMBOL}` : `arjun@asterbot ${label} ${PROMPT_SYMBOL}`;
+// The pane is narrow, so the prompt is just the path
+function promptFor(cwd: Directory) {
+  return `${pathLabel(cwd.path)} ${PROMPT_SYMBOL}`;
 }
 
 function toneFor(commandName: string, output: string): Tone {
@@ -40,10 +39,9 @@ type TerminalProps = {
   onNavigate?: (path: string) => void;
   currentLocation?: string;
   focusRef?: MutableRefObject<() => void>;
-  split?: boolean;   // rendered as a side pane next to the page content
 };
 
-const Terminal: React.FC<TerminalProps> = ({ onNavigate, currentLocation, focusRef, split = false }) => {
+const Terminal: React.FC<TerminalProps> = ({ onNavigate, currentLocation, focusRef }) => {
   const [history, setHistory] = useState<History[]>([]);
   const [input, setInput] = useState('');
   const [open, setOpen] = useState(true);
@@ -198,7 +196,7 @@ const Terminal: React.FC<TerminalProps> = ({ onNavigate, currentLocation, focusR
   const accent = accentFor(cwd.path);
 
   return (
-    <div className={`terminal ${split ? 'side' : 'stacked'} ${open ? 'open' : 'closed'}`}>
+    <div className={`terminal ${open ? 'open' : 'closed'}`}>
       <div className="terminal-toolbar">
         <button type="button" className="terminal-toggle" onClick={toggle} title={open ? 'Hide terminal' : 'Show terminal'}>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={accent} strokeWidth="1.8" strokeLinecap="square" aria-hidden="true">
@@ -215,7 +213,7 @@ const Terminal: React.FC<TerminalProps> = ({ onNavigate, currentLocation, focusR
           {history.map((line, i) => (
             line.type === HistoryType.COMMAND ? (
               <div key={i} className="terminal-line">
-                <span className="terminal-prompt" style={{ color: accentFor(line.cwd.path) }}>{promptFor(line.cwd, split)} </span>
+                <span className="terminal-prompt" style={{ color: accentFor(line.cwd.path) }}>{promptFor(line.cwd)} </span>
                 <span>{line.out}</span>
               </div>
             ) : (
@@ -225,7 +223,7 @@ const Terminal: React.FC<TerminalProps> = ({ onNavigate, currentLocation, focusR
             )
           ))}
           <form onSubmit={handleSubmit} className="terminal-form">
-            <span className="terminal-prompt" style={{ color: accent }}>{promptFor(cwd, split)}</span>
+            <span className="terminal-prompt" style={{ color: accent }}>{promptFor(cwd)}</span>
             <input
               ref={inputRef}
               value={input}

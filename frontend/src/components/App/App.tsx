@@ -62,13 +62,13 @@ const App: React.FC = () => {
           ))}
         </header>
 
-        {/* Home stacks the terminal under the content; every other page shows it as a side pane */}
-        <div className={`split ${pathname === '/' ? 'stacked' : 'side'}`}>
+        {/* The terminal sits beside the page content on every page */}
+        <div className="split">
           <main className="page-content">
             <Outlet />
           </main>
 
-          <Terminal onNavigate={navigate} currentLocation={pathname} focusRef={focusTerminal} split={pathname !== '/'} />
+          <Terminal onNavigate={navigate} currentLocation={pathname} focusRef={focusTerminal} />
         </div>
       </div>
     </div>
