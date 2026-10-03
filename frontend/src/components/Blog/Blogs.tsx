@@ -1,13 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Blog.css';
-import blogEntries from './blogEntries';
+import branches from './data/branches';
+import buildGraph, { postsOnLane } from './data/gitGraph';
 
-// Renders the blog list as a `git log --graph --all`: the newest post on a side
-// branch that merges down into main, and every other post as a commit on main.
+// The blog index as `git log --graph --all`: one row per post, lanes per branch,
+// with chips to filter down to a single branch. Everything is derived from
+// data/posts.ts and data/branches.ts.
 const Blogs: React.FC = () => {
   const navigate = useNavigate();
-  const [head, ...rest] = blogEntries;
+  const [selected, setSelected] = useState<number | null>(null);
+  const rows = buildGraph(selected);
 
   return (
     <div>
@@ -15,31 +18,57 @@ const Blogs: React.FC = () => {
       <h1 className="section-title blogs-accent">Blogs</h1>
       <div className="section-hint">git log --graph --all &middot; click a commit to read it</div>
 
+      <div className="branch-chips">
+        <button
+          type="button"
+          className="link-button branch-chip"
+          style={{ borderColor: selected === null ? 'var(--fg)' : 'var(--line)' }}
+          onClick={() => setSelected(null)}
+        >
+          --all
+        </button>
+        {branches.map((branch, lane) => (
+          <button
+            key={branch.name}
+            type="button"
+            className="link-button branch-chip"
+            style={{
+              borderColor: selected === lane ? branch.color : 'var(--line)',
+              color: selected === null || selected === lane ? 'var(--fg)' : 'var(--dim)',
+            }}
+            onClick={() => setSelected((s) => (s === lane ? null : lane))}
+          >
+            <span style={{ color: branch.color }}>&#9679;</span>
+            <span>{branch.name}</span>
+            <span className="branch-chip-count">{postsOnLane(lane).length}</span>
+          </button>
+        ))}
+      </div>
+
       <div className="git-log">
-        {head && (
-          <>
-            <div className="git-row">
-              <span className="git-main">│</span>
-              <span className="git-branch">●</span>
-              <button type="button" className="link-button git-commit" onClick={() => navigate('/blogs/' + head.id)}>{head.title}</button>
-              <span className="git-ref">({head.branch})</span>
-            </div>
-            <div className="git-row">
-              <span className="git-main">│</span>
-              <span className="git-branch">╱</span>
-            </div>
-          </>
-        )}
-        {rest.map((entry, i) => (
-          <React.Fragment key={entry.id}>
-            {i > 0 && <div className="git-row"><span className="git-main">│</span></div>}
-            <div className="git-row">
-              <span className="git-main">●</span>
-              <span className="git-col" />
-              <button type="button" className="link-button git-commit" onClick={() => navigate('/blogs/' + entry.id)}>{entry.title}</button>
-              <span className="git-ref">({entry.branch})</span>
-            </div>
-          </React.Fragment>
+        {rows.map((row) => (
+          <div key={row.key} className="git-row">
+            <span className="git-lanes">
+              {row.cells.map((cell, i) => (
+                <span key={i} style={{ color: cell.color }}>{cell.text}</span>
+              ))}
+            </span>
+            {row.isCommit && (
+              <div className="git-commit-line">
+                <span className="git-hash" style={{ color: row.tagColor }}>{row.hash}</span>
+                {row.tag && <span className="git-ref" style={{ color: row.tagColor }}>{row.tag}</span>}
+                <button
+                  type="button"
+                  className="link-button git-commit"
+                  title={row.title}
+                  style={{ color: row.titleColor }}
+                  onClick={() => navigate('/blogs/' + row.id)}
+                >
+                  {row.title}
+                </button>
+              </div>
+            )}
+          </div>
         ))}
       </div>
     </div>

@@ -1,4 +1,5 @@
 import { RegularFile, Directory, File, FileType } from "./types"
+import blogPosts from "../../../Blog/data/posts"
 
 // Helper functions
 function createRegularFile(name: string, content: string = "", path: string = ""): RegularFile{
@@ -41,11 +42,17 @@ const peerToPeer = createRegularFile("PeerToPeer", "Decentralized file-sharing p
 const projects = createDirectory("projects", [ageEngine, betterNotes, bookExplorer, peerToPeer], "/projects/");
 
 
-// Files in blogs (each blog is a directory holding its index.md, so `cd blogs/<id>` opens the post)
-const initial_commit = createDirectory("initial_commit", [createRegularFile("index.md", "An initial blog for my website!")], "/blogs/initial_commit/");
-const sleep_sort = createDirectory("sleep_sort", [createRegularFile("index.md", "A blog where I analyze a random algorithm posted on 4chan for some reason")], "/blogs/sleep_sort/");
+// Files in blogs - generated from the blog list, so adding a post to posts.ts
+// also makes it show up under `ls blogs/` (each blog is a directory holding its index.md)
+const blogChildren = blogPosts.map((post) =>
+    createDirectory(
+        post.id,
+        [createRegularFile("index.md", post.blurb || post.title)],
+        `/blogs/${post.id}/`
+    )
+);
 
-const blogs = createDirectory("blogs", [initial_commit, sleep_sort], "/blogs/");
+const blogs = createDirectory("blogs", blogChildren, "/blogs/");
 
 
 // Files in timeline

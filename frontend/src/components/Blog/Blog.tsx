@@ -9,16 +9,22 @@ import rehypeHighlight from 'rehype-highlight';
 import 'katex/dist/katex.min.css';
 import 'highlight.js/styles/base16/material-darker.css';
 import './Blog.css';
+import { postById, branchOf } from './data/gitGraph';
 
 
 function convertIDToTitle(id: string | undefined){
     if (!id) return id;
+    // Prefer the title from posts.ts; fall back to prettifying the id
+    const post = postById(id);
+    if (post) return post.title;
     return id.split("_").map((s) => {return s.charAt(0).toUpperCase() + s.slice(1)}).join(" ");
 }
 
 const Blog: React.FC = () => {
     const { id } = useParams();
     const navigate = useNavigate();
+    const post = postById(id);
+    const branch = post && branchOf(post);
 
     const [markdownContent, setMarkdownContent] = useState<string>('');
     const [errorMessage, setErrorMessage] = useState<string>('');
@@ -85,7 +91,11 @@ const Blog: React.FC = () => {
       <div>
         <div className="section-rule"><span className="section-path blogs-accent">~/blogs/{id}</span></div>
         <h1 className="section-title blogs-accent">{convertIDToTitle(id)}</h1>
-        <div className="section-hint">cat index.md &middot; <button type="button" className="link-button hint-link" onClick={() => navigate('/blogs')}>cd ..</button></div>
+        <div className="section-hint">
+          cat index.md
+          {branch && <> &middot; on branch <span style={{ color: branch.color }}>{branch.name}</span></>}
+          {' '}&middot; <button type="button" className="link-button hint-link" onClick={() => navigate('/blogs')}>cd ..</button>
+        </div>
 
         {errorMessage && (
             <div className="out-error">{errorMessage}</div>

@@ -3,46 +3,102 @@
   color: var(--lav);
 }
 
+/* Branch filter chips */
+.branch-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 14px;
+  max-width: 720px;
+}
+
+.branch-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid var(--line);
+  padding: 2px 8px;
+  font-size: 12px;
+  color: var(--fg);
+  user-select: none;
+}
+
+.branch-chip:hover {
+  background: var(--bg-inline);
+}
+
+.branch-chip-count {
+  color: var(--dim);
+}
+
 /* git log --graph view */
 .git-log {
   border: 1px solid var(--line);
   background: var(--bg-panel);
-  padding: 20px 24px;
+  padding: 16px 18px;
   max-width: 720px;
   overflow-x: auto;
-  line-height: 1.4;
+  line-height: 1.25;
+  font-size: 13px;
 }
 
 .git-row {
   display: flex;
   align-items: baseline;
-  gap: 8px;
+  gap: 6px;
+  height: 1.25em;
   white-space: nowrap;
+  min-width: 0;
 }
 
-.git-main,
-.git-col {
-  color: var(--peri);
-  width: 0.9em;
-  display: inline-block;
+/* Narrow screens: pan the graph instead of letting it push the page wide */
+@media (max-width: 699px) {
+  .git-row {
+    width: max-content;
+  }
+
+  .git-commit {
+    overflow: visible;
+    text-overflow: clip;
+  }
 }
 
-.git-branch {
-  color: var(--pink);
+.git-lanes {
+  white-space: pre;
+  flex: none;
+}
+
+.git-commit-line {
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
+  min-width: 0;
+  flex: 1;
+  flex-wrap: nowrap;
+  overflow: hidden;
+}
+
+.git-hash {
+  font-size: 12px;
+  flex: none;
+}
+
+.git-ref {
+  font-size: 12px;
+  flex: none;
 }
 
 .git-commit {
   cursor: pointer;
-  color: var(--fg);
-  margin-left: 6px;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: block;
 }
 
 .git-commit:hover {
-  color: var(--pink);
-}
-
-.git-ref {
-  color: var(--dim);
+  color: var(--pink) !important;
 }
 
 /* Rendered markdown */
