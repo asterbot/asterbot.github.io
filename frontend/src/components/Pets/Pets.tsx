@@ -2,11 +2,11 @@ import React, { useEffect, useRef } from 'react';
 import './Pets.css';
 import petTypes, { PetType } from './petTypes';
 
-const MAX_PETS = 12;
-const MAX_BALLS = 3;
+const MAX_PETS = 20;
+const MAX_BALLS = 5;
 const GROUND = 8;        // height of the ground strip at the bottom of the yard
-const GRAVITY = 0.45;
-const BOUNCE = -0.55;
+const GRAVITY = 0.45; 
+const BOUNCE = -0.7;
 
 interface Pet {
   t: PetType;
@@ -29,15 +29,13 @@ interface Ball {
   r: number;
 }
 
-// A yard of wandering sprites that chase a thrown ball. The simulation runs on a
-// rAF loop against real DOM nodes rather than React state, since it updates every frame.
 const Pets: React.FC = () => {
   const yardRef = useRef<HTMLDivElement>(null);
   const pets = useRef<Pet[]>([]);
   const balls = useRef<Ball[]>([]);
 
   const placePet = (p: Pet, floor: number) => {
-    p.el.style.transform = `translate(${p.x}px,${floor - p.t.h}px) scaleX(${p.dir < 0 ? -1 : 1})`;
+    p.el.style.transform = `translate(${p.x}px,${floor - p.t.h}px) scaleX(${p.dir})`;
   };
 
   const setAnim = (p: Pet, anim: string) => {
