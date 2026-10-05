@@ -17,7 +17,7 @@ const Projects: React.FC = () => {
     <div>
       <div className="section-rule"><span className="section-path projects-accent">~/projects</span></div>
       <h1 className="section-title projects-accent">Projects</h1>
-      <div className="section-hint">{projectData.length} entries &middot; click a thumbnail to open the screenshots</div>
+      <div className="section-hint">Click a thumbnail to open the screenshots</div>
 
       <div className="projects-grid">
         {projectData.map((project) => (

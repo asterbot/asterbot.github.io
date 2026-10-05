@@ -5,7 +5,7 @@
   font-size: 13px;
   padding-top: 16px;
   flex: 0 0 auto;
-  width: clamp(340px, 34%, 460px);
+  width: var(--terminal-width, clamp(340px, 34%, 460px));
   min-width: 0;
   margin-top: 22px;
   position: sticky;
@@ -18,7 +18,45 @@
   width: auto;
 }
 
+/* Drag handle straddling the pane's left border */
+.terminal-resize {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -5px;
+  width: 9px;
+  cursor: col-resize;
+  touch-action: none;
+  z-index: 1;
+}
+
+.terminal-resize::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 4px;
+  width: 1px;
+  background: transparent;
+  transition: background 0.15s;
+}
+
+.terminal-resize:hover::after,
+.terminal-resizing .terminal-resize::after {
+  background: var(--lav);
+}
+
+/* While dragging, keep the resize cursor everywhere and stop text getting selected */
+.terminal-resizing {
+  cursor: col-resize;
+  user-select: none;
+}
+
 @media (max-width: 899px) {
+  .terminal-resize {
+    display: none;
+  }
+
   .terminal {
     width: 100%;
     position: static;

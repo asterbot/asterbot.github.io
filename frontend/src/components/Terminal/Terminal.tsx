@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, MutableRefObject } from 'react';
+import React, { useState, useRef, useEffect, useLayoutEffect, MutableRefObject } from 'react';
 import './Terminal.css';
 import root from './data/directoryData/terminalData';
 import { Directory } from './data/directoryData/types';
@@ -7,6 +7,72 @@ import commands from './data/commands/utils';
 import { HistoryType, History, Command, CommandContext, Tone } from './data/commands/types';
 
 const PROMPT_SYMBOL = '$';
+const WIDTH_KEY = 'terminal-width';
+const MIN_WIDTH = 260;
+const MIN_CONTENT_WIDTH = 360;   // always leave the page content at least this much room
+const STACKED_QUERY = '(max-width: 899px)';   // matches Terminal.css: pane sits under the content, full width
+
+function loadWidth(): number | null {
+  try {
+    const w = Number(localStorage.getItem(WIDTH_KEY));
+    return w > 0 ? w : null;
+  } catch {
+    return null;
+  }
+}
+
+function saveWidth(w: number | null) {
+  try {
+    if (w === null) localStorage.removeItem(WIDTH_KEY);
+    else localStorage.setItem(WIDTH_KEY, String(w));
+  } catch {
+    // storage unavailable: the width just won't persist
+  }
+}
+
+// The width the pane's CSS actually resolved to (content-box, so excludes the left padding/border)
+function cssWidth(el: HTMLElement) {
+  return parseFloat(getComputedStyle(el).width);
+}
+
+// Size the pane to `preferred`, then shrink it as far as needed so the page content beside it
+// keeps MIN_CONTENT_WIDTH and doesn't overflow (e.g. the projects grid's minimum column width,
+// the pets control row). If the content overflows even at MIN_WIDTH, the terminal isn't the
+// cause, so leave it be.
+function fitPane(pane: HTMLElement, preferred: number | null) {
+  const split = pane.parentElement;
+  const content = split?.querySelector<HTMLElement>('.page-content');
+  const set = (w: number | null) => {
+    if (w === null) pane.style.removeProperty('--terminal-width');
+    else pane.style.setProperty('--terminal-width', `${w}px`);
+  };
+  const overflows = () => !!content && content.scrollWidth > content.clientWidth;
+
+  set(preferred);
+  if (!split || !content || window.matchMedia(STACKED_QUERY).matches) return;
+
+  // Widest the pane can be while leaving the content MIN_CONTENT_WIDTH
+  const chrome = pane.getBoundingClientRect().width - cssWidth(pane);   // left padding + border
+  const gap = parseFloat(getComputedStyle(split).columnGap) || 0;
+  const cap = Math.floor(split.clientWidth - MIN_CONTENT_WIDTH - gap - chrome);
+  if (cssWidth(pane) > cap) set(Math.max(MIN_WIDTH, cap));
+  if (!overflows()) return;
+
+  let hi = Math.floor(cssWidth(pane));
+  let lo = MIN_WIDTH;
+  if (hi <= lo) return;
+  set(lo);
+  if (overflows()) { set(preferred); return; }
+
+  // Widest width that still fits; each probe forces a (cheap) synchronous layout
+  while (hi - lo > 1) {
+    const mid = Math.floor((lo + hi) / 2);
+    set(mid);
+    if (overflows()) hi = mid;
+    else lo = mid;
+  }
+  set(lo);
+}
 const ERROR_PATTERN = /breaking this|unexpected|No manual entry|not found|no such directory|Already at root|sudo|expected at least/;
 
 // The pane is narrow, so the prompt is just the path
@@ -45,6 +111,10 @@ const Terminal: React.FC<TerminalProps> = ({ onNavigate, currentLocation, focusR
   const [history, setHistory] = useState<History[]>([]);
   const [input, setInput] = useState('');
   const [open, setOpen] = useState(true);
+  const [width, setWidth] = useState<number | null>(loadWidth);   // null = default CSS width
+  const paneRef = useRef<HTMLDivElement>(null);
+  const widthRef = useRef(width);
+  widthRef.current = width;
   const [cwd, setCwd] = useState<Directory>(() => currentLocation ? getDirectoryByAbsolutePath(currentLocation) : root);
   const inputRef = useRef<HTMLInputElement>(null);
   const typed = useRef<string[]>([]);     // previously submitted commands (for arrow-key recall)
@@ -193,10 +263,90 @@ const Terminal: React.FC<TerminalProps> = ({ onNavigate, currentLocation, focusR
     if (e.key === 'Tab') { e.preventDefault(); scrollDown(); complete(); }
   };
 
+  // Re-fit whenever the preferred width or the page changes...
+  useLayoutEffect(() => {
+    if (open && paneRef.current) fitPane(paneRef.current, width);
+  }, [width, open, currentLocation]);
+
+  // ...and when the window resizes or page content arrives late (blog posts, pets, etc.)
+  useEffect(() => {
+    const pane = paneRef.current;
+    const content = pane?.parentElement?.querySelector('.page-content');
+    if (!pane || !content) return;
+    let frame = 0;
+    const refit = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        if (pane.classList.contains('open')) fitPane(pane, widthRef.current);
+      });
+    };
+    const observer = new MutationObserver(refit);
+    observer.observe(content, { childList: true, subtree: true });
+    window.addEventListener('resize', refit);
+    return () => {
+      cancelAnimationFrame(frame);
+      observer.disconnect();
+      window.removeEventListener('resize', refit);
+    };
+  }, []);
+
+  // Drag the pane's left edge to resize it. Width is measured from the pane's right edge,
+  // which stays put while dragging.
+  const startResize = (e: React.PointerEvent<HTMLDivElement>) => {
+    const pane = paneRef.current;
+    if (!pane) return;
+    e.preventDefault();
+    const handle = e.currentTarget;
+    handle.setPointerCapture(e.pointerId);
+    const rect = pane.getBoundingClientRect();
+    const chrome = rect.width - cssWidth(pane);   // left padding + border, outside the CSS width
+    document.body.classList.add('terminal-resizing');
+
+    let latest: number | null = null;
+
+    const onMove = (ev: PointerEvent) => {
+      latest = Math.round(Math.max(MIN_WIDTH, rect.right - ev.clientX - chrome));   // fitPane caps it
+      setWidth(latest);
+    };
+    const onUp = () => {
+      handle.removeEventListener('pointermove', onMove);
+      handle.removeEventListener('pointerup', onUp);
+      handle.removeEventListener('pointercancel', onUp);
+      document.body.classList.remove('terminal-resizing');
+      if (latest === null) return;
+      // Keep what the pane actually settles at, not how far past the limit the pointer went
+      fitPane(pane, latest);
+      const settled = Math.round(cssWidth(pane));
+      setWidth(settled);
+      saveWidth(settled);
+    };
+    handle.addEventListener('pointermove', onMove);
+    handle.addEventListener('pointerup', onUp);
+    handle.addEventListener('pointercancel', onUp);
+  };
+
+  const resetWidth = () => {
+    setWidth(null);
+    saveWidth(null);
+  };
+
   const accent = accentFor(cwd.path);
 
   return (
-    <div className={`terminal ${open ? 'open' : 'closed'}`}>
+    <div
+      ref={paneRef}
+      className={`terminal ${open ? 'open' : 'closed'}`}
+    >
+      {open && (
+        <div
+          className="terminal-resize"
+          onPointerDown={startResize}
+          onDoubleClick={resetWidth}
+          title="Drag to resize · double-click to reset"
+          role="separator"
+          aria-orientation="vertical"
+        />
+      )}
       <div className="terminal-toolbar">
         <button type="button" className="terminal-toggle" onClick={toggle} title={open ? 'Hide terminal' : 'Show terminal'}>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={accent} strokeWidth="1.8" strokeLinecap="square" aria-hidden="true">
