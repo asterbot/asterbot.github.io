@@ -38,7 +38,7 @@ function rmAs<T extends File>(file: T, key: string): T{
 
 
 // Files in home
-const titleFile = rmAs(createRegularFile("title.txt", "A developer at heart!"), "home:title")
+const titleFile = rmAs(createRegularFile("title.txt", "A developer at heart!"), "")
 const aboutFile = rmAs(createRegularFile("about.txt", "Hello, welcome to my website! This terminal project was a fun side thing I was trying, glad to see you're using it! Have fun trying some random stuff :D"), "home:about")
 
 // Files in projects
@@ -64,6 +64,9 @@ const blogs = rmAs(createDirectory("blogs", blogChildren, "/blogs/"), PAGE);
 
 
 // Files in timeline - rm targets are the entry titles in Timeline/data/timelineData.ts
+const WT6 = rmAs(createRegularFile("WT6", "no courses! :D"), "timeline:Work Term 6")
+const fourA = rmAs(createRegularFile("4A", "CS 488, CS 453, MUSIC 275"), "timeline:4A")
+const WT5 = rmAs(createRegularFile("WT5", "CS 451"), "timeline:Work Term 5")
 const threeB = rmAs(createRegularFile("3B", "CO 456, CS 480, CS 454"), "timeline:3B");
 const WT4 = rmAs(createRegularFile("WT4", "CS 348"), "timeline:Work Term 4");
 const threeA = rmAs(createRegularFile("3A", "CS 341, CS 350, CS 370, CS 346, MUSIC 290, FR 152"), "timeline:3A");
@@ -75,7 +78,7 @@ const WT1 = rmAs(createRegularFile("WT1", "CO 250, ECON 101"), "timeline:Work Te
 const oneB = rmAs(createRegularFile("1B", "CS 146, CS 136L, MATH 136, MATH 138, PHYS 122"), "timeline:1B");
 const oneA = rmAs(createRegularFile("1A", "CS 145, MATH 135, MATH 137, SPCOM 223, PHYS 121"), "timeline:1A");
 
-const timeline = rmAs(createDirectory("timeline", [threeB, WT4, threeA, WT3, twoB, WT2, twoA, WT1, oneB, oneA], "/timeline/"), PAGE);
+const timeline = rmAs(createDirectory("timeline", [WT6, fourA, WT5, threeB, WT4, threeA, WT3, twoB, WT2, twoA, WT1, oneB, oneA], "/timeline/"), PAGE);
 
 
 // Root!
