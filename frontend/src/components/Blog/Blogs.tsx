@@ -47,7 +47,7 @@ const Blogs: React.FC = () => {
 
       <div className="git-log">
         {rows.map((row) => (
-          <div key={row.key} className="git-row">
+          <div key={row.key} className="git-row" data-rm={row.isCommit ? `blog:${row.id}` : undefined}>
             <span className="git-lanes">
               {row.cells.map((cell, i) => (
                 <span key={i} style={{ color: cell.color }}>{cell.text}</span>

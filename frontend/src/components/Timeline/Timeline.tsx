@@ -32,7 +32,7 @@ const Timeline: React.FC = () => {
           const isWork = event.termType === TermType.WorkTerm;
           const dotColor = isWork ? 'var(--red)' : 'var(--peri)';
           return (
-            <div key={index} className="timeline-entry">
+            <div key={index} className="timeline-entry" data-rm={`timeline:${event.title}`}>
               <div className="timeline-spine">
                 <div className="timeline-dot" style={{ color: dotColor }}>●</div>
                 <div className="timeline-line" />

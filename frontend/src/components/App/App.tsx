@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import Terminal from '../Terminal';
+import RmOverlay, { RmRequest } from '../Rm';
 import { accentFor, pathLabel } from '../Terminal/data/directoryData/utils';
 import './App.css';
 
@@ -25,6 +26,7 @@ const App: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const focusTerminal = useRef<() => void>(() => {});
+  const runRm = useRef<(req: RmRequest) => boolean>(() => false);
 
   const pathname = location.pathname.length > 1 && location.pathname.endsWith('/')
     ? location.pathname.slice(0, -1)
@@ -68,9 +70,11 @@ const App: React.FC = () => {
             <Outlet />
           </main>
 
-          <Terminal onNavigate={navigate} currentLocation={pathname} focusRef={focusTerminal} />
+          <Terminal onNavigate={navigate} currentLocation={pathname} focusRef={focusTerminal} onRemove={(req) => runRm.current(req)} />
         </div>
       </div>
+
+      <RmOverlay runRef={runRm} pathname={pathname} />
     </div>
   );
 };

@@ -1,4 +1,5 @@
 import { Directory } from "../directoryData/types";
+import { RmRequest } from "../../../Rm";
 
 export enum HistoryType{
     COMMAND,
@@ -21,6 +22,7 @@ export interface CommandContext {
     setCwd: (value: React.SetStateAction<Directory>) => void;
     navigateToPage: (dir: Directory) => void;
     setHistory: React.Dispatch<React.SetStateAction<History[]>>;
+    remove: (req: RmRequest) => boolean;   // start the rm effect; false if one is already running
   }
   
 

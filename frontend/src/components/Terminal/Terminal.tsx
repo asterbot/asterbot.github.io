@@ -2,9 +2,10 @@ import React, { useState, useRef, useEffect, useLayoutEffect, MutableRefObject }
 import './Terminal.css';
 import root from './data/directoryData/terminalData';
 import { Directory } from './data/directoryData/types';
-import { getDirectoryByAbsolutePath, listChildren, resolvePath, pathLabel, accentFor } from './data/directoryData/utils';
+import { getDirectoryByAbsolutePath, listChildren, resolvePath, pathLabel, accentFor, routeFor } from './data/directoryData/utils';
 import commands from './data/commands/utils';
 import { HistoryType, History, Command, CommandContext, Tone } from './data/commands/types';
+import { RmRequest } from '../Rm';
 
 const PROMPT_SYMBOL = '$';
 const WIDTH_KEY = 'terminal-width';
@@ -73,7 +74,7 @@ function fitPane(pane: HTMLElement, preferred: number | null) {
   }
   set(lo);
 }
-const ERROR_PATTERN = /breaking this|unexpected|No manual entry|not found|no such directory|Already at root|sudo|expected at least/;
+const ERROR_PATTERN = /breaking this|unexpected|No manual entry|not found|no such directory|Already at root|sudo|expected at least|cannot remove|busy/;
 
 // The pane is narrow, so the prompt is just the path
 function promptFor(cwd: Directory) {
@@ -96,18 +97,14 @@ function renderLine(line: string, tone: Tone, key: number) {
   return <div key={key} className={`out-${tone}`}>{line}</div>;
 }
 
-// Strip the trailing slash the directory tree uses so it matches router paths
-function routeFor(dir: Directory) {
-  return dir.path.length > 1 && dir.path.endsWith('/') ? dir.path.slice(0, -1) : dir.path;
-}
-
 type TerminalProps = {
   onNavigate?: (path: string) => void;
   currentLocation?: string;
   focusRef?: MutableRefObject<() => void>;
+  onRemove?: (req: RmRequest) => boolean;   // runs the `rm` effect; false if one is already running
 };
 
-const Terminal: React.FC<TerminalProps> = ({ onNavigate, currentLocation, focusRef }) => {
+const Terminal: React.FC<TerminalProps> = ({ onNavigate, currentLocation, focusRef, onRemove }) => {
   const [history, setHistory] = useState<History[]>([]);
   const [input, setInput] = useState('');
   const [open, setOpen] = useState(true);
@@ -181,7 +178,7 @@ const Terminal: React.FC<TerminalProps> = ({ onNavigate, currentLocation, focusR
       output = `Command ${command.name} expected at least ${command.minExpectedArgs} args, but got ${args.length}`;
     }
     else {
-      const context: CommandContext = { cwd, setCwd, navigateToPage, setHistory };
+      const context: CommandContext = { cwd, setCwd, navigateToPage, setHistory, remove: onRemove ?? (() => false) };
 
       output = command.callback(args, context);
 

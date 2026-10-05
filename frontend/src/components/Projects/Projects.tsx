@@ -21,7 +21,7 @@ const Projects: React.FC = () => {
 
       <div className="projects-grid">
         {projectData.map((project) => (
-          <div key={project.uid} className="project-card">
+          <div key={project.uid} className="project-card" data-rm={`project:${project.uid}`}>
             <div className="project-heading">
               <span className="project-title">{project.title}</span>
               {project.tryItOut && <span className="try-banner">Try it out!</span>}

@@ -10,11 +10,11 @@ const HomePage: React.FC = () => {
     <div>
       <div className="section-rule"><span className="section-path">~</span></div>
 
-      <h1 className="hero-title">
+      <h1 className="hero-title" data-rm="home:title">
         A <span className="accent">Developer</span> at heart<span className="cursor" />
       </h1>
 
-      <div className="intro-box">
+      <div className="intro-box" data-rm="home:about">
         <div><span className="question">Who am I?</span> A "huge nerd" doesn't even scratch the surface.</div>
         <div className="gap" />
         <div>I love making things with code, whether it's games, apps, system-level projects or anything in between, I'm always trying new things with software!</div>

@@ -101,7 +101,7 @@ const Blog: React.FC = () => {
             <div className="out-error">{errorMessage}</div>
         )}
         {!errorMessage && (
-            <div className="blog-markdown" onClick={handleClick}>
+            <div className="blog-markdown" onClick={handleClick} data-rm={`post:${id}`}>
                 <ReactMarkdown
                     remarkPlugins={[remarkGfm, remarkMath]}
                     rehypePlugins={[rehypeRaw, rehypeKatex, rehypeHighlight]}

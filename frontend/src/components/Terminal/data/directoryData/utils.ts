@@ -126,3 +126,13 @@ export function accentFor(path: string): string {
     if (path.startsWith("/timeline")) return "var(--red)";
     return "var(--peri)";
 }
+
+export function getNodeByAbsolutePath(path: string): File | undefined {
+    // The directory or regular file at an absolute path, if there is one
+    return directoryExists(path) ? getDirectoryByAbsolutePath(path) : getFileByAbsolutePath(path);
+}
+
+export function routeFor(dir: Directory): string {
+    // Router path for a directory: strip the trailing slash the directory tree uses
+    return dir.path.length > 1 && dir.path.endsWith("/") ? dir.path.slice(0, -1) : dir.path;
+}
