@@ -17,6 +17,7 @@ const Blogs: React.FC = () => {
       <div className="section-rule"><span className="section-path blogs-accent">~/blogs</span></div>
       <h1 className="section-title blogs-accent">Blogs</h1>
       <div className="section-hint">git log --graph --all &middot; click a commit to read it</div>
+      <div className="section-hint">All blogs are written without AI! This is all human slop</div>
 
       <div className="branch-chips">
         <button
