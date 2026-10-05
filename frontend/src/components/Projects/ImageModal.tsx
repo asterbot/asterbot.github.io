@@ -1,5 +1,5 @@
 import React, { useEffect, useCallback } from 'react';
-import { Project } from './data/types';
+import { Project, imageSrc } from './data/types';
 
 type ImageModalProps = {
   project: Project;
@@ -25,7 +25,7 @@ const ImageModal: React.FC<ImageModalProps> = ({ project, index, onIndexChange, 
     return () => window.removeEventListener('keydown', onKey, true);
   }, [step, onClose]);
 
-  const src = (i: number) => `/projects/${project.uid}/${i + 1}.png`;
+  const src = (i: number) => imageSrc(project, i);
 
   return (
     <div className="modal-backdrop" onClick={onClose}>

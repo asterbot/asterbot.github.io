@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import './Projects.css';
 
 import projectData from './data/projectsData';
-import { Project } from './data/types';
+import { Project, thumbnailSrc } from './data/types';
 import ImageModal from './ImageModal';
 
-/* CONVENTION: number all images in /projects/{uid}/[number].png where 1.png will be shown at the start and the rest if you click as a slideshow */
+/* CONVENTION: number all images in /projects/{uid}/[number].png (or .gif, listed in `gifs`) where 1 will be shown at the start and the rest if you click as a slideshow */
 
 const Projects: React.FC = () => {
   const [open, setOpen] = useState<Project | null>(null);
@@ -29,7 +29,7 @@ const Projects: React.FC = () => {
 
             <button type="button" className="link-button project-image-container" onClick={() => openModal(project)}>
               <img
-                src={`/projects/${project.uid}/thumbnail.png`}
+                src={thumbnailSrc(project)}
                 alt={project.title + ' project image'}
                 className="project-image"
               />
