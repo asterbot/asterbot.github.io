@@ -82,6 +82,13 @@ export default function buildGraph(selected: number | null): GraphRow[] {
   });
   end[TRUNK] = rows.length - 1;
 
+  // The trunk's line runs from the first branch rejoining it, not just from its own newest post
+  const start: Record<number, number> = { ...head };
+  const firstFork = rows.findIndex((r) => 'fork' in r);
+  if (firstFork !== -1 && (start[TRUNK] === undefined || firstFork < start[TRUNK])) {
+    start[TRUNK] = firstFork;
+  }
+
   const col = (lane: number) =>
     selected === null || selected === lane ? branches[lane].color : DIM;
 
@@ -90,7 +97,7 @@ export default function buildGraph(selected: number | null): GraphRow[] {
     const cells: GraphCell[] = [];
 
     for (let lane = 0; lane <= lastLane; lane++) {
-      const active = head[lane] !== undefined && i >= head[lane] && i <= end[lane];
+      const active = start[lane] !== undefined && i >= start[lane] && i <= end[lane];
       let glyph = ' ';
       let gap = '  ';
       let glyphColor = col(lane);

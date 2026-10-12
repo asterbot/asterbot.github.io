@@ -228,3 +228,10 @@
 .blog-markdown details > *:not(summary) {
   margin-top: 0.5rem;
 }
+
+.blog-markdown .mermaid-diagram {
+  display: flex;
+  justify-content: center;
+  margin: 1rem 0;
+  overflow-x: auto;
+}

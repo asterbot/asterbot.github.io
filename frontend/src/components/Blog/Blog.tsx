@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom'
-import ReactMarkdown from 'react-markdown';
+import ReactMarkdown, { Components } from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
@@ -10,6 +10,7 @@ import 'katex/dist/katex.min.css';
 import 'highlight.js/styles/base16/material-darker.css';
 import './Blog.css';
 import { postById, branchOf } from './data/gitGraph';
+import Mermaid from './Mermaid';
 
 
 function convertIDToTitle(id: string | undefined){
@@ -19,6 +20,26 @@ function convertIDToTitle(id: string | undefined){
     if (post) return post.title;
     return id.split("_").map((s) => {return s.charAt(0).toUpperCase() + s.slice(1)}).join(" ");
 }
+
+// Concatenate the text of a hast node (code blocks are a single text child,
+// but be safe in case something wrapped them)
+function hastText(node: any): string {
+    if (!node) return '';
+    if (node.type === 'text') return node.value;
+    return (node.children ?? []).map(hastText).join('');
+}
+
+// ```mermaid blocks render as diagrams instead of code
+const markdownComponents: Components = {
+    pre({ node, children, ...props }) {
+        const code: any = node?.children?.[0];
+        const classes = code?.properties?.className;
+        if (code?.tagName === 'code' && Array.isArray(classes) && classes.includes('language-mermaid')) {
+            return <Mermaid chart={hastText(code).trim()} />;
+        }
+        return <pre {...props}>{children}</pre>;
+    },
+};
 
 const Blog: React.FC = () => {
     const { id } = useParams();
@@ -104,7 +125,8 @@ const Blog: React.FC = () => {
             <div className="blog-markdown" onClick={handleClick} data-rm={`post:${id}`}>
                 <ReactMarkdown
                     remarkPlugins={[remarkGfm, remarkMath]}
-                    rehypePlugins={[rehypeRaw, rehypeKatex, rehypeHighlight]}
+                    rehypePlugins={[rehypeRaw, rehypeKatex, [rehypeHighlight, { plainText: ['mermaid'] }]]}
+                    components={markdownComponents}
                 >
                     {markdownContent}
                 </ReactMarkdown>

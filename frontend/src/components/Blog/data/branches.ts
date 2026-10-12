@@ -12,9 +12,9 @@ export interface Branch {
  */
 const branches: Branch[] = [
   { name: 'main',     color: '#bdc2ff' },
-  // { name: 'co-op',    color: '#a9dcc5' },
+  { name: 'co-op',    color: '#a9dcc5' },
   // { name: 'music',    color: '#e9d8a6' },
-  // { name: 'games',    color: '#ffb4ab' },
+  { name: 'games',    color: '#ffb4ab' },
   { name: 'cs-stuff', color: '#e7b9d5' },
 ];
 
