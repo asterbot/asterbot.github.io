@@ -1,86 +1,146 @@
 /* Terminal Component Styles */
+
+/* Side pane beside the page content */
 .terminal {
-  background: #181a20;
-  color: #00ff90;
-  font-family: monospace;
-  padding: 1.2rem 1rem;
-  border-radius: 10px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.10);
-  max-width: 700px;
-  margin: 0 auto;
+  font-size: 13px;
+  padding-top: 16px;
+  flex: 0 0 auto;
+  width: var(--terminal-width, clamp(340px, 34%, 460px));
+  min-width: 0;
+  margin-top: 22px;
+  position: sticky;
+  top: 56px;
+  border-left: 1px solid var(--line);
+  padding-left: 22px;
 }
 
-.terminal-content {
-  text-align: left;
+.terminal.closed {
+  width: auto;
+}
+
+/* Drag handle straddling the pane's left border */
+.terminal-resize {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -5px;
+  width: 9px;
+  cursor: col-resize;
+  touch-action: none;
+  z-index: 1;
+}
+
+.terminal-resize::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 4px;
+  width: 1px;
+  background: transparent;
+  transition: background 0.15s;
+}
+
+.terminal-resize:hover::after,
+.terminal-resizing .terminal-resize::after {
+  background: var(--lav);
+}
+
+/* While dragging, keep the resize cursor everywhere and stop text getting selected */
+.terminal-resizing {
+  cursor: col-resize;
+  user-select: none;
+}
+
+@media (max-width: 899px) {
+  .terminal-resize {
+    display: none;
+  }
+
+  .terminal {
+    width: 100%;
+    position: static;
+    margin-top: 38px;
+    border-left: none;
+    border-top: 1px solid var(--line);
+    padding-left: 0;
+  }
+}
+
+.terminal-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.terminal-toggle {
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  border: 1px solid var(--line);
+  background: #1b1b22;
+  color: var(--lav);
+  padding: 5px 11px;
+  line-height: 1;
+  font: inherit;
+  user-select: none;
+}
+
+.terminal-toggle:hover {
+  background: #24242c;
+  border-color: var(--dim);
+  color: var(--fg);
+}
+
+.terminal-toggle-word {
+  font-size: 22px;
+  line-height: 1;
+}
+
+.terminal-welcome {
+  color: var(--dim);
 }
 
 .terminal-line {
   white-space: pre-wrap;
-  text-align: left;
-  padding: 2px 0;
-  font-size: 12px;
+  word-break: break-word;
+}
+
+.terminal-prompt {
+  white-space: pre;
+  flex: 0 0 auto;
 }
 
 .terminal-form {
   display: flex;
-  margin-top: 8px;
-}
-
-.terminal-prompt {
-  color: #ffcc00;
-  margin-right: 4px;
-  font-weight: bold;
-  font-size: 12px;
+  align-items: baseline;
+  gap: 8px;
+  margin-top: 4px;
+  max-width: 100%;
 }
 
 .terminal-input {
+  flex: 1 1 auto;
+  width: auto;
+  min-width: 0;
   background: none;
   border: none;
-  color: #00ff90;
   outline: none;
-  flex: 1;
-  font-family: monospace;
-  font-size: 12px;
+  color: var(--fg);
+  caret-color: var(--fg);
+  font-family: inherit;
+  font-size: 13px;
 }
 
 .terminal-input::placeholder {
-  color: #666;
+  color: var(--line);
 }
 
-/* Syntax highlighting styles */
-.command-prompt {
-  color: #FFD700;
-  text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.7);
-}
-
-.command-text {
-  color: #00bfff;
-  text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.7);
-}
-
-.error-text {
-  color: #ff6666;
-  text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.7);
-}
-
-.directory-text {
-  color: #00ff90;
-  text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.7);
-  font-weight: bold;
-}
-
-.help-text {
-  color: #FFD700;
-  text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.7);
-  font-weight: bold;
-}
-  
-.terminal-default-text {
-  color: #eaeaea;
-  text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.5);
-  font-size: 12px;
-}
-
-.file-text{
-  color: white;
-}
+/* Output tones */
+.out-default { color: var(--fg); }
+.out-error   { color: var(--red); }
+.out-help    { color: var(--lav); }
+.out-dir     { color: var(--peri); }
+.out-file    { color: var(--fg); }

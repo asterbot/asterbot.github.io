@@ -2,6 +2,16 @@ import { Project, SourceDomain } from "./types";
 
 const projectData: Project[] = [
     {
+        title: "Solar system emulator",
+        tags: ["C++", "OpenGL", "Graphics"],
+        sources: [],
+        description: "A 3D graphics emulator of the solar system, where you can navigate the solar system with realistic graphics and see different planets/stars in the milky way!",
+        uid: "solar-system",
+        tryItOut: false,
+        numImages: 10,
+        gifs: ["thumbnail", 1, 2, 4, 5, 6, 10],
+    },
+    {
         title: "ASCII Game Engine",
         tags: ["C++", "Ncurses", "OOP", "MVC", "SOLID"],
         sources: [],

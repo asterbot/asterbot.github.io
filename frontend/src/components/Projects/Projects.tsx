@@ -2,80 +2,68 @@ import React, { useState } from 'react';
 import './Projects.css';
 
 import projectData from './data/projectsData';
-import { Project } from './data/types';
+import { Project, thumbnailSrc } from './data/types';
+import ImageModal from './ImageModal';
 
-import Lightbox from "yet-another-react-lightbox";
-import Thumbnails from "yet-another-react-lightbox/plugins/thumbnails";
-
-import "yet-another-react-lightbox/styles.css";
-import "yet-another-react-lightbox/plugins/thumbnails.css";
-
-/* CONVENTION: number all images in /projects/{uid}/[number].png where 1.png will be shown at the start and the rest if you click as a slideshow */
+/* CONVENTION: number all images in /projects/{uid}/[number].png (or .gif, listed in `gifs`) where 1 will be shown at the start and the rest if you click as a slideshow */
 
 const Projects: React.FC = () => {
+  const [open, setOpen] = useState<Project | null>(null);
+  const [index, setIndex] = useState(0);
 
-  const [open, setOpen] = useState<Project|null>(null);
+  const openModal = (project: Project) => { setOpen(project); setIndex(0); };
 
   return (
-    <div className="projects-container">
-      <h1 className="projects-title">Projects</h1>
-      <div className="projects-grid">
-        {projectData.map((project, index) => (
-          <div key={index} className="project-card">
-            {project.tryItOut && (
-              <div className="try-banner">Try it out!</div>
-            )}
+    <div>
+      <div className="section-rule"><span className="section-path projects-accent">~/projects</span></div>
+      <h1 className="section-title projects-accent">Projects</h1>
+      <div className="section-hint">Click a thumbnail to open the screenshots</div>
 
-            <h3 className="project-title">{project.title}</h3>
-            
-            <div className="project-image-container" onClick={() => setOpen(project)}>
-              <img 
-                src={'/projects/' + project.uid + '/thumbnail.png'} 
-                alt={project.title + " project image"} 
-                width={280} 
-                height={174} 
+      <div className="projects-grid">
+        {projectData.map((project) => (
+          <div key={project.uid} className="project-card" data-rm={`project:${project.uid}`}>
+            <div className="project-heading">
+              <span className="project-title">{project.title}</span>
+              {project.tryItOut && <span className="try-banner">Try it out!</span>}
+            </div>
+
+            <button type="button" className="link-button project-image-container" onClick={() => openModal(project)}>
+              <img
+                src={thumbnailSrc(project)}
+                alt={project.title + ' project image'}
                 className="project-image"
               />
-              <div className="image-overlay">
-                <span className="overlay-text">View Gallery</span>
-              </div>
-            </div>
+              <span className="project-image-overlay">
+                <span className="project-open-badge">
+                  $ open ./images <span className="project-open-count">({project.numImages})</span>
+                </span>
+              </span>
+            </button>
 
             <p className="project-description">{project.description}</p>
+
             <div className="project-tech">
-              {project.tags.map((tech, techIndex) => (
-                <span key={techIndex} className="tech-tag">{tech}</span>
+              {project.tags.map((tech) => (
+                <span key={tech} className="tech-tag">{tech}</span>
               ))}
             </div>
-            <div className="project-links">
-              {project.sources.map((source, sourceIndex) => (
-                <a key={sourceIndex} href={source.sourceLink} className="project-link" target="_blank" rel="noreferrer">
-                  {source.sourceDomain}
-                </a>
-              ))}
-            </div>
+
+            {project.sources.length > 0 && (
+              <div className="project-links">
+                {project.sources.map((source) => (
+                  <a key={source.sourceLink} href={source.sourceLink} className="underline-link" target="_blank" rel="noopener noreferrer">
+                    {source.sourceDomain}
+                  </a>
+                ))}
+              </div>
+            )}
           </div>
         ))}
       </div>
-      
-      {open != null &&
-        <Lightbox 
-          open = {open != null}
-          close = {() => setOpen(null)}
-          slides = {Array.from
-            ({length: open.numImages || 1}, (_, i) => {return {src: '/projects/' + open.uid + '/' + (i+1) as string + '.png'}})
-          }
-          plugins={[Thumbnails]}
-          styles={{
-            container: {
-              backgroundColor: "rgba(0, 0, 0, 0.7)"
-            }
-          }}
-        
-        />
-      }
 
-
+      {open && (
+        <ImageModal project={open} index={index} onIndexChange={setIndex} onClose={() => setOpen(null)} />
+      )}
     </div>
   );
 };

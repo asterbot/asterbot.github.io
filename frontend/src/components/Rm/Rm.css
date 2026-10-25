@@ -1,0 +1,10 @@
+/* Where SikeMessage is drawn: over the on-screen part of whatever was removed */
+.rm-sike {
+  position: fixed;
+  z-index: 9998;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  overflow: visible;
+}

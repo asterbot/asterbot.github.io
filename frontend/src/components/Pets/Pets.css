@@ -1,0 +1,162 @@
+.pets {
+  margin-top: 40px;
+  max-width: 680px;
+  width: 100%;
+}
+
+.pets-controls {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 4px;
+  margin: 14px 0 12px;
+}
+
+.pets-label {
+  color: var(--dim);
+  font-size: 12px;
+  margin-right: 4px;
+  flex: none;
+}
+
+.pet-button {
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border: 1px solid var(--line);
+  background: var(--bg-panel);
+  color: var(--lav);
+  padding: 2px 6px 2px 3px;
+  font: inherit;
+  font-size: 11px;
+  white-space: nowrap;
+  flex: none;
+  user-select: none;
+}
+
+.pet-button:hover {
+  border-color: var(--peri);
+  color: var(--fg);
+  background: var(--bg-inline);
+}
+
+.pet-button img {
+  width: 16px;
+  height: 16px;
+  image-rendering: pixelated;
+  object-fit: contain;
+}
+
+.pets-divider {
+  width: 1px;
+  height: 18px;
+  background: var(--line);
+  margin: 0 3px;
+  flex: none;
+}
+
+.ball-button {
+  padding: 2px 6px;
+}
+
+.ball-button:hover {
+  border-color: var(--red);
+}
+
+.ball-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--red);
+}
+
+.pets-clear {
+  color: var(--dim);
+  padding: 2px 6px;
+}
+
+.pets-clear:hover {
+  border-color: var(--dim);
+  color: var(--fg);
+  background: var(--bg-panel);
+}
+
+.pets-yard {
+  position: relative;
+  height: 180px;
+  border: 1px solid var(--line);
+  background: var(--bg-deep);
+  overflow: hidden;
+  cursor: crosshair;
+  user-select: none;
+}
+
+.pets-ground {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 8px;
+  border-top: 1px solid var(--line);
+  background: var(--bg-panel);
+}
+
+.pets-yard-hint {
+  position: absolute;
+  top: 8px;
+  left: 10px;
+  font-size: 11px;
+  color: var(--line);
+  pointer-events: none;
+}
+
+.pets-credit {
+  margin-top: 8px;
+  font-size: 11px;
+  color: var(--dim);
+}
+
+.pets-credit a {
+  color: var(--dim);
+  border-bottom: 1px solid var(--line);
+}
+
+
+/* Imperatively-created nodes inside the yard */
+.pet-sprite {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: auto;
+  image-rendering: pixelated;
+  cursor: pointer;
+  will-change: transform;
+}
+
+.pet-ball {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--red);
+  box-shadow: inset -2px -2px 0 rgba(0, 0, 0, 0.25);
+  pointer-events: none;
+  will-change: transform;
+}
+
+.pet-heart {
+  position: absolute;
+  pointer-events: none;
+  color: var(--pink);
+  font-size: 16px;
+}
+
+@media (max-width: 699px) {
+  .pets-controls {
+    flex-wrap: wrap;
+  }
+}

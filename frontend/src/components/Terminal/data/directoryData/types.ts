@@ -10,6 +10,7 @@ export interface RegularFile{
     content: string,
     path?: string,  // absolute path
     parent?: Directory,
+    rmTarget?: string,  // what `rm` removes from the page (see components/Rm/targets.ts)
 }
 
 export interface Directory{
@@ -18,6 +19,7 @@ export interface Directory{
     children: File[],
     path: string,
     parent?: Directory,
+    rmTarget?: string,
 }
 
 export type File = RegularFile | Directory;

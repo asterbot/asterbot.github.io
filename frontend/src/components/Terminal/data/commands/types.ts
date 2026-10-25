@@ -1,14 +1,18 @@
 import { Directory } from "../directoryData/types";
+import { RmRequest } from "../../../Rm";
 
 export enum HistoryType{
     COMMAND,
     OUTPUT,
 }
 
+export type Tone = "default" | "error" | "help" | "listing";
+
 export interface History{
     type: HistoryType,
     cwd: Directory,
     out: string,
+    tone?: Tone,   // how to colour OUTPUT lines
 }
 
 export interface CommandContext {
@@ -18,6 +22,7 @@ export interface CommandContext {
     setCwd: (value: React.SetStateAction<Directory>) => void;
     navigateToPage: (dir: Directory) => void;
     setHistory: React.Dispatch<React.SetStateAction<History[]>>;
+    remove: (req: RmRequest) => boolean;   // start the rm effect; false if one is already running
   }
   
 
