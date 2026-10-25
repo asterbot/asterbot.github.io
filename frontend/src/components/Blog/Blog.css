@@ -235,3 +235,10 @@
   margin: 1rem 0;
   overflow-x: auto;
 }
+
+.blog-coming-soon {
+  color: var(--dim);
+  border: 1px dashed var(--line);
+  padding: 16px;
+  margin-top: 8px;
+}

@@ -49,6 +49,7 @@ const Blog: React.FC = () => {
 
     const [markdownContent, setMarkdownContent] = useState<string>('');
     const [errorMessage, setErrorMessage] = useState<string>('');
+    const [comingSoon, setComingSoon] = useState<boolean>(false);
 
     // Function to transform relative image paths to absolute paths
     const transformImagePaths = (content: string, blogId: string): string => {
@@ -74,6 +75,7 @@ const Blog: React.FC = () => {
 
         let isCancelled = false;
         setErrorMessage('');
+        setComingSoon(false);
 
         fetch(`/blogfiles/${id}/index.md`)
             .then(async (response) => {
@@ -82,6 +84,10 @@ const Blog: React.FC = () => {
                         throw new Error(`Failed to load markdown: ${response.status}`);
                     }
                     const text = await response.text();
+                    // The dev server answers missing files with index.html instead of a 404
+                    if (/^\s*<!doctype html/i.test(text)) {
+                        throw new Error('Markdown missing');
+                    }
                     if (!isCancelled) {
                         const transformedContent = transformImagePaths(text, id);
                         setMarkdownContent(transformedContent);
@@ -90,7 +96,9 @@ const Blog: React.FC = () => {
             })
             .catch((_error) => {
                 if (!isCancelled) {
-                    setErrorMessage(`Blog not found for id: ${id}`);
+                    // Posts listed in posts.ts without their markdown yet are just unwritten
+                    if (postById(id)) setComingSoon(true);
+                    else setErrorMessage(`Blog not found for id: ${id}`);
                 }
             });
 
@@ -121,7 +129,10 @@ const Blog: React.FC = () => {
         {errorMessage && (
             <div className="out-error">{errorMessage}</div>
         )}
-        {!errorMessage && (
+        {comingSoon && (
+            <div className="blog-coming-soon">Coming soon!</div>
+        )}
+        {!errorMessage && !comingSoon && (
             <div className="blog-markdown" onClick={handleClick} data-rm={`post:${id}`}>
                 <ReactMarkdown
                     remarkPlugins={[remarkGfm, remarkMath]}
