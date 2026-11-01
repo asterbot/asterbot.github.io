@@ -3,8 +3,19 @@ import { Link } from 'react-router-dom';
 import './Projects.css';
 
 import projectData from './data/projectsData';
-import { Project, thumbnailSrc } from './data/types';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
+import { faGithub, faItchIo } from '@fortawesome/free-brands-svg-icons';
+import { faDownload, faTrophy } from '@fortawesome/free-solid-svg-icons';
+import { Project, SourceDomain, thumbnailSrc } from './data/types';
 import ImageModal from './ImageModal';
+
+const sourceIcons: Record<SourceDomain, IconDefinition> = {
+  [SourceDomain.GitHub]: faGithub,
+  [SourceDomain.ItchIO]: faItchIo,
+  [SourceDomain.DevPost]: faTrophy,
+  [SourceDomain.Releases]: faDownload,
+};
 
 /* CONVENTION: number all images in /projects/{uid}/[number].png (or .gif, listed in `gifs`) where 1 will be shown at the start and the rest if you click as a slideshow */
 
@@ -57,7 +68,8 @@ const Projects: React.FC = () => {
                   <Link to={project.playPath} className="underline-link">$ ./play</Link>
                 )}
                 {project.sources.map((source) => (
-                  <a key={source.sourceLink} href={source.sourceLink} className="underline-link" target="_blank" rel="noopener noreferrer">
+                  <a key={source.sourceLink} href={source.sourceLink} className="underline-link source-link" target="_blank" rel="noopener noreferrer">
+                    <FontAwesomeIcon icon={sourceIcons[source.sourceDomain]} className="source-icon" />
                     {source.sourceDomain}
                   </a>
                 ))}

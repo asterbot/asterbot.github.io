@@ -123,6 +123,16 @@
   font-size: 12px;
 }
 
+.source-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.source-icon {
+  font-size: 13px;
+}
+
 @media (max-width: 420px) {
   .projects-grid {
     grid-template-columns: 1fr;
