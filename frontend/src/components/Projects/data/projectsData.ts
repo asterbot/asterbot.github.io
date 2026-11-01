@@ -17,7 +17,8 @@ const projectData: Project[] = [
         sources: [],
         description: "An ASCII-based game engine created on the curses C framework with OOP abstractions in C++, using various OOP patterns over a C library. I created Tetris and Donkey Kong with the game engine!",
         uid: "age",
-        tryItOut: false,
+        tryItOut: true,
+        playPath: "/projects/tetris",
         numImages: 4,
     },
     {

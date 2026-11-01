@@ -39,6 +39,19 @@
   padding: 1px 7px;
 }
 
+.try-banner-link {
+  border: 1px solid var(--peri);
+  padding: 0 6px;  /* keep the same footprint as .try-banner with the border */
+  transition: background 0.15s, color 0.15s;
+}
+
+.try-banner-link:hover,
+.try-banner-link:focus-visible {
+  color: var(--peri);
+  background: transparent;
+  outline: none;
+}
+
 .project-image-container {
   border: 1px solid var(--line);
   background: var(--bg-deep);

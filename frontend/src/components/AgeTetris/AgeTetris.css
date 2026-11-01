@@ -1,0 +1,46 @@
+.tetris-accent {
+  color: var(--pink);
+}
+
+.tetris-screen {
+  position: relative;
+  border: 1px solid var(--line);
+  background: var(--bg-deep);
+  padding: 12px;
+  max-width: max-content;
+  outline: none;
+}
+
+.tetris-screen:focus-visible,
+.tetris-screen.focused {
+  border-color: var(--peri);
+}
+
+.tetris-screen canvas {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+.tetris-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(14, 14, 18, 0.8);
+  color: var(--fg);
+  cursor: pointer;
+}
+
+.tetris-keys {
+  margin-top: 14px;
+  color: var(--dim);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.tetris-keys kbd {
+  color: var(--peri);
+  font-family: inherit;
+}

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import './Projects.css';
 
 import projectData from './data/projectsData';
@@ -24,7 +25,9 @@ const Projects: React.FC = () => {
           <div key={project.uid} className="project-card" data-rm={`project:${project.uid}`}>
             <div className="project-heading">
               <span className="project-title">{project.title}</span>
-              {project.tryItOut && <span className="try-banner">Try it out!</span>}
+              {project.tryItOut && (project.playPath
+                ? <Link to={project.playPath} className="try-banner try-banner-link">Try it out!</Link>
+                : <span className="try-banner">Try it out!</span>)}
             </div>
 
             <button type="button" className="link-button project-image-container" onClick={() => openModal(project)}>
@@ -48,8 +51,11 @@ const Projects: React.FC = () => {
               ))}
             </div>
 
-            {project.sources.length > 0 && (
+            {(project.sources.length > 0 || project.playPath) && (
               <div className="project-links">
+                {project.playPath && (
+                  <Link to={project.playPath} className="underline-link">$ ./play</Link>
+                )}
                 {project.sources.map((source) => (
                   <a key={source.sourceLink} href={source.sourceLink} className="underline-link" target="_blank" rel="noopener noreferrer">
                     {source.sourceDomain}

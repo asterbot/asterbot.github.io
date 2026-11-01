@@ -35,7 +35,7 @@ const App: React.FC = () => {
   // Clicking anywhere on the page (that isn't a link/image/input) focuses the terminal input
   const handleClick = (e: React.MouseEvent) => {
     const target = e.target as HTMLElement;
-    if (target.closest && target.closest('a,img,button,input,textarea')) return;
+    if (target.closest && target.closest('a,img,button,input,textarea,[data-game]')) return;
     if (window.getSelection && String(window.getSelection())) return;
     focusTerminal.current();
   };

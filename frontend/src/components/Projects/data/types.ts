@@ -5,6 +5,7 @@ export interface Project{
     description: string,
     uid: string,        // all images of the project are stored in img/{uid}/...
     tryItOut: boolean,  // can this be tried?
+    playPath?: string,  // in-site route to play the project (when tryItOut is true)
     numImages: number,
     gifs?: (number | "thumbnail")[],  // images stored as .gif instead of .png (by number, or "thumbnail")
 }

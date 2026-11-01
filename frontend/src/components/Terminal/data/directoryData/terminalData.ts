@@ -42,12 +42,17 @@ const titleFile = rmAs(createRegularFile("title.txt", "A developer at heart!"), 
 const aboutFile = rmAs(createRegularFile("about.txt", "Hello, welcome to my website! This terminal project was a fun side thing I was trying, glad to see you're using it! Have fun trying some random stuff :D"), "home:about")
 
 // Files in projects
-const ageEngine = rmAs(createRegularFile("ASCIIGameEngine", "ASCII-based C++ game engine! Built on curses C framework with C++ OOP abstractions. Created Tetris and Donkey Kong with it!"), "project:age");
+const solarSystem = rmAs(createRegularFile("SolarSystem", "Solar system renderer in OpenGL!"), "project:solar-system");
 const betterNotes = rmAs(createRegularFile("BetterNotes", "Note taking desktop app with support for Markdown, LaTEX, graphs and freehand drawing. Includes multi-user support, offline support and sync with cloud DB on Mongo"), "project:betternotes");
 const bookExplorer = rmAs(createRegularFile("BookExplorer", "A web-app to make the most of your reading journey! Includes personalized recommendations, reading analytics, user progress tracking, book clubs and various other community features."), "project:bookexp");
 const peerToPeer = rmAs(createRegularFile("PeerToPeer", "Decentralized file-sharing platform for nodes connected to a common network. Uses data splitting protocols by splitting data into 512B chunks to be resilient against network disruptions."), "project:p2p");
 
-const projects = rmAs(createDirectory("projects", [ageEngine, betterNotes, bookExplorer, peerToPeer], "/projects/"), PAGE);
+// Playable projects are directories with their own page (route = directory path).
+// `rm`-ing the directory removes its card on the projects page; its files live on the game page.
+const tetrisReadme = rmAs(createRegularFile("README.txt", "ASCII-based C++ game engine! Built on curses C framework with C++ OOP abstractions. Created Tetris and Donkey Kong with it!\nPlay Tetris on this page: click the game screen to start.\nControls: <- -> move, down soft drop, space hard drop, up/z rotate, c hold, q quit"), PAGE);
+const tetris = rmAs(createDirectory("Tetris", [tetrisReadme], "/projects/tetris/"), "project:age");
+
+const projects = rmAs(createDirectory("projects", [tetris, solarSystem, betterNotes, bookExplorer, peerToPeer], "/projects/"), PAGE);
 
 
 // Files in blogs - generated from the blog list, so adding a post to posts.ts

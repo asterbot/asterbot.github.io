@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import { App, Blog, Blogs, Projects, Timeline, HomePage } from './components';
+import { App, Blog, Blogs, Projects, Timeline, HomePage, AgeTetris } from './components';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 const root = ReactDOM.createRoot(
@@ -23,6 +23,7 @@ root.render(
           <Route path="blogs/:id" element = {<Blog />} />
           <Route path="blogs" element={<Blogs />} />
           <Route path="projects" element={<Projects />} />
+          <Route path="projects/tetris" element={<AgeTetris />} />
           <Route path="timeline" element={<Timeline />} />
         </Route>
       </Routes>
