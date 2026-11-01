@@ -1,26 +1,55 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom'
-import ReactMarkdown from 'react-markdown';
+import { useParams, useNavigate } from 'react-router-dom'
+import ReactMarkdown, { Components } from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import rehypeRaw from 'rehype-raw';
 import rehypeHighlight from 'rehype-highlight';
 import 'katex/dist/katex.min.css';
-import 'highlight.js/styles/github-dark.css';
+import 'highlight.js/styles/base16/material-darker.css';
 import './Blog.css';
+import { postById, branchOf } from './data/gitGraph';
+import Mermaid from './Mermaid';
 
 
 function convertIDToTitle(id: string | undefined){
     if (!id) return id;
+    // Prefer the title from posts.ts; fall back to prettifying the id
+    const post = postById(id);
+    if (post) return post.title;
     return id.split("_").map((s) => {return s.charAt(0).toUpperCase() + s.slice(1)}).join(" ");
 }
 
+// Concatenate the text of a hast node (code blocks are a single text child,
+// but be safe in case something wrapped them)
+function hastText(node: any): string {
+    if (!node) return '';
+    if (node.type === 'text') return node.value;
+    return (node.children ?? []).map(hastText).join('');
+}
+
+// ```mermaid blocks render as diagrams instead of code
+const markdownComponents: Components = {
+    pre({ node, children, ...props }) {
+        const code: any = node?.children?.[0];
+        const classes = code?.properties?.className;
+        if (code?.tagName === 'code' && Array.isArray(classes) && classes.includes('language-mermaid')) {
+            return <Mermaid chart={hastText(code).trim()} />;
+        }
+        return <pre {...props}>{children}</pre>;
+    },
+};
+
 const Blog: React.FC = () => {
     const { id } = useParams();
+    const navigate = useNavigate();
+    const post = postById(id);
+    const branch = post && branchOf(post);
 
     const [markdownContent, setMarkdownContent] = useState<string>('');
     const [errorMessage, setErrorMessage] = useState<string>('');
+    const [comingSoon, setComingSoon] = useState<boolean>(false);
 
     // Function to transform relative image paths to absolute paths
     const transformImagePaths = (content: string, blogId: string): string => {
@@ -46,6 +75,7 @@ const Blog: React.FC = () => {
 
         let isCancelled = false;
         setErrorMessage('');
+        setComingSoon(false);
 
         fetch(`/blogfiles/${id}/index.md`)
             .then(async (response) => {
@@ -54,6 +84,10 @@ const Blog: React.FC = () => {
                         throw new Error(`Failed to load markdown: ${response.status}`);
                     }
                     const text = await response.text();
+                    // The dev server answers missing files with index.html instead of a 404
+                    if (/^\s*<!doctype html/i.test(text)) {
+                        throw new Error('Markdown missing');
+                    }
                     if (!isCancelled) {
                         const transformedContent = transformImagePaths(text, id);
                         setMarkdownContent(transformedContent);
@@ -62,7 +96,9 @@ const Blog: React.FC = () => {
             })
             .catch((_error) => {
                 if (!isCancelled) {
-                    setErrorMessage(`Blog not found for id: ${id}`);
+                    // Posts listed in posts.ts without their markdown yet are just unwritten
+                    if (postById(id)) setComingSoon(true);
+                    else setErrorMessage(`Blog not found for id: ${id}`);
                 }
             });
 
@@ -81,16 +117,27 @@ const Blog: React.FC = () => {
       };
 
     return (
-      <div className="blog-container" onClick={handleClick}>
-        <div className="blog-title">{convertIDToTitle(id)}</div>
+      <div>
+        <div className="section-rule"><span className="section-path blogs-accent">~/blogs/{id}</span></div>
+        <h1 className="section-title blogs-accent">{convertIDToTitle(id)}</h1>
+        <div className="section-hint">
+          cat index.md
+          {branch && <> &middot; on branch <span style={{ color: branch.color }}>{branch.name}</span></>}
+          {' '}&middot; <button type="button" className="link-button hint-link" onClick={() => navigate('/blogs')}>cd ..</button>
+        </div>
+
         {errorMessage && (
-            <div style={{ color: '#ff6b6b', marginTop: '1rem' }}>{errorMessage}</div>
+            <div className="out-error">{errorMessage}</div>
         )}
-        {!errorMessage && (
-            <div className={`blog-markdown`} style={{ textAlign: 'left' }}>
+        {comingSoon && (
+            <div className="blog-coming-soon">Coming soon!</div>
+        )}
+        {!errorMessage && !comingSoon && (
+            <div className="blog-markdown" onClick={handleClick} data-rm={`post:${id}`}>
                 <ReactMarkdown
                     remarkPlugins={[remarkGfm, remarkMath]}
-                    rehypePlugins={[rehypeRaw, rehypeKatex, rehypeHighlight]}
+                    rehypePlugins={[rehypeRaw, rehypeKatex, [rehypeHighlight, { plainText: ['mermaid'] }]]}
+                    components={markdownComponents}
                 >
                     {markdownContent}
                 </ReactMarkdown>
