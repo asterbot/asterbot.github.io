@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkfrontend=self.webpackChunkfrontend||[]).push([[1560],{1560:(e,n,r)=>{r.d(n,{createEventModelingServices:()=>s.g});var s=r(4229);r(8281)}}]);
